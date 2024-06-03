@@ -1,5 +1,9 @@
 # react-native-vision-camera-mlkit
 
+<div align="right">
+<img align="right" src="https://github.com/pedrol2b/react-native-vision-camera-mlkit/assets/107975184/a72299db-20a4-4204-9ba9-a81aec516961" width="320" target="_blank">
+</div>
+
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]

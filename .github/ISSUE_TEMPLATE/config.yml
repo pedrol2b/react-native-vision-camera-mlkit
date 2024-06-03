@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📸 react-native-vision-camera
+    url: https://github.com/mrousavy/react-native-vision-camera/issues
+    about: Choose if your issue is related to react-native-vision-camera.

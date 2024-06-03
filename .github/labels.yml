@@ -1,0 +1,63 @@
+- name: ❌-no-repro
+  description: Reproduction not provided
+  color: FF0000
+- name: 🤖 android
+  description: Android platform
+  color: 4BC74F
+- name: ⚠️ breaking change
+  description: Codebase changes
+  color: FF0000
+- name: 🐞 bug
+  description: Application problem
+  color: FFA500
+- name: 🔧 build error
+  description: Build issues
+  color: 008672
+- name: 📦 dependencies
+  description: Project dependencies
+  color: FBCA04
+- name: 📃 documentation
+  description: Documentation updates
+  color: C0C0C0
+- name: 🖇 duplicate
+  description: Duplicate issue
+  color: FFEC27
+- name: 🚀 enhancement
+  description: Improvements
+  color: 84B6EB
+- name: ✨ feature
+  description: New feature suggestion
+  color: 00BFFF
+- name: 📢 help wanted
+  description: Assistance needed
+  color: FF0000
+- name: ❌ invalid
+  description: Incomplete issue
+  color: FFA500
+- name: 🍏 ios
+  description: iOS platform
+  color: 3DDC84
+- name: 🎈 performance
+  description: Application performance
+  color: 4682B4
+- name: 💭 question
+  description: Information request
+  color: FF0000
+- name: 💄 types
+  description: TypeScript issues
+  color: 00BFFF
+- name: ❌ typo
+  description: Typo is short for typographical error
+  color: FFC0CB
+- name: ⚠️ warning
+  description: Application warnings
+  color: FFEC27
+- name: 🚧 WIP
+  description: Work in progress
+  color: FFD700
+- name: ☠️ wontfix
+  description: Acknowledged, won't be fixed
+  color: 800080
+- name: ⏳ stale
+  description: Lacking recent activity or updates
+  color: 808080

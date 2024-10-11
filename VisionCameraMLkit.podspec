@@ -26,28 +26,28 @@ Pod::Spec.new do |s|
 
   # https://developers.google.com/ml-kit/vision/barcode-scanning/ios
 
-  s.dependency "GoogleMLKit/BarcodeScanning", "3.2.0"
+  s.dependency "GoogleMLKit/BarcodeScanning"
 
   # https://developers.google.com/ml-kit/vision/object-detection/ios
 
-  s.dependency "GoogleMLKit/ObjectDetection", "3.2.0"
+  s.dependency "GoogleMLKit/ObjectDetection"
 
   # https://developers.google.com/ml-kit/vision/image-labeling/ios
 
-  s.dependency "GoogleMLKit/ImageLabeling", "3.2.0"
+  s.dependency "GoogleMLKit/ImageLabeling"
 
   # https://developers.google.com/ml-kit/vision/text-recognition/v2/ios
 
   # To recognize Latin script
-  s.dependency "GoogleMLKit/TextRecognition", "3.2.0"
+  s.dependency "GoogleMLKit/TextRecognition"
   # To recognize Chinese script
-  s.dependency "GoogleMLKit/TextRecognitionChinese", "3.2.0"
+  s.dependency "GoogleMLKit/TextRecognitionChinese"
   # To recognize Devanagari script
-  s.dependency "GoogleMLKit/TextRecognitionDevanagari", "3.2.0"
+  s.dependency "GoogleMLKit/TextRecognitionDevanagari"
   # To recognize Japanese script
-  s.dependency "GoogleMLKit/TextRecognitionJapanese", "3.2.0"
+  s.dependency "GoogleMLKit/TextRecognitionJapanese"
   # To recognize Korean script
-  s.dependency "GoogleMLKit/TextRecognitionKorean", "3.2.0"
+  s.dependency "GoogleMLKit/TextRecognitionKorean"
 
   # Don't install the dependencies when we run `pod install` in the old architecture.
   if ENV['RCT_NEW_ARCH_ENABLED'] == '1' then

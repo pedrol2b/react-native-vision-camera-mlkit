@@ -23,6 +23,8 @@ target 'VisionCameraMlkitExample' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  pod 'VisionCameraMLkit', :path => '../..'
+
   target 'VisionCameraMlkitExampleTests' do
     inherit! :complete
     # Pods for testing

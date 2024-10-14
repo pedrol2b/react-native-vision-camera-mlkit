@@ -1,43 +1,77 @@
 import Foundation
 import MLKitVision
-import UIKit
 import VisionCamera
 
-class VisionCameraMLkitUtils {
-
-  static func createInputImage(from frame: Frame) -> VisionImage? {
-    guard let buffer = frame.buffer else { return nil }
+class VisionCameraMLkitUtils: NSObject {
+  static func createVisionImageFromFrame(frame: Frame) -> VisionImage {
+    let buffer: CMSampleBuffer = frame.buffer
     let image = VisionImage(buffer: buffer)
-    image.orientation = getFrameOrientation(frame.orientation)
+
+    // HACK: fix 'landscape' frame orientation
+    let orientation = fixLandscapeFrameOrientation(orientation: frame.orientation)
+    image.orientation = orientation
     return image
   }
 
-  static func createInvertedInputImage(from frame: Frame) -> VisionImage? {
-    guard let inputImage = createInputImage(from: frame) else { return nil }
-    guard let frameBitmap = inputImage.image else { return nil }
+  static func createInvertedVisionImageFromFrame(frame: Frame) -> VisionImage? {
+    guard let buffer = CMSampleBufferGetImageBuffer(frame.buffer) else { return nil }
+    let ciImage = CIImage(cvPixelBuffer: buffer)
+    guard let invertedCIImage = invertCIImageColor(image: ciImage, orientation: frame.orientation)
+    else { return nil }
 
-    let invertedBitmap = invertBitmap(frameBitmap)
-    return VisionImage(image: invertedBitmap)
+    let image = VisionImage(image: invertedCIImage)
+
+    // HACK: fix 'landscape' frame orientation
+    let orientation = fixLandscapeFrameOrientation(orientation: frame.orientation)
+    image.orientation = orientation
+    return image
   }
 
-  private static func invertBitmap(_ bitmap: UIImage) -> UIImage {
-    guard let cgImage = bitmap.cgImage else { return bitmap }
+  private static func fixLandscapeFrameOrientation(orientation: UIImage.Orientation)
+    -> UIImage.Orientation
+  {
+    switch orientation {
+    case .left:
+      return .right
+    case .right:
+      return .left
+    case .up, .down:
+      return orientation
+    default:
+      return orientation
+    }
+  }
 
+  /**
+  * Inverts the colors of a given CIImage and returns a UIImage with the specified orientation.
+  *
+  * This function uses the CIColorInvert filter to invert the colors of the input CIImage.
+  * It then creates a CGImage from the output of the filter and converts it to a UIImage
+  * with the specified orientation.
+  *
+  * @param image The CIImage to be inverted.
+  * @param orientation The desired orientation for the output UIImage.
+  * @return A UIImage with inverted colors and the specified orientation, or nil if the inversion fails.
+  *
+  * https://stackoverflow.com/a/42987565
+  */
+  private static func invertCIImageColor(image: CIImage, orientation: UIImage.Orientation)
+    -> UIImage?
+  {
+    guard let filter = CIFilter(name: "CIColorInvert") else { return nil }
+    filter.setDefaults()
+    filter.setValue(image, forKey: kCIInputImageKey)
     let context = CIContext(options: nil)
-    let coreImage = CIImage(cgImage: cgImage)
 
-    let filter = CIFilter(name: "CIColorInvert")
-    filter?.setValue(coreImage, forKey: kCIInputImageKey)
-
-    guard let outputImage = filter?.outputImage else { return bitmap }
-    guard let cgOutputImage = context.createCGImage(outputImage, from: outputImage.extent) else {
-      return bitmap
+    guard let outputImage = filter.outputImage else { return nil }
+    guard let outputImageCopy = context.createCGImage(outputImage, from: outputImage.extent) else {
+      return nil
     }
 
-    return UIImage(cgImage: cgOutputImage)
+    return UIImage(cgImage: outputImageCopy, scale: 1, orientation: orientation)
   }
 
-  static func createBoundsMap(_ bounds: CGRect) -> [String: Any] {
+  static func createBoundsMap(_ bounds: CGRect) -> [String: CGFloat] {
     return [
       "x": bounds.midX,
       "y": bounds.midY,
@@ -52,27 +86,14 @@ class VisionCameraMLkitUtils {
     ]
   }
 
-  private static func createCornerMap(_ corner: CGPoint) -> [String: Any] {
+  private static func createCornerMap(_ corner: CGPoint) -> [String: Double] {
     return [
       "x": corner.x,
       "y": corner.y,
     ]
   }
 
-  static func createCornersArray(_ corners: [CGPoint]) -> [[String: Any]] {
-    return corners.map { createCornerMap($0) }
-  }
-
-  private static func getFrameOrientation(orientation: UIImage.Orientation) -> UIImage.Orientation {
-    switch orientation {
-    case .left:
-      return .right
-    case .right:
-      return .left
-    case .up, .down:
-      return orientation
-    default:
-      return orientation
-    }
+  static func createCornersArray(_ corners: [NSValue]) -> [[String: Double]] {
+    return corners.map { createCornerMap($0.cgPointValue) }
   }
 }

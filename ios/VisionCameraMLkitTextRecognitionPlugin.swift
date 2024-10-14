@@ -8,12 +8,16 @@ import MLKitTextRecognitionKorean
 import MLKitVision
 import VisionCamera
 
+enum VisionCameraMLkitTextRecognitionError: Error {
+  case VISION_IMAGE_INVERSION_ERROR
+}
+
 @objc(VisionCameraMLkitTextRecognitionPlugin)
-class VisionCameraMLkitTextRecognitionPlugin: NSObject {
+public class VisionCameraMLkitTextRecognitionPlugin: FrameProcessorPlugin {
   private var textRecognizer: TextRecognizer
   private var invertColors: Bool = false
 
-  init(options: [String: Any]?) {
+  override init(proxy: VisionCameraProxyHolder, options: [AnyHashable: Any]! = [:]) {
     let language = options?["language"] as? String ?? "LATIN"
 
     let textRecognizerOptions: CommonTextRecognizerOptions
@@ -34,60 +38,53 @@ class VisionCameraMLkitTextRecognitionPlugin: NSObject {
 
     self.textRecognizer = TextRecognizer.textRecognizer(options: textRecognizerOptions)
     self.invertColors = options?["invertColors"] as? Bool ?? false
+
+    super.init(proxy: proxy, options: options)
   }
 
-  func callback(frame: Frame, arguments: [String: Any]?) -> [String: Any] {
+  func callback(_ frame: Frame, arguments: [AnyHashable: Any]?) -> Any {
+    var map = [String: Any]()
+
     do {
-      let inputImage: VisionImage
+      let image: VisionImage
       if self.invertColors {
-        inputImage = VisionCameraMLkitUtils.createInvertedInputImage(from: frame)
+        guard
+          let invertedImage = VisionCameraMLkitUtils.createInvertedVisionImageFromFrame(
+            frame: frame)
+        else { throw VisionCameraMLkitTextRecognitionError.VISION_IMAGE_INVERSION_ERROR }
+        image = invertedImage
       } else {
-        inputImage = VisionCameraMLkitUtils.createInputImage(from: frame)
+        image = VisionCameraMLkitUtils.createVisionImageFromFrame(frame: frame)
       }
 
-      let text = try self.textRecognizer.results(in: inputImage)
-      var map = [String: Any]()
+      let text: Text = try self.textRecognizer.results(in: image)
       map["text"] = text.text
       map["blocks"] = createBlocksArray(text.blocks)
 
       return map
     } catch {
-      print("Error occurred while recognizing the text: \(error)")
-      return [:]
+      // TODO: catch MlKitException and FrameInvalidError exceptions
+      print("Unexpected error occurred while recognizing the text: \(error)")
     }
-  }
 
-  private func createSymbolsArray(_ symbols: [TextSymbol]) -> [[String: Any]] {
-    return symbols.map { symbol in
-      var map = [String: Any]()
-      if let bounds = symbol.frame {
-        map["bounds"] = VisionCameraMLkitUtils.createBoundsMap(bounds)
-      }
-      if let corners = symbol.cornerPoints {
-        map["corners"] = VisionCameraMLkitUtils.createCornersArray(corners)
-      }
-      map["confidence"] = symbol.confidence
-      map["angle"] = symbol.angle
-      map["text"] = symbol.text
-      map["language"] = symbol.recognizedLanguage
-      return map
-    }
+    return [:]
   }
 
   private func createElementsArray(_ elements: [TextElement]) -> [[String: Any]] {
     return elements.map { element in
       var map = [String: Any]()
-      if let bounds = element.frame {
-        map["bounds"] = VisionCameraMLkitUtils.createBoundsMap(bounds)
-      }
-      if let corners = element.cornerPoints {
-        map["corners"] = VisionCameraMLkitUtils.createCornersArray(corners)
-      }
-      map["symbols"] = createSymbolsArray(element.symbols)
-      map["confidence"] = element.confidence
-      map["angle"] = element.angle
+      let bounds = element.frame
+      map["bounds"] = VisionCameraMLkitUtils.createBoundsMap(bounds)
+
+      let corners = element.cornerPoints
+      map["corners"] = VisionCameraMLkitUtils.createCornersArray(corners)
+
+      // https://developers.google.com/ml-kit/reference/swift/mlkittextrecognitioncommon/api/reference/Classes/TextElement
+      map["symbols"] = [:]  // There is no `TextSymbol` in MLKit swift API
+      map["confidence"] = nil
+      map["angle"] = nil
       map["text"] = element.text
-      map["language"] = element.recognizedLanguage
+      map["language"] = element.recognizedLanguages
       return map
     }
   }
@@ -95,17 +92,17 @@ class VisionCameraMLkitTextRecognitionPlugin: NSObject {
   private func createLinesArray(_ lines: [TextLine]) -> [[String: Any]] {
     return lines.map { line in
       var map = [String: Any]()
-      if let bounds = line.frame {
-        map["bounds"] = VisionCameraMLkitUtils.createBoundsMap(bounds)
-      }
-      if let corners = line.cornerPoints {
-        map["corners"] = VisionCameraMLkitUtils.createCornersArray(corners)
-      }
+      let bounds = line.frame
+      map["bounds"] = VisionCameraMLkitUtils.createBoundsMap(bounds)
+
+      let corners = line.cornerPoints
+      map["corners"] = VisionCameraMLkitUtils.createCornersArray(corners)
+
       map["elements"] = createElementsArray(line.elements)
-      map["confidence"] = line.confidence
-      map["angle"] = line.angle
+      map["confidence"] = nil
+      map["angle"] = nil
       map["text"] = line.text
-      map["language"] = line.recognizedLanguage
+      map["language"] = line.recognizedLanguages
       return map
     }
   }
@@ -113,15 +110,15 @@ class VisionCameraMLkitTextRecognitionPlugin: NSObject {
   private func createBlocksArray(_ blocks: [TextBlock]) -> [[String: Any]] {
     return blocks.map { block in
       var map = [String: Any]()
-      if let bounds = block.frame {
-        map["bounds"] = VisionCameraMLkitUtils.createBoundsMap(bounds)
-      }
-      if let corners = block.cornerPoints {
-        map["corners"] = VisionCameraMLkitUtils.createCornersArray(corners)
-      }
+      let bounds = block.frame
+      map["bounds"] = VisionCameraMLkitUtils.createBoundsMap(bounds)
+
+      let corners = block.cornerPoints
+      map["corners"] = VisionCameraMLkitUtils.createCornersArray(corners)
+
       map["lines"] = createLinesArray(block.lines)
       map["text"] = block.text
-      map["language"] = block.recognizedLanguage
+      map["language"] = block.recognizedLanguages
       return map
     }
   }

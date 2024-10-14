@@ -249,6 +249,8 @@ export type TextRecognizerPlugin = {
 
 /**
  * Represents a symbol in recognized text.
+ *
+ * {@link TextSymbol} is not available on iOS.
  */
 type TextSymbol = {
   /** The bounding box of the symbol. */
@@ -273,15 +275,27 @@ type TextElement = {
   bounds: Bounds;
   /** The corner points of the element. */
   corners: Corner[];
-  /** The confidence score of the recognized element. */
-  confidence: number;
-  /** The angle of the element. */
-  angle: number;
+  /**
+   * The confidence score of the recognized element.
+   *
+   * {@link TextElement} confidence is not available on iOS.
+   */
+  confidence: number | null;
+  /**
+   * The angle of the element.
+   *
+   * {@link TextElement} angle is not available on iOS.
+   */
+  angle: number | null;
   /** The language of the element. */
   language: string;
   /** The recognized text of the element. */
   text: string;
-  /** The symbols that make up the element. */
+  /**
+   * The symbols that make up the element.
+   *
+   * {@link TextElement} symbols are not available on iOS.
+   */
   symbols: TextSymbol[];
 };
 
@@ -293,10 +307,18 @@ type TextLine = {
   bounds: Bounds;
   /** The corner points of the line. */
   corners: Corner[];
-  /** The confidence score of the recognized line. */
-  confidence: number;
-  /** The angle of the line. */
-  angle: number;
+  /**
+   * The confidence score of the recognized line.
+   *
+   * {@link TextLine} confidence is not available on iOS.
+   */
+  confidence: number | null;
+  /**
+   * The angle of the line.
+   *
+   * {@link TextLine} angle is not available on iOS.
+   */
+  angle: number | null;
   /** The language of the line. */
   language: string;
   /** The recognized text of the line. */

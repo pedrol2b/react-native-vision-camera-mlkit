@@ -1,8 +1,15 @@
 import Foundation
-import MLKitVision
 import VisionCamera
 
+enum VisionCameraMLkitImageLabelingError: Error {}
+
 @objc(VisionCameraMLkitImageLabelingPlugin)
-class VisionCameraMLkitImageLabelingPlugin: NSObject {
-  func callback(frame: Frame, arguments: [String: Any]?) -> [String: Any] {}
+public class VisionCameraMLkitImageLabelingPlugin: FrameProcessorPlugin {
+  override init(proxy: VisionCameraProxyHolder, options: [AnyHashable: Any]! = [:]) {
+    super.init(proxy: proxy, options: options)
+  }
+
+  func callback(_ frame: Frame, arguments: [AnyHashable: Any]?) -> Any {
+    return [:]
+  }
 }

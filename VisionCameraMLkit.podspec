@@ -16,12 +16,6 @@ Pod::Spec.new do |s|
 
   s.source_files = "ios/**/*.{h,m,mm,swift}"
 
-  # Use install_modules_dependencies helper to install the dependencies if React Native version >=0.71.0.
-  # See https://github.com/facebook/react-native/blob/febf6b7f33fdb4904669f99d795eba4c0f95d7bf/scripts/cocoapods/new_architecture.rb#L79.
-  if respond_to?(:install_modules_dependencies, true)
-    install_modules_dependencies(s)
-  else
-  s.dependency "React-Core"
   s.dependency "VisionCamera"
 
   # https://developers.google.com/ml-kit/vision/barcode-scanning/ios
@@ -48,6 +42,13 @@ Pod::Spec.new do |s|
   s.dependency "GoogleMLKit/TextRecognitionJapanese"
   # To recognize Korean script
   s.dependency "GoogleMLKit/TextRecognitionKorean"
+
+  # Use install_modules_dependencies helper to install the dependencies if React Native version >=0.71.0.
+  # See https://github.com/facebook/react-native/blob/febf6b7f33fdb4904669f99d795eba4c0f95d7bf/scripts/cocoapods/new_architecture.rb#L79.
+  if respond_to?(:install_modules_dependencies, true)
+    install_modules_dependencies(s)
+  else
+  s.dependency "React-Core"
 
   # Don't install the dependencies when we run `pod install` in the old architecture.
   if ENV['RCT_NEW_ARCH_ENABLED'] == '1' then

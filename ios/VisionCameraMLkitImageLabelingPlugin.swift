@@ -5,7 +5,8 @@ enum VisionCameraMLkitImageLabelingError: Error {}
 
 @objc(VisionCameraMLkitImageLabelingPlugin)
 public class VisionCameraMLkitImageLabelingPlugin: FrameProcessorPlugin {
-  override init(proxy: VisionCameraProxyHolder, options: [AnyHashable: Any]! = [:]) {
+  @objc
+  public override init(proxy: VisionCameraProxyHolder, options: [AnyHashable: Any]! = [:]) {
     super.init(proxy: proxy, options: options)
   }
 

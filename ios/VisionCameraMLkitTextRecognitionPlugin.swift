@@ -17,7 +17,8 @@ public class VisionCameraMLkitTextRecognitionPlugin: FrameProcessorPlugin {
   private var textRecognizer: TextRecognizer
   private var invertColors: Bool = false
 
-  override init(proxy: VisionCameraProxyHolder, options: [AnyHashable: Any]! = [:]) {
+  @objc
+  public override init(proxy: VisionCameraProxyHolder, options: [AnyHashable: Any]! = [:]) {
     let language = options?["language"] as? String ?? "LATIN"
 
     let textRecognizerOptions: CommonTextRecognizerOptions

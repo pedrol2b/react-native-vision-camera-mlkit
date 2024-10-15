@@ -5,7 +5,8 @@ enum VisionCameraMLkitBarcodeScanningError: Error {}
 
 @objc(VisionCameraMLkitBarcodeScanningPlugin)
 public class VisionCameraMLkitBarcodeScanningPlugin: FrameProcessorPlugin {
-  override init(proxy: VisionCameraProxyHolder, options: [AnyHashable: Any]! = [:]) {
+  @objc
+  public override init(proxy: VisionCameraProxyHolder, options: [AnyHashable: Any]! = [:]) {
     super.init(proxy: proxy, options: options)
   }
 

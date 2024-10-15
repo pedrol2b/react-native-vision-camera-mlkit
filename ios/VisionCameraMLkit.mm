@@ -3,49 +3,32 @@
 #import <VisionCamera/FrameProcessorPlugin.h>
 #import <VisionCamera/FrameProcessorPluginRegistry.h>
 
-#define REGISTER_PLUGIN(pluginClass, pluginName)                               \
-  @interface pluginClass (FrameProcessorPluginLoader)                          \
+#if __has_include("VisionCameraMLkit/VisionCameraMLkit-Swift.h")
+#import "VisionCameraMLkit/VisionCameraMLkit-Swift.h"
+#else
+#import "VisionCameraMLkit-Swift.h"
+#endif
+
+#define REGISTER_PLUGIN(PLUGIN_CLASS, PLUGIN_NAME)                             \
+  @interface PLUGIN_CLASS (FrameProcessorPluginLoader)                         \
   @end                                                                         \
-  @implementation pluginClass (FrameProcessorPluginLoader)                     \
+                                                                               \
+  @implementation PLUGIN_CLASS (FrameProcessorPluginLoader)                    \
   +(void)load {                                                                \
     [FrameProcessorPluginRegistry                                              \
-        addFrameProcessorPlugin:pluginName                                     \
+        addFrameProcessorPlugin:PLUGIN_NAME                                    \
                 withInitializer:^FrameProcessorPlugin *(                       \
                     VisionCameraProxyHolder * proxy, NSDictionary * options) { \
-                  return [[pluginClass alloc] initWithProxy:proxy              \
-                                                withOptions:options];          \
+                  return [[PLUGIN_CLASS alloc] initWithProxy:proxy             \
+                                                 withOptions:options];         \
                 }];                                                            \
   }                                                                            \
   @end
 
-#if __has_include(                                                             \
-    "VisionCameraMLkit/VisionCameraMLkitBarcodeScanningPlugin-Swift.h")
-#import "VisionCameraMLkit/VisionCameraMLkitBarcodeScanningPlugin-Swift.h"
-#else
-#import "VisionCameraMLkitBarcodeScanningPlugin-Swift.h"
-#endif
 REGISTER_PLUGIN(VisionCameraMLkitBarcodeScanningPlugin, @"barcodeScanner")
 
-#if __has_include(                                                             \
-    "VisionCameraMLkit/VisionCameraMLkitImageLabelingPlugin-Swift.h")
-#import "VisionCameraMLkit/VisionCameraMLkitImageLabelingPlugin-Swift.h"
-#else
-#import "VisionCameraMLkitImageLabelingPlugin-Swift.h"
-#endif
 REGISTER_PLUGIN(VisionCameraMLkitImageLabelingPlugin, @"imageLabeler")
 
-#if __has_include(                                                             \
-    "VisionCameraMLkit/VisionCameraMLkitObjectDetectionPlugin-Swift.h")
-#import "VisionCameraMLkit/VisionCameraMLkitObjectDetectionPlugin-Swift.h"
-#else
-#import "VisionCameraMLkitObjectDetectionPlugin-Swift.h"
-#endif
 REGISTER_PLUGIN(VisionCameraMLkitObjectDetectionPlugin, @"objectDetector")
 
-#if __has_include(                                                             \
-    "VisionCameraMLkit/VisionCameraMLkitTextRecognitionPlugin-Swift.h")
-#import "VisionCameraMLkit/VisionCameraMLkitTextRecognitionPlugin-Swift.h"
-#else
-#import "VisionCameraMLkitTextRecognitionPlugin-Swift.h"
-#endif
 REGISTER_PLUGIN(VisionCameraMLkitTextRecognitionPlugin, @"textRecognizer")

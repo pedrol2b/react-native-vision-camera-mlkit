@@ -261,8 +261,14 @@ type TextSymbol = {
   confidence: number;
   /** The angle of the symbol. */
   angle: number;
-  /** The language of the symbol. */
-  language: string;
+  /**
+   * The language of the symbol.
+   *
+   * The ISO 639-1 two-letter language code if that is defined (e.g. "en"), or else the ISO 639-2 three-letter code if that is defined, or else a Google-specific code.
+   *
+   * Essentially, it's an array of language codes.
+   */
+  languages: string[];
   /** The recognized text of the symbol. */
   text: string;
 };
@@ -287,8 +293,14 @@ type TextElement = {
    * {@link TextElement} angle is not available on iOS.
    */
   angle: number | null;
-  /** The language of the element. */
-  language: string;
+  /**
+   * The language of the element.
+   *
+   * The ISO 639-1 two-letter language code if that is defined (e.g. "en"), or else the ISO 639-2 three-letter code if that is defined, or else a Google-specific code.
+   *
+   * Essentially, it's an array of language codes.
+   */
+  languages: string[];
   /** The recognized text of the element. */
   text: string;
   /**
@@ -319,8 +331,14 @@ type TextLine = {
    * {@link TextLine} angle is not available on iOS.
    */
   angle: number | null;
-  /** The language of the line. */
-  language: string;
+  /**
+   * The language of the line.
+   *
+   * The ISO 639-1 two-letter language code if that is defined (e.g. "en"), or else the ISO 639-2 three-letter code if that is defined, or else a Google-specific code.
+   *
+   * Essentially, it's an array of language codes.
+   */
+  languages: string[];
   /** The recognized text of the line. */
   text: string;
   /** The elements that make up the line. */
@@ -335,8 +353,14 @@ type TextBlock = {
   bounds: Bounds;
   /** The corner points of the block. */
   corners: Corner[];
-  /** The language of the block. */
-  language: string;
+  /**
+   * The language of the block.
+   *
+   * The ISO 639-1 two-letter language code if that is defined (e.g. "en"), or else the ISO 639-2 three-letter code if that is defined, or else a Google-specific code.
+   *
+   * Essentially, it's an array of language codes.
+   */
+  languages: string[];
   /** The recognized text of the block. */
   text: string;
   /** The lines that make up the block. */

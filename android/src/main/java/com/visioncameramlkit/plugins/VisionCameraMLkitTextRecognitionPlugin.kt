@@ -114,7 +114,7 @@ class VisionCameraMLkitTextRecognitionPlugin(
                     putDouble("angle", symbol.angle.toDouble())
 
                     putString("text", symbol.text)
-                    putString("language", symbol.recognizedLanguage)
+                    putArray("languages", WritableNativeArray().apply { pushString(symbol.recognizedLanguage) })
                 }
             }.forEach { pushMap(it) }
         }
@@ -144,7 +144,7 @@ class VisionCameraMLkitTextRecognitionPlugin(
                     putDouble("angle", element.angle.toDouble())
 
                     putString("text", element.text)
-                    putString("language", element.recognizedLanguage)
+                    putArray("languages", WritableNativeArray().apply { pushString(element.recognizedLanguage) })
                 }
             }.forEach { pushMap(it) }
         }
@@ -174,7 +174,7 @@ class VisionCameraMLkitTextRecognitionPlugin(
                     putDouble("angle", line.angle.toDouble())
 
                     putString("text", line.text)
-                    putString("language", line.recognizedLanguage)
+                    putArray("languages", WritableNativeArray().apply { pushString(line.recognizedLanguage) })
                 }
             }.forEach { pushMap(it) }
         }
@@ -201,7 +201,7 @@ class VisionCameraMLkitTextRecognitionPlugin(
                     putArray("lines", createLinesArray(block.lines))
 
                     putString("text", block.text)
-                    putString("language", block.recognizedLanguage)
+                    putArray("languages", WritableNativeArray().apply { pushString(block.recognizedLanguage) })
                 }
             }.forEach { pushMap(it) }
         }

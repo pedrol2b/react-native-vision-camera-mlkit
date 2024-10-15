@@ -84,7 +84,7 @@ public class VisionCameraMLkitTextRecognitionPlugin: FrameProcessorPlugin {
       map["confidence"] = nil
       map["angle"] = nil
       map["text"] = element.text
-      map["language"] = element.recognizedLanguages
+      map["languages"] = element.recognizedLanguages.map { $0.languageCode }
       return map
     }
   }
@@ -102,7 +102,7 @@ public class VisionCameraMLkitTextRecognitionPlugin: FrameProcessorPlugin {
       map["confidence"] = nil
       map["angle"] = nil
       map["text"] = line.text
-      map["language"] = line.recognizedLanguages
+      map["languages"] = line.recognizedLanguages.map { $0.languageCode }
       return map
     }
   }
@@ -118,7 +118,7 @@ public class VisionCameraMLkitTextRecognitionPlugin: FrameProcessorPlugin {
 
       map["lines"] = createLinesArray(block.lines)
       map["text"] = block.text
-      map["language"] = block.recognizedLanguages
+      map["languages"] = block.recognizedLanguages.map { $0.languageCode }
       return map
     }
   }

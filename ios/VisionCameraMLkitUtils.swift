@@ -8,8 +8,7 @@ class VisionCameraMLkitUtils: NSObject {
     let image = VisionImage(buffer: buffer)
 
     // HACK: fix 'landscape' frame orientation
-    let orientation = fixLandscapeFrameOrientation(orientation: frame.orientation)
-    image.orientation = orientation
+    image.orientation = fixLandscapeFrameOrientation(orientation: frame.orientation)
     return image
   }
 
@@ -22,8 +21,7 @@ class VisionCameraMLkitUtils: NSObject {
     let image = VisionImage(image: invertedCIImage)
 
     // HACK: fix 'landscape' frame orientation
-    let orientation = fixLandscapeFrameOrientation(orientation: frame.orientation)
-    image.orientation = orientation
+    image.orientation = fixLandscapeFrameOrientation(orientation: frame.orientation)
     return image
   }
 
@@ -40,19 +38,6 @@ class VisionCameraMLkitUtils: NSObject {
     }
   }
 
-  /**
-  * Inverts the colors of a given CIImage and returns a UIImage with the specified orientation.
-  *
-  * This function uses the CIColorInvert filter to invert the colors of the input CIImage.
-  * It then creates a CGImage from the output of the filter and converts it to a UIImage
-  * with the specified orientation.
-  *
-  * @param image The CIImage to be inverted.
-  * @param orientation The desired orientation for the output UIImage.
-  * @return A UIImage with inverted colors and the specified orientation, or nil if the inversion fails.
-  *
-  * https://stackoverflow.com/a/42987565
-  */
   private static func invertCIImageColor(image: CIImage, orientation: UIImage.Orientation)
     -> UIImage?
   {
@@ -92,8 +77,8 @@ class VisionCameraMLkitUtils: NSObject {
 
   private static func createCornerMap(_ corner: CGPoint) -> [String: Double] {
     return [
-      "x": corner.x,
-      "y": corner.y,
+      "x": Double(corner.x),
+      "y": Double(corner.y),
     ]
   }
 

@@ -35,8 +35,6 @@ class VisionCameraMLkitUtils: NSObject {
       return .right
     case .right:
       return .left
-    case .up, .down:
-      return orientation
     default:
       return orientation
     }

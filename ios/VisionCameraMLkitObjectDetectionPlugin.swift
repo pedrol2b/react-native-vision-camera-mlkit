@@ -10,7 +10,8 @@ public class VisionCameraMLkitObjectDetectionPlugin: FrameProcessorPlugin {
     super.init(proxy: proxy, options: options)
   }
 
-  func callback(_ frame: Frame, arguments: [AnyHashable: Any]?) -> Any {
+  public override func callback(_ frame: Frame, withArguments arguments: [AnyHashable: Any]?) -> Any
+  {
     return [:]
   }
 }

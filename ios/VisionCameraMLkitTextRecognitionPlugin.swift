@@ -53,7 +53,9 @@ public class VisionCameraMLkitTextRecognitionPlugin: FrameProcessorPlugin {
         guard
           let invertedImage = VisionCameraMLkitUtils.createInvertedVisionImageFromFrame(
             frame: frame)
-        else { throw VisionCameraMLkitTextRecognitionError.VISION_IMAGE_INVERSION_ERROR }
+        else {
+          throw VisionCameraMLkitTextRecognitionError.VISION_IMAGE_INVERSION_ERROR
+        }
         image = invertedImage
       } else {
         image = VisionCameraMLkitUtils.createVisionImageFromFrame(frame: frame)
@@ -65,7 +67,6 @@ public class VisionCameraMLkitTextRecognitionPlugin: FrameProcessorPlugin {
 
       return map
     } catch {
-      // TODO: catch MlKitException and FrameInvalidError exceptions
       print("Unexpected error occurred while recognizing the text: \(error)")
     }
 

@@ -15,10 +15,13 @@ class VisionCameraMLkitUtils: NSObject {
   static func createInvertedVisionImageFromFrame(frame: Frame) -> VisionImage? {
     guard let buffer = CMSampleBufferGetImageBuffer(frame.buffer) else { return nil }
     let ciImage = CIImage(cvPixelBuffer: buffer)
-    guard let invertedCIImage = invertCIImageColor(image: ciImage, orientation: frame.orientation)
-    else { return nil }
 
-    let image = VisionImage(image: invertedCIImage)
+    guard let invertedCIImage = invertCIImageColor(image: ciImage) else { return nil }
+
+    let invertedUIImage = UIImage(
+      ciImage: invertedCIImage, scale: 1, orientation: frame.orientation)
+
+    let image = VisionImage(image: invertedUIImage)
 
     // HACK: fix 'landscape' frame orientation
     image.orientation = fixLandscapeFrameOrientation(orientation: frame.orientation)
@@ -38,20 +41,11 @@ class VisionCameraMLkitUtils: NSObject {
     }
   }
 
-  private static func invertCIImageColor(image: CIImage, orientation: UIImage.Orientation)
-    -> UIImage?
-  {
+  private static func invertCIImageColor(image: CIImage) -> CIImage? {
     guard let filter = CIFilter(name: "CIColorInvert") else { return nil }
     filter.setDefaults()
     filter.setValue(image, forKey: kCIInputImageKey)
-    let context = CIContext(options: nil)
-
-    guard let outputImage = filter.outputImage else { return nil }
-    guard let outputImageCopy = context.createCGImage(outputImage, from: outputImage.extent) else {
-      return nil
-    }
-
-    return UIImage(cgImage: outputImageCopy, scale: 1, orientation: orientation)
+    return filter.outputImage
   }
 
   static func createBoundsMap(_ bounds: CGRect) -> [String: CGFloat] {

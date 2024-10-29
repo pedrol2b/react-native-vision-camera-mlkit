@@ -70,16 +70,22 @@ class VisionCameraMLkitUtils: NSObject {
   }
 
   static func createBoundsMap(_ bounds: CGRect) -> [String: CGFloat] {
+    let offsetX = (bounds.midX - ceil(bounds.width)) / 2.0
+    let offsetY = (bounds.midY - ceil(bounds.height)) / 2.0
+
+    let x = bounds.maxX + offsetX
+    let y = bounds.minY + offsetY
+
     return [
-      "x": bounds.midX,
-      "y": bounds.midY,
+      "x": bounds.midX + (bounds.midX - x),
+      "y": bounds.midY + (y - bounds.midY),
       "centerX": bounds.midX,
       "centerY": bounds.midY,
       "width": bounds.width,
       "height": bounds.height,
-      "top": bounds.minY,
+      "top": bounds.maxY,
       "left": bounds.minX,
-      "bottom": bounds.maxY,
+      "bottom": bounds.minY,
       "right": bounds.maxX,
     ]
   }

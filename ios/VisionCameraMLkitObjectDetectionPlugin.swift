@@ -1,8 +1,6 @@
 import Foundation
 import VisionCamera
 
-enum VisionCameraMLkitObjectDetectionError: Error {}
-
 @objc(VisionCameraMLkitObjectDetectionPlugin)
 public class VisionCameraMLkitObjectDetectionPlugin: FrameProcessorPlugin {
   @objc

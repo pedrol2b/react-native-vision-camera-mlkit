@@ -1,8 +1,6 @@
 import Foundation
 import VisionCamera
 
-enum VisionCameraMLkitImageLabelingError: Error {}
-
 @objc(VisionCameraMLkitImageLabelingPlugin)
 public class VisionCameraMLkitImageLabelingPlugin: FrameProcessorPlugin {
   @objc

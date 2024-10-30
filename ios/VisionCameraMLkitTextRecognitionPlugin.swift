@@ -8,10 +8,6 @@ import MLKitTextRecognitionKorean
 import MLKitVision
 import VisionCamera
 
-enum VisionCameraMLkitTextRecognitionError: Error {
-  case VISION_IMAGE_INVERSION_ERROR
-}
-
 @objc(VisionCameraMLkitTextRecognitionPlugin)
 public class VisionCameraMLkitTextRecognitionPlugin: FrameProcessorPlugin {
   private var textRecognizer: TextRecognizer

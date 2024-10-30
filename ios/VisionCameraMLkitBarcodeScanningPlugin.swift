@@ -1,8 +1,6 @@
 import Foundation
 import VisionCamera
 
-enum VisionCameraMLkitBarcodeScanningError: Error {}
-
 @objc(VisionCameraMLkitBarcodeScanningPlugin)
 public class VisionCameraMLkitBarcodeScanningPlugin: FrameProcessorPlugin {
   @objc

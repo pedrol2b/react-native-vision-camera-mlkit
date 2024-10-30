@@ -7,7 +7,6 @@ class VisionCameraMLkitUtils: NSObject {
     let buffer: CMSampleBuffer = frame.buffer
     let image = VisionImage(buffer: buffer)
 
-    // HACK: fix 'landscape' frame orientation
     image.orientation = fixLandscapeFrameOrientation(orientation: frame.orientation)
     return image
   }
@@ -23,7 +22,6 @@ class VisionCameraMLkitUtils: NSObject {
 
     let image = VisionImage(image: invertedUIImage)
 
-    // HACK: fix 'landscape' frame orientation
     image.orientation = fixLandscapeFrameOrientation(orientation: frame.orientation)
     return image
   }

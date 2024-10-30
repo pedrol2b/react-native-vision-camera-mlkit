@@ -82,8 +82,7 @@ public class VisionCameraMLkitTextRecognitionPlugin: FrameProcessorPlugin {
       let corners = element.cornerPoints
       map["corners"] = VisionCameraMLkitUtils.createCornersArray(corners)
 
-      // https://developers.google.com/ml-kit/reference/swift/mlkittextrecognitioncommon/api/reference/Classes/TextElement
-      map["symbols"] = [:]  // There is no `TextSymbol` in MLKit swift API
+      map["symbols"] = [:]
       map["confidence"] = nil
       map["angle"] = nil
       map["text"] = element.text

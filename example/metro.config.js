@@ -3,6 +3,7 @@ const path = require('path');
 const escape = require('escape-string-regexp');
 const exclusionList = require('metro-config/src/defaults/exclusionList');
 const pak = require('../package.json');
+const { withNativeWind } = require('nativewind/metro');
 const {
   wrapWithReanimatedMetroConfig,
 } = require('react-native-reanimated/metro-config');
@@ -16,7 +17,7 @@ const modules = Object.keys({ ...pak.peerDependencies });
  *
  * @type {import('metro-config').MetroConfig}
  */
-const config = {
+const config = mergeConfig(getDefaultConfig(__dirname), {
   watchFolders: [root],
 
   // We need to make sure that only one version is loaded for peerDependencies
@@ -43,8 +44,13 @@ const config = {
       },
     }),
   },
-};
+});
 
-module.exports = wrapWithReanimatedMetroConfig(
-  mergeConfig(getDefaultConfig(__dirname), config)
-);
+const withNativeWindConfig = withNativeWind(config, {
+  input: './src/styles/global.css',
+});
+
+const withReactNativeReanimatedConfig =
+  wrapWithReanimatedMetroConfig(withNativeWindConfig);
+
+module.exports = withReactNativeReanimatedConfig;

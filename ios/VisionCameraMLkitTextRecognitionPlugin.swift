@@ -47,30 +47,29 @@ public class VisionCameraMLkitTextRecognitionPlugin: FrameProcessorPlugin {
   {
     var map = [String: Any]()
 
-    do {
-      let image: VisionImage
-      if self.invertColors {
-        guard
-          let invertedImage = VisionCameraMLkitUtils.createInvertedVisionImageFromFrame(
-            frame: frame)
-        else {
-          throw VisionCameraMLkitTextRecognitionError.VISION_IMAGE_INVERSION_ERROR
-        }
-        image = invertedImage
-      } else {
-        image = VisionCameraMLkitUtils.createVisionImageFromFrame(frame: frame)
+    let image: VisionImage
+    if self.invertColors {
+      guard
+        let invertedImage = VisionCameraMLkitUtils.createInvertedVisionImageFromFrame(frame: frame)
+      else {
+        print("Failed to invert image colors")
+        return [:]
       }
+      image = invertedImage
+    } else {
+      image = VisionCameraMLkitUtils.createVisionImageFromFrame(frame: frame)
+    }
 
+    do {
       let text: Text = try self.textRecognizer.results(in: image)
       map["text"] = text.text
       map["blocks"] = createBlocksArray(text.blocks)
-
-      return map
-    } catch {
-      print("Unexpected error occurred while recognizing the text: \(error)")
+    } catch let error {
+      print("Text recognition error: \(error.localizedDescription)")
+      return [:]
     }
 
-    return [:]
+    return map
   }
 
   private func createElementsArray(_ elements: [TextElement]) -> [[String: Any]] {

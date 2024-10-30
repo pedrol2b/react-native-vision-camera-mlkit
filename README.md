@@ -89,6 +89,8 @@ Ensure you have installed the required packages before installing this plugin.
 | 1 | [react-native-vision-camera](https://www.npmjs.com/package/react-native-vision-camera) | `>=4.0.1` |
 | 2 | [react-native-worklets-core](https://www.npmjs.com/package/react-native-worklets-core) | `>=1.2.0` |
 
+*If you find incompatible versions of **react-native-vision-camera** or **react-native-worklets-core**, please [file a bug](https://github.com/pedrol2b/react-native-vision-camera-mlkit/issues) to help improve this compatibility matrix.*
+
 Follow the installation instructions for each package.
 
 ### 💻 Installation

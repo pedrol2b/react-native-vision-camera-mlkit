@@ -14,18 +14,18 @@
 
 This plugin provides a simple way to use various ML Kit Vision APIs in your React Native App's [Frame processor](https://react-native-vision-camera.com/docs/guides/frame-processors).
 
-> ⚠️ **This plugin is still in development and not yet ready for iOS.**
+> ⚠️ **iOS support is still in development.**
 
 ## 🧵 Vision APIs Roadmap
 
-This roadmap provides an overview of the progress for implementing various ML Kit Vision APIs. Note that all completed items are currently only available for Android. iOS support is still in development.
+This roadmap provides an overview of the progress for implementing various ML Kit Vision APIs.
 
 | # | APIs | Android | iOS |
 | - | - | - | - |
 | 1 | **[Barcode scanning](#barcode-scanning)** | [![done][done]][done] | [![in-progress][in-progress]][in-progress] |
 | 2 | **[Face detection](#face-detection)** | [![not-started][not-started]][not-started] | [![not-started][not-started]][not-started] |
 | 3 | **[Face mesh detection](#face-mesh-detection)** | [![not-started][not-started]][not-started] | [![not-supported][not-supported]][not-supported] |
-| 4 | **[Text recognition v2](#text-recognition-v2)** | [![done][done]][done] | [![in-progress][in-progress]][in-progress] |
+| 4 | **[Text recognition v2](#text-recognition-v2)** | [![done][done]][done] | [![done][done]][done] |
 | 5 | **[Image labeling](#image-labeling)** | [![done][done]][done] | [![in-progress][in-progress]][in-progress] |
 | 6 | **[Object detection and tracking](#object-detection-and-tracking)** | [![done][done]][done] | [![in-progress][in-progress]][in-progress] |
 | 7 | **[Digital ink recognition](#digital-ink-recognition)** | [![not-started][not-started]][not-started] | [![not-started][not-started]][not-started] |
@@ -33,8 +33,6 @@ This roadmap provides an overview of the progress for implementing various ML Ki
 | 9 | **[Selfie segmentation](#selfie-segmentation)** | [![not-started][not-started]][not-started] | [![not-started][not-started]][not-started] |
 | 10 | **[Subject segmentation](#subject-segmentation)** | [![not-started][not-started]][not-started] | [![not-supported][not-supported]][not-supported] |
 | 11 | **[Document scanner](#document-scanner)** | [![not-started][not-started]][not-started] | [![not-supported][not-supported]][not-supported] |
-
-> 💬 Video and image analysis APIs to label images and detect barcodes, text, faces, and objects.
 
 ### **[Barcode scanning](https://developers.google.com/ml-kit/vision/barcode-scanning)**
 

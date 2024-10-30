@@ -39,9 +39,15 @@ class VisionCameraMLkitUtils: NSObject {
     }
   }
 
+  // Cache the CIFilter instance
+  private static let colorInvertFilter: CIFilter? = {
+    let filter = CIFilter(name: "CIColorInvert")
+    filter?.setDefaults()
+    return filter
+  }()
+
   private static func invertCIImageColor(image: CIImage) -> CIImage? {
-    guard let filter = CIFilter(name: "CIColorInvert") else { return nil }
-    filter.setDefaults()
+    guard let filter = colorInvertFilter else { return nil }
     filter.setValue(image, forKey: kCIInputImageKey)
     return filter.outputImage
   }

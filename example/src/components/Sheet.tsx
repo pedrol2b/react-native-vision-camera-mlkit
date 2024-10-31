@@ -125,7 +125,9 @@ const Sheet = forwardRef<BottomSheetModalMethods, SheetProps>(
 ) as SheetType;
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    zIndex: 20, // Ensure the Sheet is on top of all other components
+  },
   handleIndicator: {
     width: 100,
     height: 8,

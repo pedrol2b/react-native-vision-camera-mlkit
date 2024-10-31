@@ -9,7 +9,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Reanimated, {
   Extrapolation,
@@ -124,7 +124,25 @@ const Camera = forwardRef<RNVCCamera, CameraProps>((props, ref) => {
         ref={settingsSheetRef}
         onChange={(index) => setSheetVisible(index >= 0)}
       >
-        <></>
+        <View style={styles.sheetContent}>
+          <Text style={styles.sheetTitle}>Vision APIs</Text>
+          <View style={styles.sheetRowGap}>
+            <View style={styles.sheetRow}>
+              <Text style={styles.sheetText}>Barcode scanning</Text>
+            </View>
+            <View style={styles.sheetRow}>
+              <Text style={styles.sheetText}>Text recognition v2</Text>
+            </View>
+            <View style={styles.sheetRow}>
+              <Text style={styles.sheetText}>Image labeling</Text>
+            </View>
+            <View style={styles.sheetRow}>
+              <Text style={styles.sheetText}>
+                Object detection and tracking
+              </Text>
+            </View>
+          </View>
+        </View>
       </SettingsSheet>
       <View style={[{ marginTop }, styles.topRightButtons]}>
         <View style={styles.buttonContainer}>
@@ -207,6 +225,26 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 100,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  sheetContent: {
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    rowGap: 12,
+  },
+  sheetTitle: {
+    fontSize: 24,
+    fontWeight: '500',
+  },
+  sheetRowGap: {
+    rowGap: 8,
+  },
+  sheetRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  sheetText: {
+    fontSize: 16,
   },
 });
 

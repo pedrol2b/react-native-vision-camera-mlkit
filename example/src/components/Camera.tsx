@@ -107,33 +107,36 @@ const Camera = forwardRef<RNVCCamera, CameraProps>((props, ref) => {
   if (!device || !hasPermission) return null;
 
   return (
-    <GestureDetector gesture={panGesture}>
-      <ReanimatedCamera
-        ref={ref}
-        device={device}
-        isActive={true}
-        fps={fps}
-        zoom={zoom.value}
-        pixelFormat="yuv"
-        format={format}
-        enableFpsGraph={fpsGraphEnabled}
-        onError={console.error}
-        enableBufferCompression={true}
-        videoStabilizationMode="off"
-        frameProcessor={frameProcessor}
-        resizeMode="cover"
-        style={StyleSheet.absoluteFill}
-        animatedProps={animatedProps}
-        {...props}
-      >
-        <View style={[{ marginTop }, styles.topRightButtons]} />
-      </ReanimatedCamera>
-    </GestureDetector>
+    <>
+      <View style={[{ marginTop }, styles.topRightButtons]} />
+      <GestureDetector gesture={panGesture}>
+        <ReanimatedCamera
+          ref={ref}
+          device={device}
+          isActive={true}
+          fps={fps}
+          zoom={zoom.value}
+          pixelFormat="yuv"
+          format={format}
+          enableFpsGraph={fpsGraphEnabled}
+          onError={console.error}
+          enableBufferCompression={true}
+          videoStabilizationMode="off"
+          frameProcessor={frameProcessor}
+          resizeMode="cover"
+          style={StyleSheet.absoluteFill}
+          animatedProps={animatedProps}
+          {...props}
+        />
+      </GestureDetector>
+    </>
   );
 });
 
 const styles = StyleSheet.create({
   topRightButtons: {
+    zIndex: 10,
+    pointerEvents: 'box-none',
     position: 'absolute',
     top: 16,
     right: 16,

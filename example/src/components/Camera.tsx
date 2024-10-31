@@ -1,9 +1,12 @@
+import type { BottomSheetModal } from '@gorhom/bottom-sheet';
+import type { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import { Gauge, Settings } from 'lucide-react-native';
 import React, {
   type ComponentProps,
   forwardRef,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -25,6 +28,7 @@ import {
   useCameraPermission,
   useFrameProcessor,
 } from 'react-native-vision-camera';
+import { Sheet } from './Sheet';
 
 Reanimated.addWhitelistedNativeProps({ zoom: true });
 
@@ -38,6 +42,8 @@ type CameraProps = Omit<
 >;
 
 const Camera = forwardRef<RNVCCamera, CameraProps>((props, ref) => {
+  const settingsSheetRef = useRef<BottomSheetModal>(null);
+
   const { top: marginTop } = useSafeAreaInsets();
   const { hasPermission, requestPermission } = useCameraPermission();
 
@@ -88,6 +94,8 @@ const Camera = forwardRef<RNVCCamera, CameraProps>((props, ref) => {
       }
     });
 
+  const presentSettingsSheet = () => settingsSheetRef.current?.present();
+
   const toggleFpsGraphEnabled = () => setFpsGraphEnabled((enabled) => !enabled);
 
   const animatedProps = useAnimatedProps(() => ({ zoom: zoom.value }), [zoom]);
@@ -108,9 +116,13 @@ const Camera = forwardRef<RNVCCamera, CameraProps>((props, ref) => {
 
   return (
     <>
+      <SettingsSheet ref={settingsSheetRef}>
+        <></>
+      </SettingsSheet>
       <View style={[{ marginTop }, styles.topRightButtons]}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
+            onPress={presentSettingsSheet}
             hitSlop={{ top: 12, right: 12, bottom: 12, left: 12 }}
           >
             <Settings size={24} color="white" />
@@ -147,7 +159,32 @@ const Camera = forwardRef<RNVCCamera, CameraProps>((props, ref) => {
   );
 });
 
+type SettingsSheetProps = ComponentProps<typeof Sheet.ScrollView>;
+
+const SettingsSheet = forwardRef<
+  BottomSheetModalMethods | null,
+  SettingsSheetProps
+>(({ children, ...props }: SettingsSheetProps, ref) => {
+  return (
+    <Sheet ref={ref}>
+      <Sheet.ScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={styles.sheetContainer}
+        nestedScrollEnabled={true}
+        horizontal={false}
+        showsVerticalScrollIndicator={false}
+        {...props}
+      >
+        {children}
+      </Sheet.ScrollView>
+    </Sheet>
+  );
+});
+
 const styles = StyleSheet.create({
+  sheetContainer: {
+    flexGrow: 1,
+  },
   topRightButtons: {
     zIndex: 10,
     pointerEvents: 'box-none',

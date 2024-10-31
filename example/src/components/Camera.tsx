@@ -1,3 +1,4 @@
+import { Gauge, Settings } from 'lucide-react-native';
 import React, {
   type ComponentProps,
   forwardRef,
@@ -5,7 +6,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Reanimated, {
   Extrapolation,
@@ -87,7 +88,6 @@ const Camera = forwardRef<RNVCCamera, CameraProps>((props, ref) => {
       }
     });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const toggleFpsGraphEnabled = () => setFpsGraphEnabled((enabled) => !enabled);
 
   const animatedProps = useAnimatedProps(() => ({ zoom: zoom.value }), [zoom]);
@@ -108,7 +108,21 @@ const Camera = forwardRef<RNVCCamera, CameraProps>((props, ref) => {
 
   return (
     <>
-      <View style={[{ marginTop }, styles.topRightButtons]} />
+      <View style={[{ marginTop }, styles.topRightButtons]}>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            hitSlop={{ top: 12, right: 12, bottom: 12, left: 12 }}
+          >
+            <Settings size={24} color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={toggleFpsGraphEnabled}
+            hitSlop={{ top: 12, right: 12, bottom: 12, left: 12 }}
+          >
+            <Gauge size={24} color="white" />
+          </TouchableOpacity>
+        </View>
+      </View>
       <GestureDetector gesture={panGesture}>
         <ReanimatedCamera
           ref={ref}
@@ -140,6 +154,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 16,
     right: 16,
+  },
+  buttonContainer: {
+    flexDirection: 'column',
+    rowGap: 12,
+    padding: 12,
+    borderRadius: 100,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
 });
 

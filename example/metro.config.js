@@ -3,7 +3,6 @@ const path = require('path');
 const escape = require('escape-string-regexp');
 const exclusionList = require('metro-config/src/defaults/exclusionList');
 const pak = require('../package.json');
-const { withNativeWind } = require('nativewind/metro');
 const {
   wrapWithReanimatedMetroConfig,
 } = require('react-native-reanimated/metro-config');
@@ -46,11 +45,4 @@ const config = mergeConfig(getDefaultConfig(__dirname), {
   },
 });
 
-const withNativeWindConfig = withNativeWind(config, {
-  input: './src/styles/global.css',
-});
-
-const withReactNativeReanimatedConfig =
-  wrapWithReanimatedMetroConfig(withNativeWindConfig);
-
-module.exports = withReactNativeReanimatedConfig;
+module.exports = wrapWithReanimatedMetroConfig(config);

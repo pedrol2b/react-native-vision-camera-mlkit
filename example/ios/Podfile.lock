@@ -1393,6 +1393,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - RNSVG (15.8.0):
+    - React-Core
   - SocketRocket (0.7.0)
   - VisionCamera (4.6.0):
     - VisionCamera/Core (= 4.6.0)
@@ -1498,6 +1500,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
+  - RNSVG (from `../node_modules/react-native-svg`)
   - VisionCamera (from `../node_modules/react-native-vision-camera`)
   - VisionCameraMLkit (from `../..`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -1645,6 +1648,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
   VisionCamera:
     :path: "../node_modules/react-native-vision-camera"
   VisionCameraMLkit:
@@ -1733,6 +1738,7 @@ SPEC CHECKSUMS:
   ReactCommon: f7da14a8827b72704169a48c929bcde802698361
   RNGestureHandler: a8e61b93b4c5c44e6cd797cdaba43126ec36acaa
   RNReanimated: af4e059a8fd0fb7a9cdf5ad35ead4699598a9447
+  RNSVG: 8b1a777d54096b8c2a0fd38fc9d5a454332bbb4d
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   VisionCamera: c1190303038cefdab149702322ac12cc23e78b61
   VisionCameraMLkit: 83050c029a1ae88d1fce939efba892ab035d1992

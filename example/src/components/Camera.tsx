@@ -9,7 +9,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Reanimated, {
   Extrapolation,
@@ -28,6 +28,7 @@ import {
   useCameraPermission,
   useFrameProcessor,
 } from 'react-native-vision-camera';
+import * as plugins from 'react-native-vision-camera-mlkit';
 import { Sheet } from './Sheet';
 
 Reanimated.addWhitelistedNativeProps({ zoom: true });
@@ -50,6 +51,12 @@ const Camera = forwardRef<RNVCCamera, CameraProps>((props, ref) => {
   const [targetFps] = useState(60);
   const [fpsGraphEnabled, setFpsGraphEnabled] = useState(false);
   const [isSheetVisible, setSheetVisible] = useState(false);
+
+  /** Enabled PLUGINS */
+  const [barcodeScannerEnabled, setBarcodeScannerEnabled] = useState(false);
+  const [textRecognizerEnabled, setTextRecognizerEnabled] = useState(true);
+  const [imageLabelerEnabled, setImageLabelerEnabled] = useState(false);
+  const [objectDetectorEnabled, setObjectDetectorEnabled] = useState(false);
 
   /**
    * Faster Camera Device
@@ -104,13 +111,50 @@ const Camera = forwardRef<RNVCCamera, CameraProps>((props, ref) => {
 
   const animatedProps = useAnimatedProps(() => ({ zoom: zoom.value }), [zoom]);
 
-  const frameProcessor = useFrameProcessor((frame) => {
-    'worklet';
+  /** PLUGINS */
+  const { barcodeScanner } = plugins.useBarcodeScanner();
 
-    runAsync(frame, () => {
+  const { textRecognizer } = plugins.useTextRecognizer();
+
+  const { imageLabeler } = plugins.useImageLabeler();
+
+  const { objectDetector } = plugins.useObjectDetector();
+
+  const frameProcessor = useFrameProcessor(
+    (frame) => {
       'worklet';
-    });
-  }, []);
+
+      runAsync(frame, () => {
+        'worklet';
+
+        if (barcodeScannerEnabled) {
+          const barcode = barcodeScanner(frame);
+          console.log(barcode);
+        }
+
+        if (textRecognizerEnabled) {
+          const text = textRecognizer(frame);
+          console.log(text);
+        }
+
+        if (imageLabelerEnabled) {
+          const image = imageLabeler(frame);
+          console.log(image);
+        }
+
+        if (objectDetectorEnabled) {
+          const object = objectDetector(frame);
+          console.log(object);
+        }
+      });
+    },
+    [
+      barcodeScannerEnabled,
+      textRecognizerEnabled,
+      imageLabelerEnabled,
+      objectDetectorEnabled,
+    ]
+  );
 
   useEffect(() => {
     !hasPermission && requestPermission();
@@ -125,21 +169,40 @@ const Camera = forwardRef<RNVCCamera, CameraProps>((props, ref) => {
         onChange={(index) => setSheetVisible(index >= 0)}
       >
         <View style={styles.sheetContent}>
-          <Text style={styles.sheetTitle}>Vision APIs</Text>
+          <Text style={styles.sheetTitle}>Plugins</Text>
           <View style={styles.sheetRowGap}>
             <View style={styles.sheetRow}>
               <Text style={styles.sheetText}>Barcode scanning</Text>
+              <Switch
+                disabled
+                value={barcodeScannerEnabled}
+                onValueChange={setBarcodeScannerEnabled}
+              />
             </View>
             <View style={styles.sheetRow}>
               <Text style={styles.sheetText}>Text recognition v2</Text>
+              <Switch
+                value={textRecognizerEnabled}
+                onValueChange={setTextRecognizerEnabled}
+              />
             </View>
             <View style={styles.sheetRow}>
               <Text style={styles.sheetText}>Image labeling</Text>
+              <Switch
+                disabled
+                value={imageLabelerEnabled}
+                onValueChange={setImageLabelerEnabled}
+              />
             </View>
             <View style={styles.sheetRow}>
               <Text style={styles.sheetText}>
                 Object detection and tracking
               </Text>
+              <Switch
+                disabled
+                value={objectDetectorEnabled}
+                onValueChange={setObjectDetectorEnabled}
+              />
             </View>
           </View>
         </View>
@@ -236,7 +299,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   sheetRowGap: {
-    rowGap: 8,
+    rowGap: 12,
   },
   sheetRow: {
     flexDirection: 'row',

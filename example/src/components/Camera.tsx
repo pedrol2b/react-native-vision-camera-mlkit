@@ -64,16 +64,17 @@ const Camera = forwardRef<RNVCCamera, CameraProps>((props, ref) => {
   const zoom = useSharedValue(neutralZoom);
   const zoomOffset = useSharedValue(neutralZoom);
 
-  /** ZOOM Pinch Gesture */
-  const pinchGesture = Gesture.Pinch()
+  /** ZOOM Pan Gesture */
+  const panGesture = Gesture.Pan()
     .onBegin(() => {
       zoomOffset.value = zoom.value;
     })
     .onUpdate((event) => {
-      const z = zoomOffset.value * event.scale;
+      const verticalTranslation = -event.translationY;
+      const zoomChange = verticalTranslation / 200; // Adjust the denominator to control sensitivity
       zoom.value = interpolate(
-        z,
-        [1, 10],
+        zoomOffset.value + zoomChange,
+        [minZoom, maxZoom],
         [minZoom, maxZoom],
         Extrapolation.CLAMP
       );
@@ -104,7 +105,7 @@ const Camera = forwardRef<RNVCCamera, CameraProps>((props, ref) => {
   if (!device || !hasPermission) return null;
 
   return (
-    <GestureDetector gesture={pinchGesture}>
+    <GestureDetector gesture={panGesture}>
       <ReanimatedCamera
         ref={ref}
         device={device}

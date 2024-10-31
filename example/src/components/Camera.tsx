@@ -1,4 +1,4 @@
-import type { BottomSheetModal } from '@gorhom/bottom-sheet';
+import type { BottomSheetModal, SNAP_POINT_TYPE } from '@gorhom/bottom-sheet';
 import type { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import { Gauge, Settings } from 'lucide-react-native';
 import React, {
@@ -49,6 +49,7 @@ const Camera = forwardRef<RNVCCamera, CameraProps>((props, ref) => {
 
   const [targetFps] = useState(60);
   const [fpsGraphEnabled, setFpsGraphEnabled] = useState(false);
+  const [isSheetVisible, setSheetVisible] = useState(false);
 
   /**
    * Faster Camera Device
@@ -94,7 +95,10 @@ const Camera = forwardRef<RNVCCamera, CameraProps>((props, ref) => {
       }
     });
 
-  const presentSettingsSheet = () => settingsSheetRef.current?.present();
+  const toggleSettingsSheet = () =>
+    isSheetVisible
+      ? settingsSheetRef.current?.dismiss()
+      : settingsSheetRef.current?.present();
 
   const toggleFpsGraphEnabled = () => setFpsGraphEnabled((enabled) => !enabled);
 
@@ -116,13 +120,16 @@ const Camera = forwardRef<RNVCCamera, CameraProps>((props, ref) => {
 
   return (
     <>
-      <SettingsSheet ref={settingsSheetRef}>
+      <SettingsSheet
+        ref={settingsSheetRef}
+        onChange={(index) => setSheetVisible(index >= 0)}
+      >
         <></>
       </SettingsSheet>
       <View style={[{ marginTop }, styles.topRightButtons]}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
-            onPress={presentSettingsSheet}
+            onPress={toggleSettingsSheet}
             hitSlop={{ top: 12, right: 12, bottom: 12, left: 12 }}
           >
             <Settings size={24} color="white" />
@@ -159,14 +166,16 @@ const Camera = forwardRef<RNVCCamera, CameraProps>((props, ref) => {
   );
 });
 
-type SettingsSheetProps = ComponentProps<typeof Sheet.ScrollView>;
+type SettingsSheetProps = ComponentProps<typeof Sheet.ScrollView> & {
+  onChange?: (index: number, position: number, type: SNAP_POINT_TYPE) => void;
+};
 
 const SettingsSheet = forwardRef<
   BottomSheetModalMethods | null,
   SettingsSheetProps
->(({ children, ...props }: SettingsSheetProps, ref) => {
+>(({ onChange, children, ...props }: SettingsSheetProps, ref) => {
   return (
-    <Sheet ref={ref}>
+    <Sheet ref={ref} onChange={onChange}>
       <Sheet.ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={styles.sheetContainer}

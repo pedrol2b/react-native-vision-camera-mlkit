@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Reanimated, {
   Extrapolation,
@@ -14,6 +14,7 @@ import Reanimated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Camera as RNVCCamera,
   runAsync,
@@ -36,6 +37,7 @@ type CameraProps = Omit<
 >;
 
 const Camera = forwardRef<RNVCCamera, CameraProps>((props, ref) => {
+  const { top: marginTop } = useSafeAreaInsets();
   const { hasPermission, requestPermission } = useCameraPermission();
 
   const [targetFps] = useState(60);
@@ -123,9 +125,19 @@ const Camera = forwardRef<RNVCCamera, CameraProps>((props, ref) => {
         style={StyleSheet.absoluteFill}
         animatedProps={animatedProps}
         {...props}
-      />
+      >
+        <View style={[{ marginTop }, styles.topRightButtons]} />
+      </ReanimatedCamera>
     </GestureDetector>
   );
+});
+
+const styles = StyleSheet.create({
+  topRightButtons: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
+  },
 });
 
 export { Camera };

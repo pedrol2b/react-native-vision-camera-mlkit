@@ -3,17 +3,20 @@ const path = require('path');
 const escape = require('escape-string-regexp');
 const exclusionList = require('metro-config/src/defaults/exclusionList');
 const pak = require('../package.json');
+const {
+  wrapWithReanimatedMetroConfig,
+} = require('react-native-reanimated/metro-config');
 
 const root = path.resolve(__dirname, '..');
 const modules = Object.keys({ ...pak.peerDependencies });
 
 /**
  * Metro configuration
- * https://facebook.github.io/metro/docs/configuration
+ * https://reactnative.dev/docs/metro
  *
  * @type {import('metro-config').MetroConfig}
  */
-const config = {
+const config = mergeConfig(getDefaultConfig(__dirname), {
   watchFolders: [root],
 
   // We need to make sure that only one version is loaded for peerDependencies
@@ -40,6 +43,6 @@ const config = {
       },
     }),
   },
-};
+});
 
-module.exports = mergeConfig(getDefaultConfig(__dirname), config);
+module.exports = wrapWithReanimatedMetroConfig(config);

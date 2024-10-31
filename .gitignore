@@ -27,8 +27,8 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
+**/.xcode.env.local
 project.xcworkspace
-.xcode.env.local
 
 # Android/IJ
 #
@@ -43,9 +43,9 @@ android.iml
 
 # Cocoapods
 #
-ios/Pods
+**/Pods/
+/vendor/bundle/
 ios/Podfile*
-example/ios/Pods
 
 # Ruby
 example/vendor/

@@ -56,15 +56,11 @@
     "react-native-module",
     "native-module",
     "image-processing",
-    "real-time",
     "camera",
-    "on-device",
     "text-detection",
     "face-detection",
     "barcode-scanner",
-    "segmentation",
-    "pose-detection",
-    "document-scanner"
+    "pose-detection"
   ],
   "repository": {
     "type": "git",

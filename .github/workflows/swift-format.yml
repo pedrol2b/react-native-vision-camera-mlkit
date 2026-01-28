@@ -1,0 +1,58 @@
+name: Swift Format (iOS)
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/swift-format.yml'
+      - 'ios/**/*.swift'
+      - '.swift-format'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/swift-format.yml'
+      - 'ios/**/*.swift'
+      - '.swift-format'
+  merge_group:
+    types: [checks_requested]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: swift-format-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  swift-format:
+    name: Swift Format
+    runs-on: macos-latest
+
+    defaults:
+      run:
+        working-directory: ./ios
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Cache Mint
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: |
+            ~/.mint
+          key: ${{ runner.os }}-mint-${{ hashFiles('**/.swift-format') }}
+          restore-keys: |
+            ${{ runner.os }}-mint-
+
+      - name: Install Mint
+        run: brew install mint
+
+      - name: Install swift-format
+        run: mint install swiftlang/swift-format@602.0.0
+
+      - name: Check formatting under ios/
+        run: |
+          mint run swift-format swift-format lint \
+            --configuration ../.swift-format \
+            --recursive .

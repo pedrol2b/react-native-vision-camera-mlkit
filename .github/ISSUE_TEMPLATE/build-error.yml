@@ -1,0 +1,109 @@
+name: 🔧 Build Error
+description: Report build issues with react-native-vision-camera-mlkit
+title: '🔧 Build error: '
+labels: [🔧 build error]
+body:
+  - type: dropdown
+    attributes:
+      label: ML Kit Features Enabled
+      description: Which ML Kit features have you enabled in your project configuration?
+      multiple: true
+      options:
+        - Text Recognition
+        - Face Detection
+        - Face Mesh Detection
+        - Pose Detection
+        - Selfie Segmentation
+        - Subject Segmentation
+        - Document Scanner
+        - Barcode Scanning
+        - Image Labeling
+        - Object Detection
+        - Digital Ink Recognition
+        - None (trying to add first feature)
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Build Method
+      description: Describe how you attempted to build the app. Specify if you used Xcode, `yarn ios`, Android Studio, or another method.
+      placeholder: 'e.g., I ran `yarn ios` after enabling Text Recognition in my Podfile and rebuilding.'
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: Build Steps Followed
+      description: Confirm you followed the installation steps from the README.
+      options:
+        - label: '✅ Installed react-native-vision-camera-mlkit'
+          required: true
+        - label: '✅ Enabled ML Kit features in Podfile (iOS) or build.gradle (Android)'
+          required: true
+        - label: '✅ Ran `pod install` (iOS) or rebuilt app (Android)'
+          required: true
+        - label: '✅ Added camera permissions to Info.plist (iOS) or AndroidManifest.xml (Android)'
+          required: true
+  - type: textarea
+    attributes:
+      label: Complete Build Logs
+      description: Provide the complete build logs from the console. Ensure you include everything from start to end, not just the last few lines.
+      render: shell
+      placeholder: 'Paste full build log output here...'
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Target Platforms
+      description: Select the platforms where the build error occurs.
+      multiple: true
+      options:
+        - iOS
+        - Android
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Operating System
+      description: Select the operating system on which you are trying to build.
+      multiple: true
+      options:
+        - macOS
+        - Windows
+        - Linux
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Xcode Version (iOS only)
+      description: If building for iOS, specify your Xcode version.
+      placeholder: 'e.g., Xcode 15.0'
+    validations:
+      required: false
+  - type: input
+    attributes:
+      label: Android Gradle Plugin Version (Android only)
+      description: If building for Android, specify your Android Gradle Plugin version.
+      placeholder: 'e.g., 8.1.0'
+    validations:
+      required: false
+  - type: input
+    attributes:
+      label: react-native-vision-camera-mlkit Version
+      description: Specify the version of react-native-vision-camera-mlkit you are using.
+      placeholder: 'e.g., 1.0.0'
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: react-native-vision-camera Version
+      description: Specify the version of react-native-vision-camera you are using.
+      placeholder: 'e.g., 4.0.0'
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: react-native-worklets-core Version
+      description: Specify the version of react-native-worklets-core you are using.
+      placeholder: 'e.g., 1.3.0'
+    validations:
+      required: true

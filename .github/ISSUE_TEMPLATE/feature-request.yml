@@ -1,0 +1,69 @@
+name: ✨ Feature Request
+description: Suggest a new ML Kit feature or enhancement
+title: '✨ Feature Request: '
+labels: [✨ feature]
+body:
+  - type: dropdown
+    attributes:
+      label: ML Kit Feature Category
+      description: Select the category that best fits your feature request.
+      options:
+        - New ML Kit Feature Support
+        - Enhancement to Existing Feature
+        - Performance Improvement
+        - API/Configuration Enhancement
+        - Documentation/Examples
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Specific ML Kit Feature (if applicable)
+      description: If your request relates to an existing feature, select it here.
+      multiple: true
+      options:
+        - Text Recognition
+        - Face Detection
+        - Face Mesh Detection
+        - Pose Detection
+        - Selfie Segmentation
+        - Subject Segmentation
+        - Document Scanner
+        - Barcode Scanning
+        - Image Labeling
+        - Object Detection
+        - Digital Ink Recognition
+        - Not Applicable
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Feature Description
+      description: Provide a detailed description of the feature you are suggesting. Explain why it would be useful and how it should work.
+      placeholder: 'Describe the feature...'
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Use Case
+      description: Describe the use case for this feature. Explain how you or others would use it and what problem it would solve.
+      placeholder: 'Describe the use case...'
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: Implementation Requirements
+      description: Check all that apply to help us understand the scope.
+      options:
+        - label: 'Requires changes to native code (Android/iOS)'
+        - label: 'Requires new ML Kit dependencies'
+        - label: 'Breaking change for existing API'
+        - label: 'Performance-critical implementation'
+        - label: 'Cross-platform compatibility needed'
+  - type: input
+    attributes:
+      label: Additional Context
+      description: Provide any additional context or information that might be relevant to the feature request.
+      placeholder: 'Add any other context, links to ML Kit documentation, or screenshots here...'
+    validations:
+      required: false

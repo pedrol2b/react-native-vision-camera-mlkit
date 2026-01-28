@@ -1,5 +1,17 @@
 blank_issues_enabled: true
 contact_links:
-  - name: 📸 react-native-vision-camera
+  - name: 💬 GitHub Discussions
+    url: https://github.com/pedrol2b/react-native-vision-camera-mlkit/discussions
+    about: Get help, ask questions, or discuss usage when the library works as expected.
+
+  - name: 📸 react-native-vision-camera Issues
     url: https://github.com/mrousavy/react-native-vision-camera/issues
-    about: Choose if your issue is related to react-native-vision-camera.
+    about: Report issues that are specific to react-native-vision-camera itself.
+
+  - name: 🎥 Vision Camera Documentation
+    url: https://react-native-vision-camera.com/docs/guides
+    about: Read the official Vision Camera documentation for installation, APIs, and platform-specific behavior.
+
+  - name: 📚 Google ML Kit Documentation
+    url: https://developers.google.com/ml-kit
+    about: Check the official ML Kit docs for supported APIs, setup details, and platform-specific behavior.

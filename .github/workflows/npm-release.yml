@@ -49,17 +49,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup environment
+        uses: ./.github/actions/setup
+
       - name: Setup Node.js for npm
         uses: actions/setup-node@v4
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org
 
-      - name: Download build artifacts
+      - name: Download build artifacts (overwrite into repo root)
         uses: actions/download-artifact@v4
         with:
           name: lib
-          path: lib
+          path: .
 
       - name: Determine npm tag
         id: npm-tag
@@ -77,10 +80,9 @@ jobs:
           fi
 
       - name: Publish package
-        working-directory: lib
         run: |
           if [ "${{ steps.npm-tag.outputs.tag }}" = "latest" ]; then
-            npm publish --provenance --access public --ignore-scripts
+            npm publish --provenance --access public
           else
-            npm publish --provenance --access public --tag ${{ steps.npm-tag.outputs.tag }} --ignore-scripts
+            npm publish --provenance --access public --tag ${{ steps.npm-tag.outputs.tag }}
           fi

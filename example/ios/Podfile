@@ -1,12 +1,42 @@
-# Resolve react_native_pods.rb with node to allow for hoisting
-require Pod::Executable.execute_command('node', ['-p',
-  'require.resolve(
-    "react-native/scripts/react_native_pods.rb",
-    {paths: [process.argv[1]]},
-  )', __dir__]).strip
+ENV['RCT_NEW_ARCH_ENABLED'] = '1'
+
+$VisionCameraMLKit = {
+  'textRecognition' => true,
+  'textRecognitionChinese' => true,
+  'textRecognitionDevanagari' => true,
+  'textRecognitionJapanese' => true,
+  'textRecognitionKorean' => true,
+  'faceDetection' => false,
+  'poseDetection' => false,
+  'poseDetectionAccurate' => false,
+  'selfieSegmentation' => false,
+  'barcodeScanning' => false,
+  'imageLabeling' => false,
+  'objectDetection' => false,
+  'digitalInkRecognition' => false,
+}
+
+def node_require(script)
+  # Resolve script with node to allow for hoisting
+  require Pod::Executable.execute_command('node', ['-p',
+    "require.resolve(
+      '#{script}',
+      {paths: [process.argv[1]]},
+    )", __dir__]).strip
+end
+
+# Use it to require both react-native's and this package's scripts:
+node_require('react-native/scripts/react_native_pods.rb')
+node_require('react-native-permissions/scripts/setup.rb')
 
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
+
+setup_permissions([
+  'Camera',
+  'PhotoLibrary',
+])
+
 
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
@@ -14,7 +44,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'VisionCameraMlkitExample' do
+target 'VisionCameraMLKitExample' do
   config = use_native_modules!
 
   use_react_native!(
@@ -22,11 +52,6 @@ target 'VisionCameraMlkitExample' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
-
-  target 'VisionCameraMlkitExampleTests' do
-    inherit! :complete
-    # Pods for testing
-  end
 
   post_install do |installer|
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202

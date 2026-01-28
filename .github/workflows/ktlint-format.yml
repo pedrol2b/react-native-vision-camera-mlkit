@@ -1,0 +1,67 @@
+name: Ktlint Format (Android)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/ktlint-format.yml'
+      - 'android/**/*.kt'
+      - 'android/**/*.kts'
+      - '.editorconfig'
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/ktlint-format.yml'
+      - 'android/**/*.kt'
+      - 'android/**/*.kts'
+      - '.editorconfig'
+  merge_group:
+    types: [checks_requested]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ktlint-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ktlint:
+    name: Ktlint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./android
+
+    env:
+      KTLINT_VERSION: 1.8.0
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Download ktlint
+        run: |
+          curl -sSLo ktlint "https://github.com/pinterest/ktlint/releases/download/${KTLINT_VERSION}/ktlint"
+          chmod +x ktlint
+          ./ktlint --version
+
+      - name: Run ktlint (generate checkstyle report)
+        run: |
+          mkdir -p build
+          ./ktlint \
+            --relative \
+            --editorconfig=../.editorconfig \
+            --reporter=checkstyle,output=build/ktlint-report.xml
+        continue-on-error: false
+
+      - uses: yutailang0119/action-ktlint@v4
+        if: always()
+        with:
+          report-path: ./android/build/ktlint-report.xml
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ktlint-report
+          path: ./android/build/ktlint-report.xml

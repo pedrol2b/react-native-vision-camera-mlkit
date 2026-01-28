@@ -1,6 +1,7 @@
 buildscript {
-  // Buildscript is evaluated before everything else so we can't use getExtOrDefault
-  def kotlin_version = rootProject.ext.has("kotlinVersion") ? rootProject.ext.get("kotlinVersion") : project.properties["VisionCameraMlkit_kotlinVersion"]
+  ext.getExtOrDefault = { name ->
+    return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties['VisionCameraMLKit_' + name]
+  }
 
   repositories {
     google()
@@ -8,50 +9,68 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:7.2.1"
+    classpath "com.android.tools.build:gradle:8.7.2"
     // noinspection DifferentKotlinGradleVersion
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${getExtOrDefault('kotlinVersion')}"
   }
 }
 
-def isNewArchitectureEnabled() {
-  return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
-}
 
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 
-if (isNewArchitectureEnabled()) {
-  apply plugin: "com.facebook.react"
-}
-
-def getExtOrDefault(name) {
-  return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties["VisionCameraMlkit_" + name]
-}
+apply plugin: "com.facebook.react"
 
 def getExtOrIntegerDefault(name) {
-  return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["VisionCameraMlkit_" + name]).toInteger()
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["VisionCameraMLKit_" + name]).toInteger()
 }
 
-def supportsNamespace() {
-  def parsed = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')
-  def major = parsed[0].toInteger()
-  def minor = parsed[1].toInteger()
+// Load MLKit configuration from rootProject.ext set by the consuming app
+// The consuming app should set this in their android/build.gradle or app/build.gradle
+def getMLKitConfig() {
+  // Default configuration
+  def defaultConfig = [
+    textRecognition          : true,
+    textRecognitionChinese   : true,
+    textRecognitionDevanagari: true,
+    textRecognitionJapanese  : true,
+    textRecognitionKorean    : true,
+    faceDetection            : false,
+    faceMeshDetection        : false,
+    poseDetection            : false,
+    poseDetectionAccurate    : false,
+    selfieSegmentation       : false,
+    subjectSegmentation      : false,
+    documentScanner          : false,
+    barcodeScanning          : false,
+    imageLabeling            : false,
+    objectDetection          : false,
+    digitalInkRecognition    : false,
+  ]
 
-  // Namespace support was added in 7.3.0
-  return (major == 7 && minor >= 3) || major >= 8
+  // Check if the consuming app has set the config via rootProject.ext
+  if (rootProject.ext.has('react-native-vision-camera-mlkit')) {
+    def userConfig = rootProject.ext.get('react-native-vision-camera-mlkit')
+    if (userConfig?.mlkit) {
+      // Merge user config with defaults
+      defaultConfig.each { key, value ->
+        if (userConfig.mlkit.containsKey(key)) {
+          defaultConfig[key] = userConfig.mlkit[key]
+        }
+      }
+      logger.quiet("VisionCameraMLKit: Using custom configuration")
+    }
+  } else {
+    logger.quiet("VisionCameraMLKit: Using default configuration")
+  }
+
+  return defaultConfig
 }
+
+def mlkitConfig = getMLKitConfig()
 
 android {
-  if (supportsNamespace()) {
-    namespace "com.visioncameramlkit"
-
-    sourceSets {
-      main {
-        manifest.srcFile "src/main/AndroidManifestNew.xml"
-      }
-    }
-  }
+  namespace "com.visioncameramlkit"
 
   compileSdkVersion getExtOrIntegerDefault("compileSdkVersion")
 
@@ -59,6 +78,27 @@ android {
     minSdkVersion getExtOrIntegerDefault("minSdkVersion")
     targetSdkVersion getExtOrIntegerDefault("targetSdkVersion")
 
+    // Add build config fields for conditional compilation
+    buildConfigField "boolean", "MLKIT_TEXT_RECOGNITION", "${mlkitConfig.textRecognition}"
+    buildConfigField "boolean", "MLKIT_TEXT_RECOGNITION_CHINESE", "${mlkitConfig.textRecognitionChinese}"
+    buildConfigField "boolean", "MLKIT_TEXT_RECOGNITION_DEVANAGARI", "${mlkitConfig.textRecognitionDevanagari}"
+    buildConfigField "boolean", "MLKIT_TEXT_RECOGNITION_JAPANESE", "${mlkitConfig.textRecognitionJapanese}"
+    buildConfigField "boolean", "MLKIT_TEXT_RECOGNITION_KOREAN", "${mlkitConfig.textRecognitionKorean}"
+    buildConfigField "boolean", "MLKIT_FACE_DETECTION", "${mlkitConfig.faceDetection}"
+    buildConfigField "boolean", "MLKIT_FACE_MESH_DETECTION", "${mlkitConfig.faceMeshDetection}"
+    buildConfigField "boolean", "MLKIT_POSE_DETECTION", "${mlkitConfig.poseDetection}"
+    buildConfigField "boolean", "MLKIT_POSE_DETECTION_ACCURATE", "${mlkitConfig.poseDetectionAccurate}"
+    buildConfigField "boolean", "MLKIT_SELFIE_SEGMENTATION", "${mlkitConfig.selfieSegmentation}"
+    buildConfigField "boolean", "MLKIT_SUBJECT_SEGMENTATION", "${mlkitConfig.subjectSegmentation}"
+    buildConfigField "boolean", "MLKIT_DOCUMENT_SCANNER", "${mlkitConfig.documentScanner}"
+    buildConfigField "boolean", "MLKIT_BARCODE_SCANNING", "${mlkitConfig.barcodeScanning}"
+    buildConfigField "boolean", "MLKIT_IMAGE_LABELING", "${mlkitConfig.imageLabeling}"
+    buildConfigField "boolean", "MLKIT_OBJECT_DETECTION", "${mlkitConfig.objectDetection}"
+    buildConfigField "boolean", "MLKIT_DIGITAL_INK_RECOGNITION", "${mlkitConfig.digitalInkRecognition}"
+  }
+
+  buildFeatures {
+    buildConfig true
   }
 
   buildTypes {
@@ -75,6 +115,15 @@ android {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
   }
+
+  sourceSets {
+    main {
+      java.srcDirs += [
+        "generated/java",
+        "generated/jni"
+      ]
+    }
+  }
 }
 
 repositories {
@@ -85,37 +134,94 @@ repositories {
 def kotlin_version = getExtOrDefault("kotlinVersion")
 
 dependencies {
-  // For < 0.71, this will be from the local maven repo
-  // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
-  //noinspection GradleDynamicVersion
-  implementation "com.facebook.react:react-native:+"
+  implementation "com.facebook.react:react-android"
   api project(":react-native-vision-camera")
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation "androidx.camera:camera-core:1.1.0"
+  implementation "androidx.camera:camera-core:1.5.2"
 
-  // https://developers.google.com/ml-kit/vision/barcode-scanning/android
+  // ===== GoogleMLKit Vision =====
+  // Only include dependencies for enabled features
 
-  implementation "com.google.mlkit:barcode-scanning:17.2.0"
-
-  // https://developers.google.com/ml-kit/vision/object-detection/android
-
-  implementation "com.google.mlkit:object-detection:17.0.1"
-
-  // https://developers.google.com/ml-kit/vision/image-labeling/android
-
-  implementation "com.google.mlkit:image-labeling:17.0.8"
-
+  // Text recognition v2
   // https://developers.google.com/ml-kit/vision/text-recognition/v2/android
+  if (mlkitConfig.textRecognition) {
+    implementation "com.google.mlkit:text-recognition:16.0.1"
+  }
+  if (mlkitConfig.textRecognitionChinese) {
+    implementation "com.google.mlkit:text-recognition-chinese:16.0.1"
+  }
+  if (mlkitConfig.textRecognitionDevanagari) {
+    implementation "com.google.mlkit:text-recognition-devanagari:16.0.1"
+  }
+  if (mlkitConfig.textRecognitionJapanese) {
+    implementation "com.google.mlkit:text-recognition-japanese:16.0.1"
+  }
+  if (mlkitConfig.textRecognitionKorean) {
+    implementation "com.google.mlkit:text-recognition-korean:16.0.1"
+  }
 
-  // To recognize Latin script
-  implementation "com.google.mlkit:text-recognition:16.0.0"
-  // To recognize Chinese script
-  implementation "com.google.mlkit:text-recognition-chinese:16.0.0"
-  // To recognize Devanagari script
-  implementation "com.google.mlkit:text-recognition-devanagari:16.0.0"
-  // To recognize Japanese script
-  implementation "com.google.mlkit:text-recognition-japanese:16.0.0"
-  // To recognize Korean script
-  implementation "com.google.mlkit:text-recognition-korean:16.0.0"
+  // Face detection
+  // https://developers.google.com/ml-kit/vision/face-detection/android
+  if (mlkitConfig.faceDetection) {
+    implementation "com.google.mlkit:face-detection:16.1.7"
+  }
+
+  // Face mesh detection (Beta)
+  // https://developers.google.com/ml-kit/vision/face-mesh-detection/android
+  if (mlkitConfig.faceMeshDetection) {
+    implementation "com.google.mlkit:face-mesh-detection:16.0.0-beta1"
+  }
+
+  // Pose detection (Beta)
+  // https://developers.google.com/ml-kit/vision/pose-detection/android
+  if (mlkitConfig.poseDetection) {
+    implementation "com.google.mlkit:pose-detection:18.0.0-beta5"
+  }
+  if (mlkitConfig.poseDetectionAccurate) {
+    implementation "com.google.mlkit:pose-detection-accurate:18.0.0-beta5"
+  }
+
+  // Selfie segmentation (Beta)
+  // https://developers.google.com/ml-kit/vision/selfie-segmentation/android
+  if (mlkitConfig.selfieSegmentation) {
+    implementation "com.google.mlkit:segmentation-selfie:16.0.0-beta6"
+  }
+
+  // Subject segmentation (Beta)
+  // https://developers.google.com/ml-kit/vision/subject-segmentation/android
+  if (mlkitConfig.subjectSegmentation) {
+    implementation "com.google.android.gms:play-services-mlkit-subject-segmentation:16.0.0-beta1"
+  }
+
+  // Document scanner
+  // https://developers.google.com/ml-kit/vision/doc-scanner/android
+  if (mlkitConfig.documentScanner) {
+    implementation "com.google.android.gms:play-services-mlkit-document-scanner:16.0.0"
+  }
+
+  // Barcode scanning
+  // https://developers.google.com/ml-kit/vision/barcode-scanning/android
+  if (mlkitConfig.barcodeScanning) {
+    implementation "com.google.mlkit:barcode-scanning:17.3.0"
+  }
+
+  // Image labeling (Base Model) -> Custom models will be added soon
+  // https://developers.google.com/ml-kit/vision/image-labeling/android
+  if (mlkitConfig.imageLabeling) {
+    implementation "com.google.mlkit:image-labeling:17.0.9"
+  }
+
+  // Object detection and tracking (Base Model) -> Custom models will be added soon
+  // https://developers.google.com/ml-kit/vision/object-detection/android
+  if (mlkitConfig.objectDetection) {
+    implementation "com.google.mlkit:object-detection:17.0.2"
+  }
+
+  // Digital ink recognition
+  // https://developers.google.com/ml-kit/vision/digital-ink-recognition/android
+  if (mlkitConfig.digitalInkRecognition) {
+    implementation "com.google.mlkit:digital-ink-recognition:19.0.0"
+  }
+
+  // ===== GoogleMLKit Vision =====
 }
-

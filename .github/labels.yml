@@ -1,63 +1,102 @@
-- name: ❌-no-repro
-  description: Reproduction not provided
-  color: FF0000
-- name: 🤖 android
-  description: Android platform
-  color: 4BC74F
-- name: ⚠️ breaking change
-  description: Codebase changes
-  color: FF0000
-- name: 🐞 bug
-  description: Application problem
-  color: FFA500
-- name: 🔧 build error
-  description: Build issues
-  color: 008672
-- name: 📦 dependencies
-  description: Project dependencies
-  color: FBCA04
-- name: 📃 documentation
-  description: Documentation updates
-  color: C0C0C0
-- name: 🖇 duplicate
-  description: Duplicate issue
-  color: FFEC27
-- name: 🚀 enhancement
-  description: Improvements
-  color: 84B6EB
+- name: 🐛 bug
+  description: Something isn't working as expected
+  color: d73a49
 - name: ✨ feature
-  description: New feature suggestion
-  color: 00BFFF
-- name: 📢 help wanted
-  description: Assistance needed
-  color: FF0000
-- name: ❌ invalid
-  description: Incomplete issue
-  color: FFA500
-- name: 🍏 ios
-  description: iOS platform
-  color: 3DDC84
-- name: 🎈 performance
-  description: Application performance
-  color: 4682B4
+  description: New feature request
+  color: a2eeef
+- name: 🚀 enhancement
+  description: Enhancement to existing feature
+  color: 84B6EB
+- name: 🔧 build error
+  description: Build or compilation issues
+  color: 008672
+- name: 📚 documentation
+  description: Documentation improvements or additions
+  color: 0075ca
 - name: 💭 question
-  description: Information request
+  description: Questions or clarifications needed
+  color: d876e3
+- name: 🤖 android
+  description: Android platform specific
+  color: 4BC74F
+- name: 🍏 ios
+  description: iOS platform specific
+  color: 3DDC84
+- name: 📝 text-recognition
+  description: Text Recognition feature
+  color: fbca04
+- name: 👤 face-detection
+  description: Face Detection feature
+  color: f9d0c4
+- name: 🎭 face-mesh-detection
+  description: Face Mesh Detection feature
+  color: e99695
+- name: 🏃 pose-detection
+  description: Pose Detection feature
+  color: d4c5f9
+- name: ✂️ selfie-segmentation
+  description: Selfie Segmentation feature
+  color: bfc1c6
+- name: 📐 subject-segmentation
+  description: Subject Segmentation feature
+  color: 8b4513
+- name: 📄 document-scanner
+  description: Document Scanner feature
+  color: 2e8b57
+- name: 📱 barcode-scanning
+  description: Barcode Scanning feature
+  color: ff69b4
+- name: 🏷️ image-labeling
+  description: Image Labeling feature
+  color: 00ced1
+- name: 🔍 object-detection
+  description: Object Detection feature
+  color: dc143c
+- name: ✍️ digital-ink-recognition
+  description: Digital Ink Recognition feature
+  color: 8a2be2
+- name: ❌ needs-reproduction
+  description: Issue needs reproduction steps
   color: FF0000
-- name: 💄 types
-  description: TypeScript issues
-  color: 00BFFF
-- name: ❌ typo
-  description: Typo is short for typographical error
-  color: FFC0CB
-- name: ⚠️ warning
-  description: Application warnings
-  color: FFEC27
-- name: 🚧 WIP
-  description: Work in progress
-  color: FFD700
+- name: ⌛ awaiting-author
+  description: Waiting for author feedback or requested information
+  color: FBCA04
+- name: 🖇 duplicate
+  description: This issue or pull request already exists
+  color: cfd3d7
+- name: ❌ invalid
+  description: This doesn't seem right
+  color: e4e669
 - name: ☠️ wontfix
-  description: Acknowledged, won't be fixed
-  color: 800080
+  description: This will not be worked on
+  color: ffffff
 - name: ⏳ stale
-  description: Lacking recent activity or updates
+  description: Issue has not had recent activity
   color: 808080
+- name: 🚧 wip
+  description: Work in progress
+  color: fbca04
+- name: 🔴 critical
+  description: Critical issue affecting core functionality
+  color: b60205
+- name: 🟠 high
+  description: High priority issue
+  color: fbca04
+- name: 🟡 medium
+  description: Medium priority issue
+  color: fef2c0
+- name: 🟢 low
+  description: Low priority issue
+  color: 0e8a16
+- name: ⚠️ breaking change
+  description: Breaking change that requires migration
+  color: d93f0b
+- name: 🎈 performance
+  description: Performance related issue or improvement
+  color: 006b75
+- name: 📦 dependencies
+  description: Pull requests that update dependencies
+  color: 0366d6
+- name: 💄 types
+  description: TypeScript type definitions or issues
+  color: 1d76db

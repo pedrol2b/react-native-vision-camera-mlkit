@@ -59,6 +59,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: lib
+          path: lib
 
       - name: Determine npm tag
         id: npm-tag
@@ -76,9 +77,10 @@ jobs:
           fi
 
       - name: Publish package
+        working-directory: lib
         run: |
           if [ "${{ steps.npm-tag.outputs.tag }}" = "latest" ]; then
-            npm publish --provenance --access public
+            npm publish --provenance --access public --ignore-scripts
           else
-            npm publish --provenance --access public --tag ${{ steps.npm-tag.outputs.tag }}
+            npm publish --provenance --access public --tag ${{ steps.npm-tag.outputs.tag }} --ignore-scripts
           fi

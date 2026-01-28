@@ -50,18 +50,27 @@ jobs:
 
       - name: Resolve iOS simulator destination
         run: |
-          IOS_RUNTIME=$(xcrun simctl list runtimes -j | /usr/bin/python3 - <<'PY'
+          SIMCTL_JSON="$(xcrun simctl list runtimes -j 2>/dev/null || true)"
+          IOS_RUNTIME=$(SIMCTL_JSON="$SIMCTL_JSON" /usr/bin/python3 - <<'PY'
           import json
+          import os
           import sys
 
-          data = json.load(sys.stdin)
+          raw = os.environ.get("SIMCTL_JSON", "")
+          if not raw.strip():
+              sys.exit(0)
+
+          try:
+              data = json.loads(raw)
+          except json.JSONDecodeError:
+              sys.exit(0)
+
           runtimes = [
               runtime
               for runtime in data.get("runtimes", [])
               if runtime.get("platform") == "iOS" and runtime.get("isAvailable")
           ]
           if not runtimes:
-              print("", end="")
               sys.exit(0)
 
           def version_key(runtime):

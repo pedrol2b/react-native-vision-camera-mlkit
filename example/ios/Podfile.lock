@@ -9,6 +9,9 @@ PODS:
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30911.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleMLKit/BarcodeScanning (5.0.0):
+    - GoogleMLKit/MLKitCore
+    - MLKitBarcodeScanning (~> 4.0.0)
   - GoogleMLKit/MLKitCore (5.0.0):
     - MLKitCommon (~> 10.0.0)
   - GoogleMLKit/TextRecognition (5.0.0):
@@ -55,6 +58,9 @@ PODS:
     - hermes-engine/Pre-built (= 0.81.1)
   - hermes-engine/Pre-built (0.81.1)
   - MLImage (1.0.0-beta5)
+  - MLKitBarcodeScanning (4.0.0):
+    - MLKitCommon (~> 10.0)
+    - MLKitVision (~> 6.0)
   - MLKitCommon (10.0.0):
     - GoogleDataTransport (~> 9.0)
     - GoogleToolboxForMac/Logger (~> 2.1)
@@ -2943,6 +2949,7 @@ PODS:
     - fast_float
     - fmt
     - glog
+    - GoogleMLKit/BarcodeScanning
     - GoogleMLKit/TextRecognition
     - GoogleMLKit/TextRecognitionChinese
     - GoogleMLKit/TextRecognitionDevanagari
@@ -3070,6 +3077,7 @@ SPEC REPOS:
     - GoogleUtilitiesComponents
     - GTMSessionFetcher
     - MLImage
+    - MLKitBarcodeScanning
     - MLKitCommon
     - MLKitTextRecognition
     - MLKitTextRecognitionChinese
@@ -3268,6 +3276,7 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   hermes-engine: 4f8246b1f6d79f625e0d99472d1f3a71da4d28ca
   MLImage: 1824212150da33ef225fbd3dc49f184cf611046c
+  MLKitBarcodeScanning: 9cb0ec5ec65bbb5db31de4eba0a3289626beab4e
   MLKitCommon: afcd11b6c0735066a0dde8b4bf2331f6197cbca2
   MLKitTextRecognition: 91706574e4db9b48cd2e66cbbcc6b58956156b0a
   MLKitTextRecognitionChinese: 19d3a70799f17cf2115b6381964b87e874d96dcd
@@ -3354,9 +3363,9 @@ SPEC CHECKSUMS:
   RNWorklets: ab7740c2a152f77ff76a40d52be860d8f128fab1
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   VisionCamera: 47f10351a1b6a8d251b90986ae72ca5f52331954
-  VisionCameraMLKit: 218fa89d2b7fc41d4c18e7d02388acfee540f414
+  VisionCameraMLKit: 573c04788106c92549faf3a46eea1771f2ac6c49
   Yoga: fa23995c18b65978347b096d0836f4f5093df545
 
-PODFILE CHECKSUM: 41a62ebecc21ff87e3b5d0c2e79112ee681909eb
+PODFILE CHECKSUM: 1e33379caa52806ba900154e8eb803a55bbce31c
 
 COCOAPODS: 1.16.2

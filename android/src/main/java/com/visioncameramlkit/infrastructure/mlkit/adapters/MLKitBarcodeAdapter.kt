@@ -24,7 +24,7 @@ object MLKitBarcodeAdapter {
       content = toContent(barcode),
     )
 
-  private fun toContent(barcode: Barcode): Map<String, Any?>? {
+  private fun toContent(barcode: Barcode): Map<String, Any?> {
     val type = toValueType(barcode.valueType)
     val content = HashMap<String, Any?>()
     content["type"] = type.name
@@ -115,7 +115,7 @@ object MLKitBarcodeAdapter {
   private fun toAddressMap(address: Barcode.Address?): Map<String, Any?>? {
     if (address == null) return null
     val map = HashMap<String, Any?>()
-    map["addressLines"] = address.addressLines?.toList() ?: emptyList<String>()
+    map["addressLines"] = address.addressLines.toList()
     map["type"] = address.type
     return map
   }
@@ -136,13 +136,14 @@ object MLKitBarcodeAdapter {
   private fun toContactInfoMap(info: Barcode.ContactInfo?): Map<String, Any?>? {
     if (info == null) return null
     val map = HashMap<String, Any?>()
-    map["addresses"] = info.addresses?.mapNotNull { toAddressMap(it) } ?: emptyList<Map<String, Any?>>()
-    map["emails"] = info.emails?.mapNotNull { toEmailMap(it) } ?: emptyList<Map<String, Any?>>()
+    map["addresses"] =
+      info.addresses.mapNotNull { toAddressMap(it) }
+    map["emails"] = info.emails.mapNotNull { toEmailMap(it) }
     map["name"] = toPersonNameMap(info.name)
     map["organization"] = info.organization
-    map["phones"] = info.phones?.mapNotNull { toPhoneMap(it) } ?: emptyList<Map<String, Any?>>()
+    map["phones"] = info.phones.mapNotNull { toPhoneMap(it) }
     map["title"] = info.title
-    map["urls"] = info.urls?.toList() ?: emptyList<String>()
+    map["urls"] = info.urls.toList()
     return map
   }
 

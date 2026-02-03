@@ -24,11 +24,13 @@ class VisionCameraMLKitModule(
   private val handlers by lazy {
     val handlers = mutableMapOf<String, IStaticImageHandler>()
 
+    @Suppress("KotlinConstantConditions")
     if (BuildConfig.MLKIT_TEXT_RECOGNITION) {
       handlers[MLKitFeatureKeys.TEXT_RECOGNITION] =
         StaticTextRecognitionHandler(reactApplicationContext)
     }
 
+    @Suppress("KotlinConstantConditions")
     if (BuildConfig.MLKIT_BARCODE_SCANNING) {
       handlers[MLKitFeatureKeys.BARCODE_SCANNING] =
         StaticBarcodeScanningHandler(reactApplicationContext)
@@ -39,6 +41,7 @@ class VisionCameraMLKitModule(
 
   override fun getName(): String = NAME
 
+  @Suppress("unused")
   @ReactMethod
   fun processImage(
     feature: String,

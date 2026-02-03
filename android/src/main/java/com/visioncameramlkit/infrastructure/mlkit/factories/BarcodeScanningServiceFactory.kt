@@ -34,10 +34,9 @@ object BarcodeScanningServiceFactory {
     }
 
     val resolved = formats.mapNotNull { toMlKitFormat(it) }
-    return if (resolved.isEmpty()) {
+
+    return resolved.ifEmpty {
       listOf(Barcode.FORMAT_ALL_FORMATS)
-    } else {
-      resolved
     }
   }
 

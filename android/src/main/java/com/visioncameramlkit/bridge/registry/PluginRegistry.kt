@@ -14,11 +14,13 @@ object PluginRegistry {
     isRegistered
   }
 
-  @Suppress("KotlinConstantConditions")
   private fun registerPlugins() {
+    @Suppress("KotlinConstantConditions")
     if (BuildConfig.MLKIT_TEXT_RECOGNITION) {
       registerTextRecognitionPlugin()
     }
+
+    @Suppress("KotlinConstantConditions")
     if (BuildConfig.MLKIT_BARCODE_SCANNING) {
       registerBarcodeScanningPlugin()
     }

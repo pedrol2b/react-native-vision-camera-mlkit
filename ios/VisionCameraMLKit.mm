@@ -35,3 +35,7 @@ RCT_EXTERN_METHOD(processImage : (NSString *)feature path : (
 #ifdef MLKIT_TEXT_RECOGNITION
 REGISTER_PLUGIN(TextRecognitionPlugin, @"TextRecognition")
 #endif
+
+#ifdef MLKIT_BARCODE_SCANNING
+REGISTER_PLUGIN(BarcodeScanningPlugin, @"BarcodeScanning")
+#endif

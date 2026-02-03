@@ -2,8 +2,7 @@ import Foundation
 
 class TextRecognitionSerializer {
 
-  static func toReactNativeMap(_ result: TextRecognitionResult) -> [String: Any]
-  {
+  static func toReactNativeMap(_ result: TextRecognitionResult) -> [String: Any] {
     var map = [String: Any]()
     map["text"] = result.text
     map["blocks"] = toBlocksArray(result.blocks)
@@ -100,8 +99,7 @@ class TextRecognitionSerializer {
     ]
   }
 
-  private static func toCornersArray(_ corners: [Corner]) -> [[String: Double]]
-  {
+  private static func toCornersArray(_ corners: [Corner]) -> [[String: Double]] {
     return corners.map { toCornerMap($0) }
   }
 

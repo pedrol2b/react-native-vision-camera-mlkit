@@ -4,37 +4,42 @@ import android.net.Uri
 import androidx.core.net.toUri
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
-import com.visioncameramlkit.application.usecases.RecognizeTextUseCase
+import com.visioncameramlkit.application.usecases.RecognizeBarcodeUseCase
+import com.visioncameramlkit.domain.models.BarcodeFormatOption
+import com.visioncameramlkit.domain.models.BarcodeScanningOptions
 import com.visioncameramlkit.domain.models.ImagePreprocessingOptions
 import com.visioncameramlkit.domain.models.Orientation
-import com.visioncameramlkit.domain.models.TextRecognitionLanguage
-import com.visioncameramlkit.domain.models.TextRecognitionOptions
 import com.visioncameramlkit.infrastructure.image.ImagePreprocessor
-import com.visioncameramlkit.infrastructure.mlkit.factories.TextRecognitionServiceFactory
-import com.visioncameramlkit.infrastructure.serializers.TextRecognitionSerializer
+import com.visioncameramlkit.infrastructure.mlkit.factories.BarcodeScanningServiceFactory
+import com.visioncameramlkit.infrastructure.serializers.BarcodeScanningSerializer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 
-class StaticTextRecognitionHandler(
+class StaticBarcodeScanningHandler(
   private val reactContext: ReactApplicationContext,
 ) : IStaticImageHandler {
-  private var cachedUseCase: RecognizeTextUseCase? = null
+  private var cachedUseCase: RecognizeBarcodeUseCase? = null
+  private var cachedOptionsKey: String? = null
 
-  private fun getRecognizeTextUseCase(language: TextRecognitionLanguage): RecognizeTextUseCase {
-    if (cachedUseCase != null) {
+  private fun getRecognizeBarcodeUseCase(options: BarcodeScanningOptions): RecognizeBarcodeUseCase {
+    val optionsKey = buildOptionsKey(options)
+    if (cachedUseCase != null && cachedOptionsKey == optionsKey) {
       return cachedUseCase!!
     }
-    val recognitionService = TextRecognitionServiceFactory.create(language)
+
+    val recognitionService = BarcodeScanningServiceFactory.create(options)
     val newUseCase =
-      RecognizeTextUseCase(
+      RecognizeBarcodeUseCase(
         ImagePreprocessor(),
         recognitionService,
       )
     cachedUseCase = newUseCase
+    cachedOptionsKey = optionsKey
     return newUseCase
   }
 
@@ -54,22 +59,17 @@ class StaticTextRecognitionHandler(
         }
 
         val imageOptions = parseImageOptions(options)
-
-        val languageString = options.getString("language") ?: "LATIN"
-        val language = parseLanguage(languageString)
-        val textOptions = TextRecognitionOptions(language = language)
-
-        val recognizeTextUseCase = getRecognizeTextUseCase(language)
+        val barcodeOptions = parseBarcodeOptions(options)
+        val recognizeBarcodeUseCase = getRecognizeBarcodeUseCase(barcodeOptions)
 
         val result =
-          recognizeTextUseCase.execute(
+          recognizeBarcodeUseCase.execute(
             imageFile,
             imageOptions,
-            textOptions,
+            barcodeOptions,
           )
 
-        val serializedResult = TextRecognitionSerializer.toWritableMap(result)
-
+        val serializedResult = BarcodeScanningSerializer.toWritableMap(result)
         promise.resolve(serializedResult)
       } catch (
         @Suppress("TooGenericExceptionCaught") e: Exception,
@@ -89,7 +89,7 @@ class StaticTextRecognitionHandler(
           else -> {
             promise.reject(
               "IMAGE_PROCESSING_FAILED_ERROR",
-              e.message ?: "Text recognition failed",
+              e.message ?: "Barcode scanning failed",
             )
           }
         }
@@ -138,6 +138,45 @@ class StaticTextRecognitionHandler(
           ?: Orientation.PORTRAIT,
     )
 
+  private fun parseBarcodeOptions(options: ReadableMap): BarcodeScanningOptions {
+    val formatStrings = parseFormats(options.getArray("formats"))
+    val enableAllPotentialBarcodes =
+      if (options.hasKey("enableAllPotentialBarcodes")) {
+        options.getBoolean("enableAllPotentialBarcodes")
+      } else {
+        false
+      }
+
+    return BarcodeScanningOptions(
+      formats = formatStrings,
+      enableAllPotentialBarcodes = enableAllPotentialBarcodes,
+    )
+  }
+
+  private fun parseFormats(rawFormats: ReadableArray?): List<BarcodeFormatOption> {
+    if (rawFormats == null || rawFormats.size() == 0) {
+      return listOf(BarcodeFormatOption.ALL)
+    }
+
+    val parsed = mutableListOf<BarcodeFormatOption>()
+    for (index in 0 until rawFormats.size()) {
+      val rawValue = rawFormats.getString(index)?.uppercase() ?: continue
+      try {
+        parsed.add(BarcodeFormatOption.valueOf(rawValue))
+      } catch (
+        @Suppress("SwallowedException") _: IllegalArgumentException,
+      ) {
+        continue
+      }
+    }
+
+    return if (parsed.isEmpty()) {
+      listOf(BarcodeFormatOption.ALL)
+    } else {
+      parsed
+    }
+  }
+
   private fun parseOrientation(orientation: String): Orientation =
     when (orientation) {
       "portrait" -> Orientation.PORTRAIT
@@ -147,13 +186,12 @@ class StaticTextRecognitionHandler(
       else -> Orientation.PORTRAIT
     }
 
-  private fun parseLanguage(language: String): TextRecognitionLanguage =
-    when (language) {
-      "LATIN" -> TextRecognitionLanguage.LATIN
-      "CHINESE" -> TextRecognitionLanguage.CHINESE
-      "DEVANAGARI" -> TextRecognitionLanguage.DEVANAGARI
-      "JAPANESE" -> TextRecognitionLanguage.JAPANESE
-      "KOREAN" -> TextRecognitionLanguage.KOREAN
-      else -> TextRecognitionLanguage.LATIN
-    }
+  private fun buildOptionsKey(options: BarcodeScanningOptions): String {
+    val formatsKey =
+      options.formats
+        .map { it.name }
+        .sorted()
+        .joinToString(",")
+    return "$formatsKey|${options.enableAllPotentialBarcodes}"
+  }
 }

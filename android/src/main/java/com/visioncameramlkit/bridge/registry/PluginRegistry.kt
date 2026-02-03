@@ -19,12 +19,13 @@ object PluginRegistry {
     if (BuildConfig.MLKIT_TEXT_RECOGNITION) {
       registerTextRecognitionPlugin()
     }
+    if (BuildConfig.MLKIT_BARCODE_SCANNING) {
+      registerBarcodeScanningPlugin()
+    }
   }
 
   private fun registerTextRecognitionPlugin() {
     try {
-      // Dynamically load the plugin class to avoid compilation errors
-      // when the MLKit dependencies are not included
       val pluginClass =
         Class.forName("com.visioncameramlkit.bridge.plugins.TextRecognitionPlugin")
 
@@ -42,12 +43,38 @@ object PluginRegistry {
         ) as com.mrousavy.camera.frameprocessors.FrameProcessorPlugin
       }
     } catch (e: ClassNotFoundException) {
-      // Plugin class not found - feature not enabled
       android.util.Log.w("VisionCameraMLKit", "TextRecognitionPlugin not available: ${e.message}")
     } catch (
       @Suppress("TooGenericExceptionCaught") e: Exception,
     ) {
       android.util.Log.e("VisionCameraMLKit", "Error registering TextRecognitionPlugin", e)
+    }
+  }
+
+  private fun registerBarcodeScanningPlugin() {
+    try {
+      val pluginClass =
+        Class.forName("com.visioncameramlkit.bridge.plugins.BarcodeScanningPlugin")
+
+      FrameProcessorPluginRegistry.addFrameProcessorPlugin(
+        MLKitFeatureKeys.BARCODE_SCANNING,
+      ) { proxy, options ->
+        val constructor =
+          pluginClass.getConstructor(
+            com.mrousavy.camera.frameprocessors.VisionCameraProxy::class.java,
+            Map::class.java,
+          )
+        constructor.newInstance(
+          proxy,
+          options,
+        ) as com.mrousavy.camera.frameprocessors.FrameProcessorPlugin
+      }
+    } catch (e: ClassNotFoundException) {
+      android.util.Log.w("VisionCameraMLKit", "BarcodeScanningPlugin not available: ${e.message}")
+    } catch (
+      @Suppress("TooGenericExceptionCaught") e: Exception,
+    ) {
+      android.util.Log.e("VisionCameraMLKit", "Error registering BarcodeScanningPlugin", e)
     }
   }
 }

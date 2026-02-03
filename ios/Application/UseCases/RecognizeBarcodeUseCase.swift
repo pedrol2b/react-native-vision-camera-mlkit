@@ -1,23 +1,23 @@
 import Foundation
 
-#if MLKIT_TEXT_RECOGNITION
+#if MLKIT_BARCODE_SCANNING
   #if canImport(VisionCamera)
     import VisionCamera
 
-    class RecognizeTextUseCase {
+    class RecognizeBarcodeUseCase {
       private let imagePreprocessor: IImagePreprocessor
-      private let recognitionService: MLKitTextRecognitionService
+      private let recognitionService: MLKitBarcodeScanningService
 
       init(
         imagePreprocessor: IImagePreprocessor,
-        recognitionService: MLKitTextRecognitionService
+        recognitionService: MLKitBarcodeScanningService
       ) {
         self.imagePreprocessor = imagePreprocessor
         self.recognitionService = recognitionService
       }
 
-      func execute(frame: Frame, options: TextRecognitionOptions) throws
-        -> TextRecognitionResult
+      func execute(frame: Frame, options: BarcodeScanningOptions) throws
+        -> BarcodeScanningResult
       {
         // autoreleasepool at frame boundary to drain autoreleased Obj-C objects
         // after each frame is processed, preventing buildup across multiple frames
@@ -35,7 +35,7 @@ import Foundation
             )
           else {
             throw NSError(
-              domain: "RecognizeTextUseCase",
+              domain: "RecognizeBarcodeUseCase",
               code: -1,
               userInfo: [NSLocalizedDescriptionKey: "Failed to preprocess image"]
             )
@@ -48,8 +48,8 @@ import Foundation
       func execute(
         imageFile: URL,
         imageOptions: ImagePreprocessingOptions,
-        textOptions: TextRecognitionOptions
-      ) throws -> TextRecognitionResult {
+        barcodeOptions: BarcodeScanningOptions
+      ) throws -> BarcodeScanningResult {
         // autoreleasepool here ensures predictable memory cleanup,
         // especially if this method is called repeatedly or in batches
         return try autoreleasepool {
@@ -60,7 +60,7 @@ import Foundation
             )
           else {
             throw NSError(
-              domain: "RecognizeTextUseCase",
+              domain: "RecognizeBarcodeUseCase",
               code: -1,
               userInfo: [NSLocalizedDescriptionKey: "Failed to preprocess image"]
             )

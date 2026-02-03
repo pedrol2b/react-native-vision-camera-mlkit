@@ -1,23 +1,24 @@
 import Foundation
 
-#if MLKIT_TEXT_RECOGNITION
-  class StaticTextRecognitionHandler: IStaticImageHandler {
-    private let textRecognitionSerializer = TextRecognitionSerializer()
-    private var cachedUseCase: RecognizeTextUseCase?
+#if MLKIT_BARCODE_SCANNING
+  class StaticBarcodeScanningHandler: IStaticImageHandler {
+    private var cachedUseCase: RecognizeBarcodeUseCase?
+    private var cachedOptionsKey: String?
 
-    private func getRecognizeTextUseCase(for language: TextRecognitionLanguage)
-      -> RecognizeTextUseCase
-    {
-      if let useCase = cachedUseCase {
+    private func getRecognizeBarcodeUseCase(
+      options: BarcodeScanningOptions
+    ) -> RecognizeBarcodeUseCase {
+      let optionsKey = buildOptionsKey(options)
+      if let useCase = cachedUseCase, cachedOptionsKey == optionsKey {
         return useCase
       }
-      let newUseCase = RecognizeTextUseCase(
+
+      let newUseCase = RecognizeBarcodeUseCase(
         imagePreprocessor: ImagePreprocessor(),
-        recognitionService: TextRecognitionServiceFactory.create(
-          language: language
-        )
+        recognitionService: BarcodeScanningServiceFactory.create(options: options)
       )
       cachedUseCase = newUseCase
+      cachedOptionsKey = optionsKey
       return newUseCase
     }
 
@@ -50,23 +51,16 @@ import Foundation
           }
 
           let imageOptions = parseImageOptions(options)
+          let barcodeOptions = parseBarcodeOptions(options)
+          let recognizeBarcodeUseCase = getRecognizeBarcodeUseCase(options: barcodeOptions)
 
-          let languageString = options["language"] as? String ?? "LATIN"
-          let language = parseLanguage(languageString)
-          let textOptions = TextRecognitionOptions(language: language)
-
-          let recognizeTextUseCase = getRecognizeTextUseCase(for: language)
-
-          let result = try recognizeTextUseCase.execute(
+          let result = try recognizeBarcodeUseCase.execute(
             imageFile: fileURL,
             imageOptions: imageOptions,
-            textOptions: textOptions
+            barcodeOptions: barcodeOptions
           )
 
-          let serializedResult = TextRecognitionSerializer.toReactNativeMap(
-            result
-          )
-
+          let serializedResult = BarcodeScanningSerializer.toReactNativeMap(result)
           resolver(serializedResult)
         } catch {
           switch error {
@@ -106,6 +100,22 @@ import Foundation
       )
     }
 
+    private func parseBarcodeOptions(_ options: [String: Any])
+      -> BarcodeScanningOptions
+    {
+      let formatStrings = (options["formats"] as? [String] ?? ["ALL"]).map {
+        $0.uppercased()
+      }
+      let parsedFormats = formatStrings.compactMap { BarcodeFormatOption(rawValue: $0) }
+      let formats = parsedFormats.isEmpty ? [.all] : parsedFormats
+      let enableAllPotentialBarcodes = options["enableAllPotentialBarcodes"] as? Bool ?? false
+
+      return BarcodeScanningOptions(
+        formats: formats,
+        enableAllPotentialBarcodes: enableAllPotentialBarcodes
+      )
+    }
+
     private func parseOrientation(_ orientation: String) -> Orientation {
       switch orientation {
       case "portrait":
@@ -121,23 +131,6 @@ import Foundation
       }
     }
 
-    private func parseLanguage(_ language: String) -> TextRecognitionLanguage {
-      switch language {
-      case "LATIN":
-        return .latin
-      case "CHINESE":
-        return .chinese
-      case "DEVANAGARI":
-        return .devanagari
-      case "JAPANESE":
-        return .japanese
-      case "KOREAN":
-        return .korean
-      default:
-        return .latin
-      }
-    }
-
     private func resolveFileURL(from path: String) -> URL? {
       if path.hasPrefix("file://") {
         return URL(string: path)
@@ -148,6 +141,11 @@ import Foundation
       }
 
       return URL(fileURLWithPath: path)
+    }
+
+    private func buildOptionsKey(_ options: BarcodeScanningOptions) -> String {
+      let formatsKey = options.formats.map { $0.rawValue }.sorted().joined(separator: ",")
+      return "\(formatsKey)|\(options.enableAllPotentialBarcodes)"
     }
   }
 #endif

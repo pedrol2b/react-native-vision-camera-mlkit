@@ -9,6 +9,7 @@ import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.module.annotations.ReactModule
 import com.visioncameramlkit.bridge.constants.MLKitFeatureKeys
 import com.visioncameramlkit.bridge.handlers.IStaticImageHandler
+import com.visioncameramlkit.bridge.handlers.StaticBarcodeScanningHandler
 import com.visioncameramlkit.bridge.handlers.StaticTextRecognitionHandler
 
 @ReactModule(name = VisionCameraMLKitModule.NAME)
@@ -22,6 +23,7 @@ class VisionCameraMLKitModule(
   private val handlers by lazy {
     mapOf<String, IStaticImageHandler>(
       MLKitFeatureKeys.TEXT_RECOGNITION to StaticTextRecognitionHandler(reactApplicationContext),
+      MLKitFeatureKeys.BARCODE_SCANNING to StaticBarcodeScanningHandler(reactApplicationContext),
     )
   }
 

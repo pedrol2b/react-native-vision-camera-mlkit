@@ -1,4 +1,4 @@
-import UIKit
+import Foundation
 
 @objc public enum OutputOrientation: Int {
   case portrait

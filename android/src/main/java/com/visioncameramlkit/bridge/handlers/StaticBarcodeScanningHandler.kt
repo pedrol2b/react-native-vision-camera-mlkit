@@ -160,13 +160,10 @@ class StaticBarcodeScanningHandler(
 
     val parsed = mutableListOf<BarcodeFormatOption>()
     for (index in 0 until rawFormats.size()) {
-      val rawValue = rawFormats.getString(index)?.uppercase() ?: continue
-      try {
-        parsed.add(BarcodeFormatOption.valueOf(rawValue))
-      } catch (
-        @Suppress("SwallowedException") _: IllegalArgumentException,
-      ) {
-        continue
+      val rawValue = rawFormats.getString(index)?.uppercase()
+      val format = rawValue?.let { toBarcodeFormat(it) }
+      if (format != null) {
+        parsed.add(format)
       }
     }
 
@@ -184,6 +181,15 @@ class StaticBarcodeScanningHandler(
       "landscape-left" -> Orientation.LANDSCAPE_LEFT
       "landscape-right" -> Orientation.LANDSCAPE_RIGHT
       else -> Orientation.PORTRAIT
+    }
+
+  private fun toBarcodeFormat(rawValue: String): BarcodeFormatOption? =
+    try {
+      BarcodeFormatOption.valueOf(rawValue)
+    } catch (
+      @Suppress("SwallowedException") _: IllegalArgumentException,
+    ) {
+      null
     }
 
   private fun buildOptionsKey(options: BarcodeScanningOptions): String {

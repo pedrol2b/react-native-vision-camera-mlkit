@@ -116,6 +116,20 @@ $VisionCameraMLKit = {
 
 Android-only keys: `faceMeshDetection`, `subjectSegmentation`, `documentScanner`.
 
+Note: If you enable any non-Latin text recognition model, keep the base `textRecognition` enabled as well. Some shared code paths are still guarded by `#if MLKIT_TEXT_RECOGNITION`, so disabling it will break the extra language models. This will be fixed in a future version.
+
+Example configuration:
+
+```ruby
+$VisionCameraMLKit = {
+  'textRecognition' => true,
+  'textRecognitionChinese' => false,
+  'textRecognitionDevanagari' => false,
+  'textRecognitionJapanese' => false,
+  'textRecognitionKorean' => true,
+}
+```
+
 ## Usage
 
 ### Text Recognition (Frame Processor)
@@ -269,10 +283,8 @@ If you’re integrating this library into a production app, consider funding the
 
 [complete]: https://img.shields.io/badge/COMPLETE-5E5CE6
 [in-progress]: https://img.shields.io/badge/IN%20PROGRESS-FFD60A
-
 [android]: https://img.shields.io/badge/ANDROID-3DDC84
 [ios]: https://img.shields.io/badge/IOS-0A84FF
-
 [contributors-shield]: https://img.shields.io/github/contributors/pedrol2b/react-native-vision-camera-mlkit.svg?style=for-the-badge
 [contributors-url]: https://github.com/pedrol2b/react-native-vision-camera-mlkit/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/pedrol2b/react-native-vision-camera-mlkit.svg?style=for-the-badge

@@ -62,10 +62,8 @@ class BarcodeScanningPlugin(
         }
       }
 
-    return if (formats.isEmpty()) {
+    return formats.ifEmpty {
       listOf(BarcodeFormatOption.ALL)
-    } else {
-      formats
     }
   }
 }

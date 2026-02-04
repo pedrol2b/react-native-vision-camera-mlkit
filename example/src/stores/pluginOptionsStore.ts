@@ -1,16 +1,17 @@
 import type {
+  BarcodeScanningOptions,
   MLKitBaseOptions as SharedPluginOptions,
-  TextRecognitionLanguage,
+  TextRecognitionOptions,
 } from 'react-native-vision-camera-mlkit';
 import { create } from 'zustand';
 import { PLUGIN_ID } from '../constants/PLUGINS';
 
-type TextRecognitionOptions = {
-  language: TextRecognitionLanguage;
-};
-
 type SpecificPluginOptions = {
-  [PLUGIN_ID.TEXT_RECOGNITION]: TextRecognitionOptions;
+  [PLUGIN_ID.TEXT_RECOGNITION]: Pick<TextRecognitionOptions, 'language'>;
+  [PLUGIN_ID.BARCODE_SCANNING]: Pick<
+    BarcodeScanningOptions,
+    'formats' | 'enableAllPotentialBarcodes'
+  >;
 };
 
 type PluginOptionsState = {
@@ -39,6 +40,10 @@ export const usePluginOptionsStore = create<PluginOptionsState>((set) => ({
   pluginOptions: {
     [PLUGIN_ID.TEXT_RECOGNITION]: {
       language: 'LATIN',
+    },
+    [PLUGIN_ID.BARCODE_SCANNING]: {
+      formats: ['ALL'],
+      enableAllPotentialBarcodes: false,
     },
   },
   setSharedOption: (key, value) =>

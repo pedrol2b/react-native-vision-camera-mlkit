@@ -6,9 +6,13 @@ import {
   type RouteProp,
 } from '@react-navigation/native';
 import { useState } from 'react';
-import { Image, ScrollView, StyleSheet, View } from 'react-native';
+import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { processImageTextRecognition } from 'react-native-vision-camera-mlkit';
+import type { BarcodeFormat } from 'react-native-vision-camera-mlkit';
+import {
+  processImageBarcodeScanning,
+  processImageTextRecognition,
+} from 'react-native-vision-camera-mlkit';
 import {
   Button,
   Divider,
@@ -29,7 +33,34 @@ import { useImageProcessingOptionsStore, useTerminalStore } from '../stores';
 
 const IMAGE_PROCESSOR_MAP = {
   [PLUGIN_ID.TEXT_RECOGNITION]: processImageTextRecognition,
+  [PLUGIN_ID.BARCODE_SCANNING]: processImageBarcodeScanning,
 } as const;
+
+const BARCODE_FORMAT_OPTIONS: { label: string; value: BarcodeFormat }[] = [
+  { label: 'All', value: 'ALL' },
+  { label: 'Code 128', value: 'CODE_128' },
+  { label: 'Code 39', value: 'CODE_39' },
+  { label: 'Code 93', value: 'CODE_93' },
+  { label: 'Codabar', value: 'CODABAR' },
+  { label: 'Data Matrix', value: 'DATA_MATRIX' },
+  { label: 'EAN-13', value: 'EAN_13' },
+  { label: 'EAN-8', value: 'EAN_8' },
+  { label: 'ITF', value: 'ITF' },
+  { label: 'QR Code', value: 'QR_CODE' },
+  { label: 'UPC-A', value: 'UPC_A' },
+  { label: 'UPC-E', value: 'UPC_E' },
+  { label: 'PDF417', value: 'PDF417' },
+  { label: 'Aztec', value: 'AZTEC' },
+  { label: 'Unknown', value: 'UNKNOWN' },
+];
+
+const normalizeBarcodeFormats = (formats: BarcodeFormat[]) => {
+  if (formats.length === 0) return ['ALL'] as BarcodeFormat[];
+  if (formats.includes('ALL') && formats.length > 1) {
+    return formats.filter((format) => format !== 'ALL');
+  }
+  return formats;
+};
 
 const ImageScreen = () => {
   const { theme } = useTheme();
@@ -183,7 +214,8 @@ const ImageScreen = () => {
               label="Language"
               description="Select the language for text recognition."
               value={
-                imageProcessingOptions[PLUGIN_ID.TEXT_RECOGNITION].language
+                imageProcessingOptions[PLUGIN_ID.TEXT_RECOGNITION].language ??
+                'LATIN'
               }
               options={[
                 { label: 'Latin', value: 'LATIN' },
@@ -200,6 +232,43 @@ const ImageScreen = () => {
                 )
               }
             />
+          )}
+          {pluginId === PLUGIN_ID.BARCODE_SCANNING && (
+            <>
+              <SectionPicker
+                label="Barcode Formats"
+                description="Select one or more barcode formats to scan."
+                value={
+                  imageProcessingOptions[PLUGIN_ID.BARCODE_SCANNING]
+                    .formats ?? ['ALL']
+                }
+                options={BARCODE_FORMAT_OPTIONS}
+                multiple
+                onValueChange={(value) =>
+                  setImageProcessingOption(
+                    PLUGIN_ID.BARCODE_SCANNING,
+                    'formats',
+                    normalizeBarcodeFormats(value as BarcodeFormat[])
+                  )
+                }
+              />
+              <SectionSwitch
+                label="Enable All potential barcodes (Android only)"
+                description="Enables detection of all supported barcode formats. May impact performance."
+                value={Boolean(
+                  imageProcessingOptions[PLUGIN_ID.BARCODE_SCANNING]
+                    .enableAllPotentialBarcodes
+                )}
+                onValueChange={(value) =>
+                  setImageProcessingOption(
+                    PLUGIN_ID.BARCODE_SCANNING,
+                    'enableAllPotentialBarcodes',
+                    value
+                  )
+                }
+                disabled={Platform.OS !== 'android'}
+              />
+            </>
           )}
         </Section>
       </ScrollView>

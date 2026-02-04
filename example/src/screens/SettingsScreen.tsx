@@ -1,5 +1,6 @@
 import { useRoute, type RouteProp } from '@react-navigation/native';
-import { ScrollView, StyleSheet } from 'react-native';
+import { Platform, ScrollView, StyleSheet } from 'react-native';
+import type { BarcodeFormat } from 'react-native-vision-camera-mlkit';
 import {
   Section,
   SectionPicker,
@@ -9,6 +10,32 @@ import {
 import { PLUGIN_ID, pluginIdToName } from '../constants/PLUGINS';
 import type { RootStackParamList } from '../navigation/RootNavigator';
 import { usePluginOptionsStore, useSettingsStore } from '../stores';
+
+const BARCODE_FORMAT_OPTIONS: { label: string; value: BarcodeFormat }[] = [
+  { label: 'All', value: 'ALL' },
+  { label: 'Code 128', value: 'CODE_128' },
+  { label: 'Code 39', value: 'CODE_39' },
+  { label: 'Code 93', value: 'CODE_93' },
+  { label: 'Codabar', value: 'CODABAR' },
+  { label: 'Data Matrix', value: 'DATA_MATRIX' },
+  { label: 'EAN-13', value: 'EAN_13' },
+  { label: 'EAN-8', value: 'EAN_8' },
+  { label: 'ITF', value: 'ITF' },
+  { label: 'QR Code', value: 'QR_CODE' },
+  { label: 'UPC-A', value: 'UPC_A' },
+  { label: 'UPC-E', value: 'UPC_E' },
+  { label: 'PDF417', value: 'PDF417' },
+  { label: 'Aztec', value: 'AZTEC' },
+  { label: 'Unknown', value: 'UNKNOWN' },
+];
+
+const normalizeBarcodeFormats = (formats: BarcodeFormat[]) => {
+  if (formats.length === 0) return ['ALL'] as BarcodeFormat[];
+  if (formats.includes('ALL') && formats.length > 1) {
+    return formats.filter((format) => format !== 'ALL');
+  }
+  return formats;
+};
 
 const SettingsScreen = () => {
   const { params } = useRoute<RouteProp<RootStackParamList, 'Settings'>>();
@@ -96,7 +123,9 @@ const SettingsScreen = () => {
           <SectionPicker
             label="Language"
             description="Select the language for text recognition."
-            value={pluginOptions[PLUGIN_ID.TEXT_RECOGNITION].language}
+            value={
+              pluginOptions[PLUGIN_ID.TEXT_RECOGNITION].language ?? 'LATIN'
+            }
             options={[
               { label: 'Latin', value: 'LATIN' },
               { label: 'Chinese', value: 'CHINESE' },
@@ -112,6 +141,42 @@ const SettingsScreen = () => {
               )
             }
           />
+        )}
+        {pluginId === PLUGIN_ID.BARCODE_SCANNING && (
+          <>
+            <SectionPicker
+              label="Barcode Formats"
+              description="Select one or more barcode formats to scan."
+              value={
+                pluginOptions[PLUGIN_ID.BARCODE_SCANNING].formats ?? ['ALL']
+              }
+              options={BARCODE_FORMAT_OPTIONS}
+              multiple
+              onValueChange={(value) =>
+                setPluginOption(
+                  PLUGIN_ID.BARCODE_SCANNING,
+                  'formats',
+                  normalizeBarcodeFormats(value as BarcodeFormat[])
+                )
+              }
+            />
+            <SectionSwitch
+              label="Enable All potential barcodes (Android only)"
+              description="Enables detection of all supported barcode formats. May impact performance."
+              value={Boolean(
+                pluginOptions[PLUGIN_ID.BARCODE_SCANNING]
+                  .enableAllPotentialBarcodes
+              )}
+              onValueChange={(value) =>
+                setPluginOption(
+                  PLUGIN_ID.BARCODE_SCANNING,
+                  'enableAllPotentialBarcodes',
+                  value
+                )
+              }
+              disabled={Platform.OS !== 'android'}
+            />
+          </>
         )}
       </Section>
 

@@ -17,30 +17,61 @@ type SectionPickerOption<T> = {
   value: T;
 };
 
-type SectionPickerProps<T> = {
-  label: string;
-  description?: string;
-  value: T;
-  options: SectionPickerOption<T>[];
-  onValueChange: (value: T) => void;
-  disabled?: boolean;
-};
+type SectionPickerProps<T> =
+  | {
+      label: string;
+      description?: string;
+      value: T;
+      options: SectionPickerOption<T>[];
+      onValueChange: (value: T) => void;
+      disabled?: boolean;
+      multiple?: false;
+    }
+  | {
+      label: string;
+      description?: string;
+      value: T[];
+      options: SectionPickerOption<T>[];
+      onValueChange: (value: T[]) => void;
+      disabled?: boolean;
+      multiple: true;
+    };
 
-const SectionPicker = <T extends string>({
-  label,
-  description,
-  value,
-  options,
-  onValueChange,
-  disabled = false,
-}: SectionPickerProps<T>) => {
+const SectionPicker = <T extends string>(props: SectionPickerProps<T>) => {
+  const { label, description, options, disabled = false } = props;
+  const isMultiple = props.multiple === true;
   const { theme } = useTheme();
   const [isPickerVisible, setPickerVisible] = useState<boolean>(false);
 
-  const selectedOption = options.find((opt) => opt.value === value);
+  const selectedValues = Array.isArray(props.value)
+    ? props.value
+    : [props.value];
+  const selectedOptions = options.filter((opt) =>
+    selectedValues.includes(opt.value)
+  );
+
+  const selectedLabel = (() => {
+    if (isMultiple) {
+      if (selectedOptions.length === 0) return 'Select';
+      if (selectedOptions.length <= 2) {
+        return selectedOptions.map((opt) => opt.label).join(', ');
+      }
+      return `${selectedOptions.length} selected`;
+    }
+    return selectedOptions[0]?.label;
+  })();
 
   const handleSelect = (selectedValue: T) => {
-    onValueChange(selectedValue);
+    if (isMultiple) {
+      const currentValues = Array.isArray(props.value) ? props.value : [];
+      const isSelected = currentValues.includes(selectedValue);
+      const nextValues = isSelected
+        ? currentValues.filter((item) => item !== selectedValue)
+        : [...currentValues, selectedValue];
+      props.onValueChange(nextValues);
+      return;
+    }
+    props.onValueChange(selectedValue as T);
     setPickerVisible(false);
   };
 
@@ -85,7 +116,7 @@ const SectionPicker = <T extends string>({
             variant="sm"
             style={[styles.valueText, { color: theme.colors.primary }]}
           >
-            {selectedOption?.label}
+            {selectedLabel}
           </Text>
         </View>
       </TouchableOpacity>
@@ -129,7 +160,7 @@ const SectionPicker = <T extends string>({
                 </View>
                 <ScrollView style={styles.optionsList} removeClippedSubviews>
                   {options.map((option) => {
-                    const isSelected = option.value === value;
+                    const isSelected = selectedValues.includes(option.value);
                     return (
                       <Pressable
                         key={option.value}

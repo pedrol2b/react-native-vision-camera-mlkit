@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     marginVertical: 12,
   },
   disabled: {
-    opacity: 0.8,
+    opacity: 0.6,
   },
 });
 

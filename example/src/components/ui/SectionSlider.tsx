@@ -108,8 +108,7 @@ const styles = StyleSheet.create({
     height: 32,
   },
   disabled: {
-    opacity: 0.8,
-    filter: 'brightness(0.9)',
+    opacity: 0.6,
   },
 });
 

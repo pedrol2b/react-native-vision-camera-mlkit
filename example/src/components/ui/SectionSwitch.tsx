@@ -76,8 +76,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   disabled: {
-    opacity: 0.8,
-    filter: 'brightness(0.9)',
+    opacity: 0.6,
   },
 });
 

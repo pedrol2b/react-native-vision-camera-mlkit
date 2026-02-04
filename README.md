@@ -200,7 +200,80 @@ console.log(result.blocks);
 - `orientation?: 'portrait' | 'portrait-upside-down' | 'landscape-left' | 'landscape-right'`
 - `invertColors?: boolean`
 
-The native bridge normalizes URIs (`file://` is removed on iOS and added on Android if missing). Supported formats: JPEG, PNG, WebP.
+> The native bridge normalizes URIs (`file://` is removed on iOS and added on Android if missing). Supported formats: JPEG, PNG, WebP.
+
+### Barcode Scanning (Frame Processor)
+
+```ts
+import {
+  useFrameProcessor,
+  runAsync,
+  runAtTargetFps,
+} from 'react-native-vision-camera';
+import { useBarcodeScanning } from 'react-native-vision-camera-mlkit';
+
+const { barcodeScanning } = useBarcodeScanning({
+  formats: ['QR_CODE'],
+  enableAllPotentialBarcodes: false,
+  scaleFactor: 1,
+  invertColors: false,
+});
+
+const frameProcessor = useFrameProcessor(
+  (frame) => {
+    'worklet';
+
+    runAtTargetFps(10, () => {
+      'worklet';
+      runAsync(frame, () => {
+        'worklet';
+        const result = barcodeScanning(frame, {
+          outputOrientation: 'portrait',
+        });
+        console.log(result.barcodes);
+      });
+    });
+  },
+  [barcodeScanning]
+);
+```
+
+`BarcodeScanningOptions`:
+
+- `formats?: BarcodeFormat[]` (default `['ALL']`)
+- `enableAllPotentialBarcodes?: boolean` (Android only)
+- `scaleFactor?: number` (0.9-1.0)
+- `invertColors?: boolean`
+- `frameProcessInterval?: number` (deprecated, use `runAtTargetFps`)
+
+`BarcodeScanningArguments`:
+
+- `outputOrientation?: 'portrait' | 'portrait-upside-down' | 'landscape-left' | 'landscape-right'` (iOS only)
+
+### Image Processing (Static Images)
+
+Use `processImageBarcodeScanning` to scan a file path or URI without the camera.
+
+```ts
+import { processImageBarcodeScanning } from 'react-native-vision-camera-mlkit';
+
+const result = await processImageBarcodeScanning(imageUri, {
+  formats: ['QR_CODE'],
+  orientation: 'portrait',
+  enableAllPotentialBarcodes: false,
+});
+
+console.log(result.barcodes);
+```
+
+`BarcodeScanningImageOptions`:
+
+- `formats?: BarcodeFormat[]` (default `['ALL']`)
+- `orientation?: 'portrait' | 'portrait-upside-down' | 'landscape-left' | 'landscape-right'`
+- `invertColors?: boolean`
+- `enableAllPotentialBarcodes?: boolean` (Android only)
+
+> The native bridge normalizes URIs (`file://` is removed on iOS and added on Android if missing). Supported formats: JPEG, PNG, WebP.
 
 ### Feature Utilities
 

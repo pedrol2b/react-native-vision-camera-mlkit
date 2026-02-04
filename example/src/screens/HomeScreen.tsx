@@ -91,7 +91,7 @@ const BASE_DATA: Array<Omit<LinkCardProps, 'onPress'>> = [
     isBeta: false,
     android: true,
     ios: true,
-    status: 'in-progress',
+    status: 'complete',
   },
   {
     id: PLUGIN_ID.IMAGE_LABELING,
@@ -155,12 +155,23 @@ const HomeScreen = () => {
   const deferredSearchQuery = useDeferredValue(searchQuery);
 
   const filteredData = useMemo(() => {
+    const sortedData = [...data].sort((left, right) => {
+      const leftIsComplete = left.status === 'complete';
+      const rightIsComplete = right.status === 'complete';
+
+      if (leftIsComplete === rightIsComplete) {
+        return 0;
+      }
+
+      return leftIsComplete ? -1 : 1;
+    });
+
     if (!deferredSearchQuery.trim()) {
-      return data;
+      return sortedData;
     }
 
     const query = deferredSearchQuery.toLowerCase();
-    return data.filter(
+    return sortedData.filter(
       (item) =>
         item.title.toLowerCase().includes(query) ||
         item.description?.toLowerCase().includes(query)

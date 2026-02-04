@@ -262,13 +262,13 @@ The library works correctly on **physical iOS devices** and on the **iOS Simulat
 | #   | Feature                           | Status                                     | Platform                                          |
 | --- | --------------------------------- | ------------------------------------------ | ------------------------------------------------- |
 | 0   | **Text recognition v2**           | [![complete][complete]][complete]          | [![android][android]][android] [![ios][ios]][ios] |
-| 1   | **Face detection**                | [![in-progress][in-progress]][in-progress] | [![android][android]][android] [![ios][ios]][ios] |
-| 2   | **Face mesh detection**           | [![in-progress][in-progress]][in-progress] | [![android][android]][android]                    |
-| 3   | **Pose detection**                | [![in-progress][in-progress]][in-progress] | [![android][android]][android] [![ios][ios]][ios] |
-| 4   | **Selfie segmentation**           | [![in-progress][in-progress]][in-progress] | [![android][android]][android] [![ios][ios]][ios] |
-| 5   | **Subject segmentation**          | [![in-progress][in-progress]][in-progress] | [![android][android]][android]                    |
-| 6   | **Document scanner**              | [![in-progress][in-progress]][in-progress] | [![android][android]][android]                    |
-| 7   | **Barcode scanning**              | [![in-progress][in-progress]][in-progress] | [![android][android]][android] [![ios][ios]][ios] |
+| 1   | **Barcode scanning**              | [![complete][complete]][complete]          | [![android][android]][android] [![ios][ios]][ios] |
+| 2   | **Face detection**                | [![in-progress][in-progress]][in-progress] | [![android][android]][android] [![ios][ios]][ios] |
+| 3   | **Face mesh detection**           | [![in-progress][in-progress]][in-progress] | [![android][android]][android]                    |
+| 4   | **Pose detection**                | [![in-progress][in-progress]][in-progress] | [![android][android]][android] [![ios][ios]][ios] |
+| 5   | **Selfie segmentation**           | [![in-progress][in-progress]][in-progress] | [![android][android]][android] [![ios][ios]][ios] |
+| 6   | **Subject segmentation**          | [![in-progress][in-progress]][in-progress] | [![android][android]][android]                    |
+| 7   | **Document scanner**              | [![in-progress][in-progress]][in-progress] | [![android][android]][android]                    |
 | 8   | **Image labeling**                | [![in-progress][in-progress]][in-progress] | [![android][android]][android] [![ios][ios]][ios] |
 | 9   | **Object detection and tracking** | [![in-progress][in-progress]][in-progress] | [![android][android]][android] [![ios][ios]][ios] |
 | 10  | **Digital ink recognition**       | [![in-progress][in-progress]][in-progress] | [![android][android]][android] [![ios][ios]][ios] |

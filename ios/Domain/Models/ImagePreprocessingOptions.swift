@@ -1,4 +1,4 @@
-import UIKit
+import Foundation
 
 public struct ImagePreprocessingOptions {
   let invertColors: Bool

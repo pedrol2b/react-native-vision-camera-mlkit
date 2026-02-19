@@ -186,7 +186,7 @@ console.log(result.blocks);
 - `orientation?: 'portrait' | 'portrait-upside-down' | 'landscape-left' | 'landscape-right'`
 - `invertColors?: boolean`
 
-The native bridge normalizes URIs (`file://` is removed on iOS and added on Android if missing). Supported formats: JPEG, PNG, WebP.
+> The native bridge normalizes URIs (`file://` is removed on iOS and added on Android if missing). Supported formats: JPEG, PNG, WebP.
 
 ### Feature Utilities
 

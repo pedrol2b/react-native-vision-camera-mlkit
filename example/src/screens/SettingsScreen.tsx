@@ -96,7 +96,9 @@ const SettingsScreen = () => {
           <SectionPicker
             label="Language"
             description="Select the language for text recognition."
-            value={pluginOptions[PLUGIN_ID.TEXT_RECOGNITION].language}
+            value={
+              pluginOptions[PLUGIN_ID.TEXT_RECOGNITION].language ?? 'LATIN'
+            }
             options={[
               { label: 'Latin', value: 'LATIN' },
               { label: 'Chinese', value: 'CHINESE' },

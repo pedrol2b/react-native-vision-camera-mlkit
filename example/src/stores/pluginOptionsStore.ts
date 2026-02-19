@@ -1,16 +1,12 @@
 import type {
   MLKitBaseOptions as SharedPluginOptions,
-  TextRecognitionLanguage,
+  TextRecognitionOptions,
 } from 'react-native-vision-camera-mlkit';
 import { create } from 'zustand';
 import { PLUGIN_ID } from '../constants/PLUGINS';
 
-type TextRecognitionOptions = {
-  language: TextRecognitionLanguage;
-};
-
 type SpecificPluginOptions = {
-  [PLUGIN_ID.TEXT_RECOGNITION]: TextRecognitionOptions;
+  [PLUGIN_ID.TEXT_RECOGNITION]: Pick<TextRecognitionOptions, 'language'>;
 };
 
 type PluginOptionsState = {

@@ -9,6 +9,7 @@ import com.mrousavy.camera.frameprocessors.VisionCameraProxy
 
 @Suppress("MagicNumber")
 abstract class BaseMLKitPlugin(
+  @Suppress("unused")
   protected val proxy: VisionCameraProxy,
   protected val options: Map<String, Any>?,
 ) : FrameProcessorPlugin() {

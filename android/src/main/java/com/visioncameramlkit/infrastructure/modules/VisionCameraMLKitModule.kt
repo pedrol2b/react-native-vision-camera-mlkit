@@ -7,6 +7,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.module.annotations.ReactModule
+import com.visioncameramlkit.BuildConfig
 import com.visioncameramlkit.bridge.constants.MLKitFeatureKeys
 import com.visioncameramlkit.bridge.handlers.IStaticImageHandler
 import com.visioncameramlkit.bridge.handlers.StaticTextRecognitionHandler
@@ -20,13 +21,20 @@ class VisionCameraMLKitModule(
   }
 
   private val handlers by lazy {
-    mapOf<String, IStaticImageHandler>(
-      MLKitFeatureKeys.TEXT_RECOGNITION to StaticTextRecognitionHandler(reactApplicationContext),
-    )
+    val handlers = mutableMapOf<String, IStaticImageHandler>()
+
+    @Suppress("KotlinConstantConditions")
+    if (BuildConfig.MLKIT_TEXT_RECOGNITION) {
+      handlers[MLKitFeatureKeys.TEXT_RECOGNITION] =
+        StaticTextRecognitionHandler(reactApplicationContext)
+    }
+
+    handlers
   }
 
   override fun getName(): String = NAME
 
+  @Suppress("unused")
   @ReactMethod
   fun processImage(
     feature: String,

@@ -23,8 +23,6 @@ object PluginRegistry {
 
   private fun registerTextRecognitionPlugin() {
     try {
-      // Dynamically load the plugin class to avoid compilation errors
-      // when the MLKit dependencies are not included
       val pluginClass =
         Class.forName("com.visioncameramlkit.bridge.plugins.TextRecognitionPlugin")
 
@@ -42,7 +40,6 @@ object PluginRegistry {
         ) as com.mrousavy.camera.frameprocessors.FrameProcessorPlugin
       }
     } catch (e: ClassNotFoundException) {
-      // Plugin class not found - feature not enabled
       android.util.Log.w("VisionCameraMLKit", "TextRecognitionPlugin not available: ${e.message}")
     } catch (
       @Suppress("TooGenericExceptionCaught") e: Exception,

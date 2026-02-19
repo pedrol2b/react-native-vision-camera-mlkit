@@ -53,18 +53,14 @@ class StaticTextRecognitionHandler(
           return@launch
         }
 
-        // Parse options
         val imageOptions = parseImageOptions(options)
 
-        // Create text recognition options
         val languageString = options.getString("language") ?: "LATIN"
         val language = parseLanguage(languageString)
         val textOptions = TextRecognitionOptions(language = language)
 
-        // Get use case for the language
         val recognizeTextUseCase = getRecognizeTextUseCase(language)
 
-        // Process the image
         val result =
           recognizeTextUseCase.execute(
             imageFile,
@@ -72,7 +68,6 @@ class StaticTextRecognitionHandler(
             textOptions,
           )
 
-        // Serialize result
         val serializedResult = TextRecognitionSerializer.toWritableMap(result)
 
         promise.resolve(serializedResult)

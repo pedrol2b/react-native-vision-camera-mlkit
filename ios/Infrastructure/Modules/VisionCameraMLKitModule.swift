@@ -3,9 +3,15 @@ import React
 
 @objc(VisionCameraMLKitModule)
 class VisionCameraMLKitModule: NSObject {
-  private lazy var handlers: [String: IStaticImageHandler] = [
-    MLKitFeatureKeys.TEXT_RECOGNITION: StaticTextRecognitionHandler()
-  ]
+  private lazy var handlers: [String: IStaticImageHandler] = {
+    var handlers: [String: IStaticImageHandler] = [:]
+
+    #if MLKIT_TEXT_RECOGNITION
+      handlers[MLKitFeatureKeys.TEXT_RECOGNITION] = StaticTextRecognitionHandler()
+    #endif
+
+    return handlers
+  }()
 
   @objc
   func processImage(

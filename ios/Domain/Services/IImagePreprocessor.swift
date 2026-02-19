@@ -1,10 +1,13 @@
 import Foundation
-import VisionCamera
 
-protocol IImagePreprocessor {
-  func preprocessFrame(frame: Frame, options: ImagePreprocessingOptions)
-    -> ProcessedImage?
+#if canImport(VisionCamera)
+  import VisionCamera
 
-  func preprocessImage(imageFile: URL, options: ImagePreprocessingOptions)
-    -> ProcessedImage?
-}
+  protocol IImagePreprocessor {
+    func preprocessFrame(frame: Frame, options: ImagePreprocessingOptions)
+      -> ProcessedImage?
+
+    func preprocessImage(imageFile: URL, options: ImagePreprocessingOptions)
+      -> ProcessedImage?
+  }
+#endif

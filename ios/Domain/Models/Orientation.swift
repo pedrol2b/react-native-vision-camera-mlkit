@@ -1,4 +1,4 @@
-import UIKit
+import Foundation
 
 @objc public enum Orientation: Int {
   case portrait

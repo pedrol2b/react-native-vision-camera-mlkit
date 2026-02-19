@@ -155,11 +155,12 @@ const CameraView = forwardRef<Camera, CameraViewProps>(
 
             let resultObject: any = null;
 
-            if (pluginId === PLUGIN_ID.TEXT_RECOGNITION) {
-              const withArguments = {
-                outputOrientation: frameOutputOrientation.value,
-              };
+            // Shared arguments for all plugins
+            const withArguments = {
+              outputOrientation: frameOutputOrientation.value,
+            };
 
+            if (pluginId === PLUGIN_ID.TEXT_RECOGNITION) {
               resultObject = textRecognitionPlugin.textRecognition(
                 frame,
                 withArguments

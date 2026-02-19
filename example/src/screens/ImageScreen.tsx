@@ -183,7 +183,8 @@ const ImageScreen = () => {
               label="Language"
               description="Select the language for text recognition."
               value={
-                imageProcessingOptions[PLUGIN_ID.TEXT_RECOGNITION].language
+                imageProcessingOptions[PLUGIN_ID.TEXT_RECOGNITION].language ??
+                'LATIN'
               }
               options={[
                 { label: 'Latin', value: 'LATIN' },

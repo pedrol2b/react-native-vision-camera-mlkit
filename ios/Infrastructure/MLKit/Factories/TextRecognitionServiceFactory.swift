@@ -1,6 +1,6 @@
 import Foundation
 
-#if MLKIT_TEXT_RECOGNITION
+#if MLKIT_TEXT_RECOGNITION_ANY
   import MLKitTextRecognition
 #endif
 
@@ -20,7 +20,7 @@ import Foundation
   import MLKitTextRecognitionKorean
 #endif
 
-#if MLKIT_TEXT_RECOGNITION
+#if MLKIT_TEXT_RECOGNITION_ANY
   class TextRecognitionServiceFactory {
 
     static func createTextRecognizer(language: TextRecognitionLanguage)
@@ -61,4 +61,4 @@ import Foundation
       return MLKitTextRecognitionService(textRecognizer: textRecognizer)
     }
   }
-#endif
+#endif  // MLKIT_TEXT_RECOGNITION_ANY

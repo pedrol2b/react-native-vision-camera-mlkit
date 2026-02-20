@@ -1,6 +1,6 @@
 import Foundation
 
-#if MLKIT_TEXT_RECOGNITION
+#if MLKIT_TEXT_RECOGNITION_ANY
   import MLKitTextRecognition
 #endif
 
@@ -20,7 +20,7 @@ import Foundation
   import MLKitTextRecognitionKorean
 #endif
 
-#if MLKIT_TEXT_RECOGNITION
+#if MLKIT_TEXT_RECOGNITION_ANY
   class MLKitTextRecognitionService: IRecognitionService {
     typealias ResultType = TextRecognitionResult
 
@@ -35,4 +35,4 @@ import Foundation
       return MLKitTextAdapter.toDomain(text)
     }
   }
-#endif
+#endif  // MLKIT_TEXT_RECOGNITION_ANY

@@ -45,8 +45,16 @@ Pod::Spec.new do |s|
 
   s.dependency "VisionCamera"
 
+  # Compute whether any text recognition variant is enabled
+  any_text_recognition = mlkit_config['textRecognition'] ||
+    mlkit_config['textRecognitionChinese'] ||
+    mlkit_config['textRecognitionDevanagari'] ||
+    mlkit_config['textRecognitionJapanese'] ||
+    mlkit_config['textRecognitionKorean']
+
   # Generate Swift compiler flags for conditional compilation
   swift_flags = []
+  swift_flags << "MLKIT_TEXT_RECOGNITION_ANY" if any_text_recognition
   swift_flags << "MLKIT_TEXT_RECOGNITION" if mlkit_config['textRecognition']
   swift_flags << "MLKIT_TEXT_RECOGNITION_CHINESE" if mlkit_config['textRecognitionChinese']
   swift_flags << "MLKIT_TEXT_RECOGNITION_DEVANAGARI" if mlkit_config['textRecognitionDevanagari']
@@ -74,7 +82,9 @@ Pod::Spec.new do |s|
 
   # Text recognition v2
   # https://developers.google.com/ml-kit/vision/text-recognition/v2/ios
-  if mlkit_config['textRecognition']
+  # Base TextRecognition is required whenever any text recognition variant is enabled,
+  # as it provides shared types (TextRecognizer, CommonTextRecognizerOptions, Text, etc.)
+  if any_text_recognition
     s.dependency "GoogleMLKit/TextRecognition"
   end
   if mlkit_config['textRecognitionChinese']

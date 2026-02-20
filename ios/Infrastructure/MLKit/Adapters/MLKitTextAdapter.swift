@@ -1,6 +1,6 @@
 import Foundation
 
-#if MLKIT_TEXT_RECOGNITION
+#if MLKIT_TEXT_RECOGNITION_ANY
   import MLKitTextRecognition
 
   class MLKitTextAdapter {
@@ -77,4 +77,4 @@ import Foundation
       return Corner(x: Double(point.x), y: Double(point.y))
     }
   }
-#endif
+#endif  // MLKIT_TEXT_RECOGNITION_ANY

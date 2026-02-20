@@ -1,6 +1,6 @@
 import Foundation
 
-#if MLKIT_TEXT_RECOGNITION
+#if MLKIT_TEXT_RECOGNITION_ANY
   #if canImport(VisionCamera)
     import VisionCamera
 
@@ -65,4 +65,4 @@ import Foundation
     }
 
   #endif
-#endif
+#endif  // MLKIT_TEXT_RECOGNITION_ANY

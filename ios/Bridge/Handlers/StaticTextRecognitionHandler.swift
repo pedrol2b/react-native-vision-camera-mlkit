@@ -1,6 +1,6 @@
 import Foundation
 
-#if MLKIT_TEXT_RECOGNITION
+#if MLKIT_TEXT_RECOGNITION_ANY
   class StaticTextRecognitionHandler: IStaticImageHandler {
     private let textRecognitionSerializer = TextRecognitionSerializer()
     private var cachedUseCase: RecognizeTextUseCase?
@@ -150,4 +150,4 @@ import Foundation
       return URL(fileURLWithPath: path)
     }
   }
-#endif
+#endif  // MLKIT_TEXT_RECOGNITION_ANY

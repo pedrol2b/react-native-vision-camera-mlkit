@@ -69,6 +69,13 @@ def getMLKitConfig() {
 
 def mlkitConfig = getMLKitConfig()
 
+// Compute whether any text recognition variant is enabled
+def anyTextRecognition = mlkitConfig.textRecognition ||
+  mlkitConfig.textRecognitionChinese ||
+  mlkitConfig.textRecognitionDevanagari ||
+  mlkitConfig.textRecognitionJapanese ||
+  mlkitConfig.textRecognitionKorean
+
 android {
   namespace "com.visioncameramlkit"
 
@@ -79,6 +86,7 @@ android {
     targetSdkVersion getExtOrIntegerDefault("targetSdkVersion")
 
     // Add build config fields for conditional compilation
+    buildConfigField "boolean", "MLKIT_TEXT_RECOGNITION_ANY", "${anyTextRecognition}"
     buildConfigField "boolean", "MLKIT_TEXT_RECOGNITION", "${mlkitConfig.textRecognition}"
     buildConfigField "boolean", "MLKIT_TEXT_RECOGNITION_CHINESE", "${mlkitConfig.textRecognitionChinese}"
     buildConfigField "boolean", "MLKIT_TEXT_RECOGNITION_DEVANAGARI", "${mlkitConfig.textRecognitionDevanagari}"
@@ -144,7 +152,9 @@ dependencies {
 
   // Text recognition v2
   // https://developers.google.com/ml-kit/vision/text-recognition/v2/android
-  if (mlkitConfig.textRecognition) {
+  // Base text-recognition is required whenever any text recognition variant is enabled,
+  // as it provides shared types (TextRecognizer, TextRecognizerOptions, etc.)
+  if (anyTextRecognition) {
     implementation "com.google.mlkit:text-recognition:16.0.1"
   }
   if (mlkitConfig.textRecognitionChinese) {

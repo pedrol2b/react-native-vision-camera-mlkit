@@ -32,6 +32,6 @@ RCT_EXTERN_METHOD(processImage : (NSString *)feature path : (
   }                                                                            \
   @end
 
-#ifdef MLKIT_TEXT_RECOGNITION
+#ifdef MLKIT_TEXT_RECOGNITION_ANY
 REGISTER_PLUGIN(TextRecognitionPlugin, @"TextRecognition")
 #endif

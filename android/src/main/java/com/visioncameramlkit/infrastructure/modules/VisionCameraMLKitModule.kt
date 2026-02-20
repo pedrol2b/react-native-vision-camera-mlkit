@@ -24,7 +24,7 @@ class VisionCameraMLKitModule(
     val handlers = mutableMapOf<String, IStaticImageHandler>()
 
     @Suppress("KotlinConstantConditions")
-    if (BuildConfig.MLKIT_TEXT_RECOGNITION) {
+    if (BuildConfig.MLKIT_TEXT_RECOGNITION_ANY) {
       handlers[MLKitFeatureKeys.TEXT_RECOGNITION] =
         StaticTextRecognitionHandler(reactApplicationContext)
     }

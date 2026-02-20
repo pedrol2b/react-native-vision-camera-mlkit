@@ -16,7 +16,7 @@ object PluginRegistry {
 
   private fun registerPlugins() {
     @Suppress("KotlinConstantConditions")
-    if (BuildConfig.MLKIT_TEXT_RECOGNITION) {
+    if (BuildConfig.MLKIT_TEXT_RECOGNITION_ANY) {
       registerTextRecognitionPlugin()
     }
   }

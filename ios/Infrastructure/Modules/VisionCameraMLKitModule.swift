@@ -6,7 +6,7 @@ class VisionCameraMLKitModule: NSObject {
   private lazy var handlers: [String: IStaticImageHandler] = {
     var handlers: [String: IStaticImageHandler] = [:]
 
-    #if MLKIT_TEXT_RECOGNITION
+    #if MLKIT_TEXT_RECOGNITION_ANY
       handlers[MLKitFeatureKeys.TEXT_RECOGNITION] = StaticTextRecognitionHandler()
     #endif
 

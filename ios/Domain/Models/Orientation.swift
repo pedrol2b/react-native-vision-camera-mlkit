@@ -16,6 +16,18 @@ import Foundation
     }
   }
 
+  /// Maps a UIImage.Orientation (typically from EXIF metadata) back to an Orientation value.
+  public static func fromUIImageOrientation(_ imageOrientation: UIImage.Orientation) -> Orientation
+  {
+    switch imageOrientation {
+    case .up: return .portrait
+    case .down: return .portraitUpsideDown
+    case .left: return .landscapeLeft
+    case .right: return .landscapeRight
+    default: return .portrait
+    }
+  }
+
   public var asUIImageOrientation: UIImage.Orientation {
     switch self {
     case .portrait: return .up

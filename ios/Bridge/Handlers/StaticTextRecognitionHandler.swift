@@ -97,28 +97,12 @@ import Foundation
       -> ImagePreprocessingOptions
     {
       let invertColors = options["invertColors"] as? Bool ?? false
-      let orientationString = options["orientation"] as? String ?? "portrait"
-      let orientation = parseOrientation(orientationString)
+      let orientation = (options["orientation"] as? String).flatMap { Orientation(string: $0) }
 
       return ImagePreprocessingOptions(
         invertColors: invertColors,
         orientation: orientation
       )
-    }
-
-    private func parseOrientation(_ orientation: String) -> Orientation {
-      switch orientation {
-      case "portrait":
-        return .portrait
-      case "portrait-upside-down":
-        return .portraitUpsideDown
-      case "landscape-left":
-        return .landscapeLeft
-      case "landscape-right":
-        return .landscapeRight
-      default:
-        return .portrait
-      }
     }
 
     private func parseLanguage(_ language: String) -> TextRecognitionLanguage {

@@ -168,15 +168,21 @@ const ImageScreen = () => {
           />
           <SectionPicker
             label="Orientation"
-            description="Set the image orientation for processing."
-            value={sharedOptions.orientation ?? 'portrait'}
+            description="Set the image orientation for processing. Auto uses the image's EXIF metadata."
+            value={sharedOptions.orientation ?? 'auto'}
             options={[
+              { label: 'Auto (from metadata)', value: 'auto' },
               { label: 'portrait', value: 'portrait' },
               { label: 'portrait-upside-down', value: 'portrait-upside-down' },
               { label: 'landscape-left', value: 'landscape-left' },
               { label: 'landscape-right', value: 'landscape-right' },
             ]}
-            onValueChange={(value) => setSharedOption('orientation', value)}
+            onValueChange={(value) =>
+              setSharedOption(
+                'orientation',
+                value === 'auto' ? undefined : value
+              )
+            }
           />
           {pluginId === PLUGIN_ID.TEXT_RECOGNITION && (
             <SectionPicker

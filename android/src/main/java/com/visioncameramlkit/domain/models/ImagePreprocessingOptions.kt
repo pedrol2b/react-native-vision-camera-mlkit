@@ -5,5 +5,5 @@ data class ImagePreprocessingOptions(
   // Android handles rotation automatically, so outputOrientation is ignored. Added for iOS parity.
   val outputOrientation: OutputOrientation? = null,
   val scaleFactor: Float = 1.0f,
-  val orientation: Orientation = Orientation.PORTRAIT,
+  val orientation: Orientation? = null,
 )

@@ -10,6 +10,7 @@ import android.graphics.Matrix
 import android.graphics.Paint
 import android.media.Image
 import androidx.core.graphics.scale
+import androidx.exifinterface.media.ExifInterface
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.common.internal.ImageConvertUtils
 import com.mrousavy.camera.frameprocessors.Frame
@@ -151,7 +152,11 @@ class ImagePreprocessor : IImagePreprocessor {
       BitmapFactory.decodeFile(imageFile.absolutePath)
         ?: throw UnsupportedOperationException("Failed to decode image file")
 
-    val rotatedBitmap = rotateBitmap(bitmap, options.orientation)
+    // Use the user-provided orientation override, or fall back to the image's
+    // embedded EXIF orientation metadata.
+    val effectiveOrientation = options.orientation ?: readExifOrientation(imageFile)
+
+    val rotatedBitmap = rotateBitmap(bitmap, effectiveOrientation)
     val effectiveScale = clampScale(options.scaleFactor)
 
     val processedBitmap =
@@ -191,6 +196,26 @@ class ImagePreprocessor : IImagePreprocessor {
 
     return ProcessedImage(inputImage, metadata)
   }
+
+  /**
+   * Reads EXIF orientation from the image file and maps it to an [Orientation].
+   * Falls back to [Orientation.PORTRAIT] if EXIF data is unavailable or unrecognized.
+   */
+  private fun readExifOrientation(imageFile: File): Orientation =
+    try {
+      val exif = ExifInterface(imageFile.absolutePath)
+      when (exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)) {
+        ExifInterface.ORIENTATION_NORMAL -> Orientation.PORTRAIT
+        ExifInterface.ORIENTATION_ROTATE_180 -> Orientation.PORTRAIT_UPSIDE_DOWN
+        ExifInterface.ORIENTATION_ROTATE_90 -> Orientation.LANDSCAPE_LEFT
+        ExifInterface.ORIENTATION_ROTATE_270 -> Orientation.LANDSCAPE_RIGHT
+        else -> Orientation.PORTRAIT
+      }
+    } catch (
+      @Suppress("TooGenericExceptionCaught") e: Exception,
+    ) {
+      Orientation.PORTRAIT
+    }
 
   private fun rotateBitmap(
     bitmap: Bitmap,

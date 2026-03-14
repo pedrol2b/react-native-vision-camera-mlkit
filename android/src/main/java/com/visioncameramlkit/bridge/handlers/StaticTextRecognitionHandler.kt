@@ -133,18 +133,16 @@ class StaticTextRecognitionHandler(
   private fun parseImageOptions(options: ReadableMap): ImagePreprocessingOptions =
     ImagePreprocessingOptions(
       invertColors = options.getBoolean("invertColors"),
-      orientation =
-        options.getString("orientation")?.let { parseOrientation(it) }
-          ?: Orientation.PORTRAIT,
+      orientation = options.getString("orientation")?.let { parseOrientation(it) },
     )
 
-  private fun parseOrientation(orientation: String): Orientation =
+  private fun parseOrientation(orientation: String): Orientation? =
     when (orientation) {
       "portrait" -> Orientation.PORTRAIT
       "portrait-upside-down" -> Orientation.PORTRAIT_UPSIDE_DOWN
       "landscape-left" -> Orientation.LANDSCAPE_LEFT
       "landscape-right" -> Orientation.LANDSCAPE_RIGHT
-      else -> Orientation.PORTRAIT
+      else -> null
     }
 
   private fun parseLanguage(language: String): TextRecognitionLanguage =

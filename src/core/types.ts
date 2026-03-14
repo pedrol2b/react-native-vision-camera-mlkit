@@ -78,8 +78,10 @@ export type MLKitBaseArguments = {
 
 export type ImageProcessingBaseOptions = {
   /**
-   * The orientation of the image. Pass this to support rotation in text recognition.
-   * @default 'portrait'
+   * Override the image orientation for processing.
+   * When omitted, the orientation is automatically detected from the image's
+   * EXIF metadata. Provide an explicit value only if the metadata is missing
+   * or incorrect.
    */
   orientation?: Orientation;
   /**

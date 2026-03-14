@@ -30,7 +30,7 @@ export const useImageProcessingOptionsStore =
   create<ImageProcessingOptionsState>((set) => ({
     sharedOptions: {
       invertColors: false,
-      orientation: 'portrait',
+      orientation: undefined,
     },
     imageProcessingOptions: {
       [PLUGIN_ID.TEXT_RECOGNITION]: {

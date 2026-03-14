@@ -205,10 +205,22 @@ class ImagePreprocessor : IImagePreprocessor {
     try {
       val exif = ExifInterface(imageFile.absolutePath)
       when (exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)) {
-        ExifInterface.ORIENTATION_NORMAL -> Orientation.PORTRAIT
-        ExifInterface.ORIENTATION_ROTATE_180 -> Orientation.PORTRAIT_UPSIDE_DOWN
-        ExifInterface.ORIENTATION_ROTATE_90 -> Orientation.LANDSCAPE_LEFT
-        ExifInterface.ORIENTATION_ROTATE_270 -> Orientation.LANDSCAPE_RIGHT
+        ExifInterface.ORIENTATION_NORMAL,
+        ExifInterface.ORIENTATION_FLIP_HORIZONTAL,
+        -> Orientation.PORTRAIT
+
+        ExifInterface.ORIENTATION_ROTATE_180,
+        ExifInterface.ORIENTATION_FLIP_VERTICAL,
+        -> Orientation.PORTRAIT_UPSIDE_DOWN
+
+        ExifInterface.ORIENTATION_ROTATE_90,
+        ExifInterface.ORIENTATION_TRANSPOSE,
+        -> Orientation.LANDSCAPE_LEFT
+
+        ExifInterface.ORIENTATION_ROTATE_270,
+        ExifInterface.ORIENTATION_TRANSVERSE,
+        -> Orientation.LANDSCAPE_RIGHT
+
         else -> Orientation.PORTRAIT
       }
     } catch (

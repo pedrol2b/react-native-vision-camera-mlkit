@@ -10,6 +10,10 @@ class VisionCameraMLKitModule: NSObject {
       handlers[MLKitFeatureKeys.TEXT_RECOGNITION] = StaticTextRecognitionHandler()
     #endif
 
+    #if MLKIT_BARCODE_SCANNING
+      handlers[MLKitFeatureKeys.BARCODE_SCANNING] = StaticBarcodeScanningHandler()
+    #endif
+
     return handlers
   }()
 

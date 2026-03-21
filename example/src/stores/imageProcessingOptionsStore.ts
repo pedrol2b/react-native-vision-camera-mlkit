@@ -1,4 +1,5 @@
 import type {
+  BarcodeScanningImageOptions,
   ImageProcessingBaseOptions as SharedImageProcessingOptions,
   TextRecognitionImageOptions,
 } from 'react-native-vision-camera-mlkit';
@@ -7,6 +8,10 @@ import { PLUGIN_ID } from '../constants/PLUGINS';
 
 type SpecificImageProcessingOptions = {
   [PLUGIN_ID.TEXT_RECOGNITION]: Pick<TextRecognitionImageOptions, 'language'>;
+  [PLUGIN_ID.BARCODE_SCANNING]: Pick<
+    BarcodeScanningImageOptions,
+    'formats' | 'enableAllPotentialBarcodes'
+  >;
 };
 
 type ImageProcessingOptionsState = {
@@ -35,6 +40,10 @@ export const useImageProcessingOptionsStore =
     imageProcessingOptions: {
       [PLUGIN_ID.TEXT_RECOGNITION]: {
         language: 'LATIN',
+      },
+      [PLUGIN_ID.BARCODE_SCANNING]: {
+        formats: [],
+        enableAllPotentialBarcodes: false,
       },
     },
     setSharedOption: (key, value) =>

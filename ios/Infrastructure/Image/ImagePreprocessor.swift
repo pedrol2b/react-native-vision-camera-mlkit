@@ -250,25 +250,34 @@ import Foundation
       // EXIF orientation into uiImage.imageOrientation.
       let effectiveOrientation =
         options.orientation ?? Orientation.fromUIImageOrientation(uiImage.imageOrientation)
+      let effectiveScale = clampScale(options.scaleFactor)
 
-      // Rotate image based on orientation
-      let rotatedImage = rotateUIImage(uiImage, orientation: effectiveOrientation)
+      var processedImage = uiImage
+
+      // Apply optional downscale for static images.
+      if effectiveScale < 1.0 {
+        processedImage = scaleUIImage(processedImage, scaleFactor: effectiveScale)
+      }
 
       // Apply color inversion if needed
-      let processedImage: UIImage
       if options.invertColors {
-        processedImage = invertUIImageColors(rotatedImage)
-      } else {
-        processedImage = rotatedImage
+        processedImage = invertUIImageColors(processedImage)
       }
 
       // Create VisionImage
       let visionImage = VisionImage(image: processedImage)
       visionImage.orientation = effectiveOrientation.asUIImageOrientation
 
+      let pixelWidth =
+        processedImage.cgImage?.width
+        ?? Int(processedImage.size.width * processedImage.scale)
+      let pixelHeight =
+        processedImage.cgImage?.height
+        ?? Int(processedImage.size.height * processedImage.scale)
+
       let metadata = ImageMetadata(
-        width: Int(processedImage.size.width),
-        height: Int(processedImage.size.height),
+        width: pixelWidth,
+        height: pixelHeight,
         orientation: effectiveOrientation.asUIImageOrientation,
         isInverted: options.invertColors
       )
@@ -276,46 +285,19 @@ import Foundation
       return ProcessedImage(image: visionImage, metadata: metadata)
     }
 
-    private func rotateUIImage(_ image: UIImage, orientation: Orientation)
-      -> UIImage
-    {
-      let degrees: CGFloat
-      switch orientation {
-      case .portrait:
-        degrees = 0
-      case .portraitUpsideDown:
-        degrees = 180
-      case .landscapeLeft:
-        degrees = 90
-      case .landscapeRight:
-        degrees = 270
+    private func scaleUIImage(_ image: UIImage, scaleFactor: CGFloat) -> UIImage {
+      let targetSize = CGSize(
+        width: image.size.width * scaleFactor,
+        height: image.size.height * scaleFactor
+      )
+
+      let rendererFormat = UIGraphicsImageRendererFormat.default()
+      rendererFormat.scale = image.scale
+
+      let renderer = UIGraphicsImageRenderer(size: targetSize, format: rendererFormat)
+      return renderer.image { _ in
+        image.draw(in: CGRect(origin: .zero, size: targetSize))
       }
-
-      let radians = degrees * .pi / 180
-      let rotatedSize = CGRect(origin: .zero, size: image.size)
-        .applying(CGAffineTransform(rotationAngle: radians))
-        .integral
-
-      UIGraphicsBeginImageContext(rotatedSize.size)
-      defer { UIGraphicsEndImageContext() }
-
-      guard let context = UIGraphicsGetCurrentContext() else { return image }
-
-      context.translateBy(
-        x: rotatedSize.size.width / 2,
-        y: rotatedSize.size.height / 2
-      )
-      context.rotate(by: radians)
-      image.draw(
-        in: CGRect(
-          x: -image.size.width / 2,
-          y: -image.size.height / 2,
-          width: image.size.width,
-          height: image.size.height
-        )
-      )
-
-      return UIGraphicsGetImageFromCurrentImageContext() ?? image
     }
 
     private func invertUIImageColors(_ image: UIImage) -> UIImage {

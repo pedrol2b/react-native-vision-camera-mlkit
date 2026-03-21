@@ -25,4 +25,5 @@ export {
   type Orientation,
 } from './core/types';
 
+export * from './features/barcode-scanning';
 export * from './features/text-recognition';

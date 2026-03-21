@@ -10,6 +10,7 @@ import com.facebook.react.module.annotations.ReactModule
 import com.visioncameramlkit.BuildConfig
 import com.visioncameramlkit.bridge.constants.MLKitFeatureKeys
 import com.visioncameramlkit.bridge.handlers.IStaticImageHandler
+import com.visioncameramlkit.bridge.handlers.StaticBarcodeScanningHandler
 import com.visioncameramlkit.bridge.handlers.StaticTextRecognitionHandler
 
 @ReactModule(name = VisionCameraMLKitModule.NAME)
@@ -27,6 +28,12 @@ class VisionCameraMLKitModule(
     if (BuildConfig.MLKIT_TEXT_RECOGNITION_ANY) {
       handlers[MLKitFeatureKeys.TEXT_RECOGNITION] =
         StaticTextRecognitionHandler(reactApplicationContext)
+    }
+
+    @Suppress("KotlinConstantConditions")
+    if (BuildConfig.MLKIT_BARCODE_SCANNING) {
+      handlers[MLKitFeatureKeys.BARCODE_SCANNING] =
+        StaticBarcodeScanningHandler(reactApplicationContext)
     }
 
     handlers

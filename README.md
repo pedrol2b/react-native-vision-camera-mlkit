@@ -118,6 +118,11 @@ Android-only keys: `faceMeshDetection`, `subjectSegmentation`, `documentScanner`
 
 ## Usage
 
+### API Docs
+
+- [Text Recognition API](docs/text-recognition.md)
+- [Barcode Scanning API](docs/barcode-scanning.md)
+
 ### Text Recognition (Frame Processor)
 
 ```ts
@@ -188,6 +193,117 @@ console.log(result.blocks);
 
 > The native bridge normalizes URIs (`file://` is removed on iOS and added on Android if missing). Supported formats: JPEG, PNG, WebP.
 
+### Barcode Scanning (Frame Processor)
+
+```ts
+import {
+  useFrameProcessor,
+  runAsync,
+  runAtTargetFps,
+} from 'react-native-vision-camera';
+import { useBarcodeScanning } from 'react-native-vision-camera-mlkit';
+
+const { barcodeScanning } = useBarcodeScanning({
+  formats: ['QR_CODE', 'CODE_128'],
+  enableAllPotentialBarcodes: true,
+  scaleFactor: 1,
+  invertColors: false,
+});
+
+const frameProcessor = useFrameProcessor(
+  (frame) => {
+    'worklet';
+
+    runAtTargetFps(10, () => {
+      'worklet';
+      runAsync(frame, () => {
+        'worklet';
+        const result = barcodeScanning(frame, {
+          outputOrientation: 'portrait',
+        });
+
+        for (const barcode of result.barcodes) {
+          console.log(
+            barcode.formatName,
+            barcode.valueTypeName,
+            barcode.rawValue
+          );
+          if (barcode.value?.type === 'TYPE_URL') {
+            console.log(barcode.value.data.url);
+          }
+        }
+      });
+    });
+  },
+  [barcodeScanning]
+);
+```
+
+`BarcodeScanningOptions`:
+
+- `formats?: ('UNKNOWN' | 'ALL_FORMATS' | 'CODE_128' | 'CODE_39' | 'CODE_93' | 'CODABAR' | 'DATA_MATRIX' | 'EAN_13' | 'EAN_8' | 'ITF' | 'QR_CODE' | 'UPC_A' | 'UPC_E' | 'PDF417' | 'AZTEC')[]`
+- `enableAllPotentialBarcodes?: boolean` (Android only)
+- `scaleFactor?: number` (0.9-1.0)
+- `invertColors?: boolean`
+- `frameProcessInterval?: number` (deprecated, use `runAtTargetFps`)
+
+Supported `formats` values:
+
+| Value         | Symbology   |
+| ------------- | ----------- |
+| `ALL_FORMATS` | All types   |
+| `QR_CODE`     | QR Code     |
+| `AZTEC`       | Aztec       |
+| `PDF417`      | PDF417      |
+| `DATA_MATRIX` | Data Matrix |
+| `CODE_128`    | Code 128    |
+| `CODE_39`     | Code 39     |
+| `CODE_93`     | Code 93     |
+| `CODABAR`     | Codabar     |
+| `EAN_13`      | EAN-13      |
+| `EAN_8`       | EAN-8       |
+| `ITF`         | ITF         |
+| `UPC_A`       | UPC-A       |
+| `UPC_E`       | UPC-E       |
+| `UNKNOWN`     | Unknown     |
+
+`BarcodeScanningArguments`:
+
+- `outputOrientation?: 'portrait' | 'portrait-upside-down' | 'landscape-left' | 'landscape-right'` (iOS only)
+
+### Barcode Scanning (Static Images)
+
+Use `processImageBarcodeScanning` to analyze a file path or URI without the camera.
+
+```ts
+import { processImageBarcodeScanning } from 'react-native-vision-camera-mlkit';
+
+const result = await processImageBarcodeScanning(imageUri, {
+  formats: ['QR_CODE', 'PDF417'],
+  enableAllPotentialBarcodes: true,
+  orientation: 'portrait',
+  invertColors: false,
+  scaleFactor: 1,
+});
+
+for (const barcode of result.barcodes) {
+  console.log(barcode.formatName, barcode.valueTypeName, barcode.displayValue);
+}
+```
+
+`BarcodeScanningImageOptions`:
+
+- `formats?: ('UNKNOWN' | 'ALL_FORMATS' | 'CODE_128' | 'CODE_39' | 'CODE_93' | 'CODABAR' | 'DATA_MATRIX' | 'EAN_13' | 'EAN_8' | 'ITF' | 'QR_CODE' | 'UPC_A' | 'UPC_E' | 'PDF417' | 'AZTEC')[]`
+- `enableAllPotentialBarcodes?: boolean` (Android only)
+- `orientation?: 'portrait' | 'portrait-upside-down' | 'landscape-left' | 'landscape-right'`
+- `invertColors?: boolean`
+- `scaleFactor?: number` (0.9-1.0)
+
+`BarcodeScanningResult` includes:
+
+- `barcodes[]` with `format`, `formatName`, `valueType`, `valueTypeName`, `rawValue`, `displayValue`, `rawBytes`, `bounds`, `corners`, `isPotential`
+- `value?: { type: TYPE_*, data: ... }` for parsed payloads (WiFi, URL, SMS, Contact, Calendar Event, Driver License, etc.)
+
 ### Feature Utilities
 
 The package also exposes helpers from the plugin factory:
@@ -248,7 +364,7 @@ The library works correctly on **physical iOS devices** and on the **iOS Simulat
 | #   | Feature                           | Status                                     | Platform                                          |
 | --- | --------------------------------- | ------------------------------------------ | ------------------------------------------------- |
 | 0   | **Text recognition v2**           | [![complete][complete]][complete]          | [![android][android]][android] [![ios][ios]][ios] |
-| 1   | **Barcode scanning**              | [![in-progress][in-progress]][in-progress] | [![android][android]][android] [![ios][ios]][ios] |
+| 1   | **Barcode scanning**              | [![complete][complete]][complete]          | [![android][android]][android] [![ios][ios]][ios] |
 | 2   | **Face detection**                | [![in-progress][in-progress]][in-progress] | [![android][android]][android] [![ios][ios]][ios] |
 | 3   | **Face mesh detection**           | [![in-progress][in-progress]][in-progress] | [![android][android]][android]                    |
 | 4   | **Pose detection**                | [![in-progress][in-progress]][in-progress] | [![android][android]][android] [![ios][ios]][ios] |
@@ -269,10 +385,8 @@ If you’re integrating this library into a production app, consider funding the
 
 [complete]: https://img.shields.io/badge/COMPLETE-5E5CE6
 [in-progress]: https://img.shields.io/badge/IN%20PROGRESS-FFD60A
-
 [android]: https://img.shields.io/badge/ANDROID-3DDC84
 [ios]: https://img.shields.io/badge/IOS-0A84FF
-
 [contributors-shield]: https://img.shields.io/github/contributors/pedrol2b/react-native-vision-camera-mlkit.svg?style=for-the-badge
 [contributors-url]: https://github.com/pedrol2b/react-native-vision-camera-mlkit/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/pedrol2b/react-native-vision-camera-mlkit.svg?style=for-the-badge

@@ -91,7 +91,7 @@ const BASE_DATA: Array<Omit<LinkCardProps, 'onPress'>> = [
     isBeta: false,
     android: true,
     ios: true,
-    status: 'in-progress',
+    status: 'complete',
   },
   {
     id: PLUGIN_ID.IMAGE_LABELING,

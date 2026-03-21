@@ -16,6 +16,7 @@ import {
   useFrameProcessor,
 } from 'react-native-vision-camera';
 import {
+  useBarcodeScanning,
   useTextRecognition,
   type Orientation,
 } from 'react-native-vision-camera-mlkit';
@@ -81,6 +82,13 @@ const CameraView = forwardRef<Camera, CameraViewProps>(
     // Initialize plugins with options from store
     const textRecognitionPlugin = useTextRecognition({
       language: pluginOptions[PLUGIN_ID.TEXT_RECOGNITION].language,
+      ...sharedOptions,
+    });
+
+    const barcodeScanningPlugin = useBarcodeScanning({
+      formats: pluginOptions[PLUGIN_ID.BARCODE_SCANNING].formats,
+      enableAllPotentialBarcodes:
+        pluginOptions[PLUGIN_ID.BARCODE_SCANNING].enableAllPotentialBarcodes,
       ...sharedOptions,
     });
 
@@ -165,6 +173,11 @@ const CameraView = forwardRef<Camera, CameraViewProps>(
                 frame,
                 withArguments
               );
+            } else if (pluginId === PLUGIN_ID.BARCODE_SCANNING) {
+              resultObject = barcodeScanningPlugin.barcodeScanning(
+                frame,
+                withArguments
+              );
             }
 
             if (resultObject) {
@@ -178,6 +191,7 @@ const CameraView = forwardRef<Camera, CameraViewProps>(
         pluginId,
         frameOutputOrientation,
         textRecognitionPlugin,
+        barcodeScanningPlugin,
         handleResultWorklet,
       ]
     );

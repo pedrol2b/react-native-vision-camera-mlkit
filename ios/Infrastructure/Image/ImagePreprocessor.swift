@@ -245,11 +245,9 @@ import Foundation
         return nil
       }
 
-      // Use the user-provided orientation override, or fall back to the image's
-      // embedded metadata orientation (EXIF). UIImage(data:) already decodes
-      // EXIF orientation into uiImage.imageOrientation.
-      let effectiveOrientation =
-        options.orientation ?? Orientation.fromUIImageOrientation(uiImage.imageOrientation)
+      // Use user-provided orientation override when available.
+      // Otherwise use the resulting UIImage orientation after processing.
+      let requestedOrientation = options.orientation?.asUIImageOrientation
       let effectiveScale = clampScale(options.scaleFactor)
 
       var processedImage = uiImage
@@ -266,7 +264,8 @@ import Foundation
 
       // Create VisionImage
       let visionImage = VisionImage(image: processedImage)
-      visionImage.orientation = effectiveOrientation.asUIImageOrientation
+      let visionOrientation = requestedOrientation ?? processedImage.imageOrientation
+      visionImage.orientation = visionOrientation
 
       let pixelWidth =
         processedImage.cgImage?.width
@@ -278,7 +277,7 @@ import Foundation
       let metadata = ImageMetadata(
         width: pixelWidth,
         height: pixelHeight,
-        orientation: effectiveOrientation.asUIImageOrientation,
+        orientation: visionOrientation,
         isInverted: options.invertColors
       )
 

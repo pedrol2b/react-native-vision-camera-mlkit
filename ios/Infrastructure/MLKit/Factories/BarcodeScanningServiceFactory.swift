@@ -8,11 +8,13 @@ import Foundation
     static func createBarcodeScanner(options: BarcodeScanningOptions)
       -> BarcodeScanner
     {
-      let scannerOptions: BarcodeScannerOptions
+      let scannerOptions: MLKitBarcodeScanning.BarcodeScannerOptions
       if options.formats.isEmpty || options.formats.contains(.formatAllFormats) {
-        scannerOptions = BarcodeScannerOptions()
+        scannerOptions = MLKitBarcodeScanning.BarcodeScannerOptions()
       } else {
-        scannerOptions = BarcodeScannerOptions(formats: toMLKitFormats(options.formats))
+        scannerOptions = MLKitBarcodeScanning.BarcodeScannerOptions(
+          formats: toMLKitFormats(options.formats)
+        )
       }
       return BarcodeScanner.barcodeScanner(options: scannerOptions)
     }
@@ -24,7 +26,9 @@ import Foundation
       return MLKitBarcodeScanningService(barcodeScanner: scanner)
     }
 
-    private static func toMLKitFormats(_ formats: [BarcodeFormatOption]) -> BarcodeFormat {
+    private static func toMLKitFormats(_ formats: [BarcodeFormatOption])
+      -> MLKitBarcodeScanning.BarcodeFormat
+    {
       var rawValue = 0
       for format in formats {
         switch format {
@@ -59,7 +63,7 @@ import Foundation
         }
       }
 
-      return BarcodeFormat(rawValue: BarcodeFormat.RawValue(rawValue))
+      return MLKitBarcodeScanning.BarcodeFormat(rawValue: rawValue)
     }
   }
 #endif  // MLKIT_BARCODE_SCANNING

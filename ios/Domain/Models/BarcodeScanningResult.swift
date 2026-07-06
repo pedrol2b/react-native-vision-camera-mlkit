@@ -6,8 +6,8 @@ import Foundation
   }
 
   struct BarcodeData {
-    let bounds: BoundingBox?
-    let corners: [Corner]?
+    let bounds: DomainBoundingBox?
+    let corners: [DomainCorner]?
     let format: Int
     let formatName: String
     let valueType: Int

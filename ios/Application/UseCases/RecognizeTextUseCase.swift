@@ -16,8 +16,8 @@ import Foundation
         self.recognitionService = recognitionService
       }
 
-      func execute(frame: Frame, options: TextRecognitionOptions) throws
-        -> TextRecognitionResult
+      func execute(frame: any HybridFrameSpec, options: TextRecognitionOptions) throws
+        -> DomainTextRecognitionResult
       {
         // autoreleasepool at frame boundary to drain autoreleased Obj-C objects
         // after each frame is processed, preventing buildup across multiple frames
@@ -49,7 +49,7 @@ import Foundation
         imageFile: URL,
         imageOptions: ImagePreprocessingOptions,
         textOptions: TextRecognitionOptions
-      ) throws -> TextRecognitionResult {
+      ) throws -> DomainTextRecognitionResult {
         // autoreleasepool here ensures predictable memory cleanup,
         // especially if this method is called repeatedly or in batches
         return try autoreleasepool {

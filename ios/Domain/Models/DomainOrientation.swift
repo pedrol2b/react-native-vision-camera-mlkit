@@ -16,7 +16,7 @@ import Foundation
   }
 #endif
 
-@objc public enum Orientation: Int {
+@objc public enum DomainOrientation: Int {
   case portrait
   case portraitUpsideDown
   case landscapeLeft
@@ -32,9 +32,9 @@ import Foundation
     }
   }
 
-  /// Maps a UIImage.Orientation (typically from EXIF metadata) back to an Orientation value.
+  /// Maps a UIImage.Orientation (typically from EXIF metadata) back to a DomainOrientation value.
   public static func fromUIImageOrientation(_ imageOrientation: NativeImageOrientation)
-    -> Orientation
+    -> DomainOrientation
   {
     switch imageOrientation {
     case .up, .upMirrored: return .portrait

@@ -209,14 +209,14 @@ import Foundation
       ]
     }
 
-    private static func toBoundingBox(_ rect: CGRect) -> BoundingBox {
+    private static func toBoundingBox(_ rect: CGRect) -> DomainBoundingBox {
       let offsetX = (rect.midX - ceil(rect.width)) / 2.0
       let offsetY = (rect.midY - ceil(rect.height)) / 2.0
 
       let x = rect.maxX + offsetX
       let y = rect.minY + offsetY
 
-      return BoundingBox(
+      return DomainBoundingBox(
         x: rect.midX + (rect.midX - x),
         y: rect.midY + (y - rect.midY),
         centerX: rect.midX,
@@ -230,11 +230,11 @@ import Foundation
       )
     }
 
-    private static func toCorner(_ point: CGPoint) -> Corner {
-      return Corner(x: Double(point.x), y: Double(point.y))
+    private static func toCorner(_ point: CGPoint) -> DomainCorner {
+      return DomainCorner(x: Double(point.x), y: Double(point.y))
     }
 
-    private static func formatName(_ format: BarcodeFormat) -> String {
+    private static func formatName(_ format: MLKitBarcodeScanning.BarcodeFormat) -> String {
       switch Int(format.rawValue) {
       case 1: return "CODE_128"
       case 2: return "CODE_39"
@@ -253,7 +253,7 @@ import Foundation
       }
     }
 
-    private static func valueTypeName(_ valueType: BarcodeValueType) -> String {
+    private static func valueTypeName(_ valueType: MLKitBarcodeScanning.BarcodeValueType) -> String {
       switch Int(valueType.rawValue) {
       case 1: return "TYPE_CONTACT_INFO"
       case 2: return "TYPE_EMAIL"

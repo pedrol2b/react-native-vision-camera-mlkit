@@ -16,7 +16,7 @@ import Foundation
         self.recognitionService = recognitionService
       }
 
-      func execute(frame: Frame, options: BarcodeScanningOptions) throws
+      func execute(frame: any HybridFrameSpec, options: BarcodeScanningOptions) throws
         -> BarcodeScanningResult
       {
         return try autoreleasepool {

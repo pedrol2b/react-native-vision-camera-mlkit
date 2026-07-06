@@ -1,6 +1,6 @@
 import Foundation
 
-struct BoundingBox {
+struct DomainBoundingBox {
   let x: Double
   let y: Double
   let centerX: Double

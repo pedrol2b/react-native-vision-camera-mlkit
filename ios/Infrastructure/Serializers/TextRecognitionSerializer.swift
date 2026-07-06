@@ -2,18 +2,18 @@ import Foundation
 
 class TextRecognitionSerializer {
 
-  static func toReactNativeMap(_ result: TextRecognitionResult) -> [String: Any] {
+  static func toReactNativeMap(_ result: DomainTextRecognitionResult) -> [String: Any] {
     var map = [String: Any]()
     map["text"] = result.text
     map["blocks"] = toBlocksArray(result.blocks)
     return map
   }
 
-  private static func toBlocksArray(_ blocks: [TextBlock]) -> [[String: Any]] {
+  private static func toBlocksArray(_ blocks: [DomainTextBlock]) -> [[String: Any]] {
     return blocks.map { toBlockMap($0) }
   }
 
-  private static func toBlockMap(_ block: TextBlock) -> [String: Any] {
+  private static func toBlockMap(_ block: DomainTextBlock) -> [String: Any] {
     var map = [String: Any]()
     map["text"] = block.text
     if let bounds = block.bounds {
@@ -27,11 +27,11 @@ class TextRecognitionSerializer {
     return map
   }
 
-  private static func toLinesArray(_ lines: [TextLine]) -> [[String: Any]] {
+  private static func toLinesArray(_ lines: [DomainTextLine]) -> [[String: Any]] {
     return lines.map { toLineMap($0) }
   }
 
-  private static func toLineMap(_ line: TextLine) -> [String: Any] {
+  private static func toLineMap(_ line: DomainTextLine) -> [String: Any] {
     var map = [String: Any]()
     map["text"] = line.text
     if let bounds = line.bounds {
@@ -47,13 +47,13 @@ class TextRecognitionSerializer {
     return map
   }
 
-  private static func toElementsArray(_ elements: [TextElement]) -> [[String:
+  private static func toElementsArray(_ elements: [DomainTextElement]) -> [[String:
     Any]]
   {
     return elements.map { toElementMap($0) }
   }
 
-  private static func toElementMap(_ element: TextElement) -> [String: Any] {
+  private static func toElementMap(_ element: DomainTextElement) -> [String: Any] {
     var map = [String: Any]()
     map["text"] = element.text
     if let bounds = element.bounds {
@@ -69,7 +69,7 @@ class TextRecognitionSerializer {
     return map
   }
 
-  private static func toSymbolMap(_ symbol: TextSymbol) -> [String: Any] {
+  private static func toSymbolMap(_ symbol: DomainTextSymbol) -> [String: Any] {
     var map = [String: Any]()
     map["text"] = symbol.text
     if let bounds = symbol.bounds {
@@ -84,7 +84,7 @@ class TextRecognitionSerializer {
     return map
   }
 
-  private static func toBoundsMap(_ bounds: BoundingBox) -> [String: Double] {
+  private static func toBoundsMap(_ bounds: DomainBoundingBox) -> [String: Double] {
     return [
       "x": bounds.x,
       "y": bounds.y,
@@ -99,11 +99,11 @@ class TextRecognitionSerializer {
     ]
   }
 
-  private static func toCornersArray(_ corners: [Corner]) -> [[String: Double]] {
+  private static func toCornersArray(_ corners: [DomainCorner]) -> [[String: Double]] {
     return corners.map { toCornerMap($0) }
   }
 
-  private static func toCornerMap(_ corner: Corner) -> [String: Double] {
+  private static func toCornerMap(_ corner: DomainCorner) -> [String: Double] {
     return [
       "x": corner.x,
       "y": corner.y,

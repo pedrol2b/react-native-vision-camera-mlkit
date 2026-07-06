@@ -5,10 +5,6 @@ approval_policy = "on-request"
 sandbox_mode = "workspace-write"
 web_search = "live"
 
-[mcp_servers.github]
-command = "npx"
-args = ["-y", "@modelcontextprotocol/server-github"]
-
 [mcp_servers.context7]
 command = "npx"
 args = ["-y", "@upstash/context7-mcp@latest"]

@@ -90,7 +90,7 @@ import Foundation
       -> ImagePreprocessingOptions
     {
       let invertColors = options["invertColors"] as? Bool ?? false
-      let orientation = (options["orientation"] as? String).flatMap { Orientation(string: $0) }
+      let orientation = (options["orientation"] as? String).flatMap { DomainOrientation(string: $0) }
       let scaleFactor = CGFloat((options["scaleFactor"] as? NSNumber)?.doubleValue ?? 1.0)
 
       return ImagePreprocessingOptions(

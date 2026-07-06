@@ -38,7 +38,7 @@ import Foundation
       return map
     }
 
-    private static func toBoundsMap(_ bounds: BoundingBox) -> [String: Double] {
+    private static func toBoundsMap(_ bounds: DomainBoundingBox) -> [String: Double] {
       return [
         "x": bounds.x,
         "y": bounds.y,
@@ -53,7 +53,7 @@ import Foundation
       ]
     }
 
-    private static func toCornerMap(_ corner: Corner) -> [String: Double] {
+    private static func toCornerMap(_ corner: DomainCorner) -> [String: Double] {
       return [
         "x": corner.x,
         "y": corner.y,

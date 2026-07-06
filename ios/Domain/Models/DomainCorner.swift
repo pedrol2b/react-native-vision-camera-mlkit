@@ -1,6 +1,6 @@
 import Foundation
 
-struct Corner {
+struct DomainCorner {
   let x: Double
   let y: Double
 }

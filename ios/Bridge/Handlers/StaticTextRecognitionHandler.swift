@@ -5,7 +5,7 @@ import Foundation
     private let textRecognitionSerializer = TextRecognitionSerializer()
     private var cachedUseCase: RecognizeTextUseCase?
 
-    private func getRecognizeTextUseCase(for language: TextRecognitionLanguage)
+    private func getRecognizeTextUseCase(for language: DomainTextRecognitionLanguage)
       -> RecognizeTextUseCase
     {
       if let useCase = cachedUseCase {
@@ -97,7 +97,7 @@ import Foundation
       -> ImagePreprocessingOptions
     {
       let invertColors = options["invertColors"] as? Bool ?? false
-      let orientation = (options["orientation"] as? String).flatMap { Orientation(string: $0) }
+      let orientation = (options["orientation"] as? String).flatMap { DomainOrientation(string: $0) }
 
       return ImagePreprocessingOptions(
         invertColors: invertColors,
@@ -105,7 +105,7 @@ import Foundation
       )
     }
 
-    private func parseLanguage(_ language: String) -> TextRecognitionLanguage {
+    private func parseLanguage(_ language: String) -> DomainTextRecognitionLanguage {
       switch language {
       case "LATIN":
         return .latin

@@ -5,17 +5,17 @@ import Foundation
 
   class MLKitTextAdapter {
 
-    static func toDomain(_ mlkitText: Text?) -> TextRecognitionResult {
-      return TextRecognitionResult(
+    static func toDomain(_ mlkitText: Text?) -> DomainTextRecognitionResult {
+      return DomainTextRecognitionResult(
         text: mlkitText?.text,
         blocks: mlkitText?.blocks.map { toTextBlock($0) } ?? []
       )
     }
 
     private static func toTextBlock(_ block: MLKitTextRecognition.TextBlock)
-      -> TextBlock
+      -> DomainTextBlock
     {
-      return TextBlock(
+      return DomainTextBlock(
         text: block.text,
         bounds: toBoundingBox(block.frame),
         corners: block.cornerPoints.map { toCorner($0.cgPointValue) },
@@ -25,9 +25,9 @@ import Foundation
     }
 
     private static func toTextLine(_ line: MLKitTextRecognition.TextLine)
-      -> TextLine
+      -> DomainTextLine
     {
-      return TextLine(
+      return DomainTextLine(
         text: line.text,
         bounds: toBoundingBox(line.frame),
         corners: line.cornerPoints.map { toCorner($0.cgPointValue) },
@@ -39,9 +39,9 @@ import Foundation
     }
 
     private static func toTextElement(_ element: MLKitTextRecognition.TextElement)
-      -> TextElement
+      -> DomainTextElement
     {
-      return TextElement(
+      return DomainTextElement(
         text: element.text,
         bounds: toBoundingBox(element.frame),
         corners: element.cornerPoints.map { toCorner($0.cgPointValue) },
@@ -52,14 +52,14 @@ import Foundation
       )
     }
 
-    private static func toBoundingBox(_ bounds: CGRect) -> BoundingBox {
+    private static func toBoundingBox(_ bounds: CGRect) -> DomainBoundingBox {
       let offsetX = (bounds.midX - ceil(bounds.width)) / 2.0
       let offsetY = (bounds.midY - ceil(bounds.height)) / 2.0
 
       let x = bounds.maxX + offsetX
       let y = bounds.minY + offsetY
 
-      return BoundingBox(
+      return DomainBoundingBox(
         x: bounds.midX + (bounds.midX - x),
         y: bounds.midY + (y - bounds.midY),
         centerX: bounds.midX,
@@ -73,8 +73,8 @@ import Foundation
       )
     }
 
-    private static func toCorner(_ point: CGPoint) -> Corner {
-      return Corner(x: Double(point.x), y: Double(point.y))
+    private static func toCorner(_ point: CGPoint) -> DomainCorner {
+      return DomainCorner(x: Double(point.x), y: Double(point.y))
     }
   }
 #endif  // MLKIT_TEXT_RECOGNITION_ANY

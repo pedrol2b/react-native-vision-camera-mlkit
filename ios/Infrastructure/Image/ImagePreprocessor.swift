@@ -71,17 +71,26 @@ import Foundation
       return filter
     }
 
-    func preprocessFrame(frame: Frame, options: ImagePreprocessingOptions)
+    func preprocessFrame(frame: any HybridFrameSpec, options: ImagePreprocessingOptions)
       -> ProcessedImage?
     {
+      guard
+        let nativeFrame = frame as? NativeFrame,
+        let sampleBuffer = nativeFrame.sampleBuffer
+      else {
+        return nil
+      }
+
       let effectiveScale = clampScale(options.scaleFactor)
+      let frameOrientation = frame.orientation.asUIImageOrientation
 
       let image: VisionImage
 
       if options.invertColors {
         guard
           let invertedImage = createInvertedVisionImageFromFrame(
-            frame: frame,
+            sampleBuffer: sampleBuffer,
+            frameOrientation: frameOrientation,
             outputOrientation: options.outputOrientation,
             scaleFactor: effectiveScale
           )
@@ -91,14 +100,14 @@ import Foundation
         image = invertedImage
       } else {
         image = createVisionImageFromFrame(
-          frame: frame,
+          sampleBuffer: sampleBuffer,
+          frameOrientation: frameOrientation,
           outputOrientation: options.outputOrientation,
           scaleFactor: effectiveScale
         )
       }
 
-      let buffer: CMSampleBuffer = frame.buffer
-      guard let imageBuffer = CMSampleBufferGetImageBuffer(buffer) else {
+      guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
         return nil
       }
 
@@ -111,7 +120,7 @@ import Foundation
       let metadata = ImageMetadata(
         width: width,
         height: height,
-        orientation: frame.orientation,
+        orientation: frameOrientation,
         isInverted: options.invertColors
       )
 
@@ -119,15 +128,14 @@ import Foundation
     }
 
     private func createVisionImageFromFrame(
-      frame: Frame,
+      sampleBuffer: CMSampleBuffer,
+      frameOrientation: UIImage.Orientation,
       outputOrientation: OutputOrientation?,
       scaleFactor: CGFloat
     ) -> VisionImage {
-      let buffer: CMSampleBuffer = frame.buffer
-
       // MLKit works more reliably when frames are converted to UIImage
       // YUV CMSampleBuffer can have orientation and format handling issues
-      if let pixelBuffer = CMSampleBufferGetImageBuffer(buffer) {
+      if let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
         let pixelFormatType = CVPixelBufferGetPixelFormatType(pixelBuffer)
 
         // Only use BGRA directly with MLKit - convert everything else
@@ -148,7 +156,7 @@ import Foundation
         if needsConversion || scaleFactor < 1.0 {
           if let convertedImage = convertToSupportedFormat(
             pixelBuffer: pixelBuffer,
-            frameOrientation: frame.orientation,
+            frameOrientation: frameOrientation,
             outputOrientation: outputOrientation,
             scaleFactor: scaleFactor
           ) {
@@ -160,20 +168,21 @@ import Foundation
       }
 
       // Fallback: Use CMSampleBuffer directly (for BGRA and scaleFactor == 1.0)
-      let image = VisionImage(buffer: buffer)
+      let image = VisionImage(buffer: sampleBuffer)
       image.orientation = getVisionOrientation(
-        frameOrientation: frame.orientation,
+        frameOrientation: frameOrientation,
         outputOrientation: outputOrientation
       )
       return image
     }
 
     private func createInvertedVisionImageFromFrame(
-      frame: Frame,
+      sampleBuffer: CMSampleBuffer,
+      frameOrientation: UIImage.Orientation,
       outputOrientation: OutputOrientation?,
       scaleFactor: CGFloat
     ) -> VisionImage? {
-      guard let buffer = CMSampleBufferGetImageBuffer(frame.buffer) else {
+      guard let buffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
         return nil
       }
 
@@ -187,7 +196,7 @@ import Foundation
       return createScaledVisionImage(
         from: invertedCIImage,
         scaleFactor: scaleFactor,
-        frameOrientation: frame.orientation,
+        frameOrientation: frameOrientation,
         outputOrientation: outputOrientation
       )
     }

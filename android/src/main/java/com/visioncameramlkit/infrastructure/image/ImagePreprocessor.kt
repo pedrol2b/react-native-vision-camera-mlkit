@@ -26,7 +26,7 @@ class ImagePreprocessor : IImagePreprocessor {
     return scale.coerceIn(0.9f, 1.0f)
   }
 
-  private fun invertBitmap(bitmap: Bitmap): Bitmap =
+  fun invertBitmap(bitmap: Bitmap): Bitmap =
     createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888).apply {
       val canvas = Canvas(this)
       val paint = Paint()

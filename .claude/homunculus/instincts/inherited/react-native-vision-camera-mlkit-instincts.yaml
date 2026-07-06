@@ -1,0 +1,548 @@
+# Instincts generated from https://github.com/pedrol2b/react-native-vision-camera-mlkit
+# Generated: 2026-07-05T23:57:28.965Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: react-native-vision-camera-mlkit-commit-conventional
+trigger: "when writing a commit message"
+confidence: 0.85
+domain: git
+source: repo-analysis
+source_repo: https://github.com/pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Commit Conventional
+
+## Action
+
+Use conventional commit format with prefixes: fix, feat, chore, docs, perf
+
+## Evidence
+
+- 17 commits analyzed
+- Detected conventional commit pattern
+- Examples: chore(barcodeScanning): add native deps for barcodeScanning, docs(README): add quote to md line
+
+---
+id: react-native-vision-camera-mlkit-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Commit Length
+
+## Action
+
+Write moderate-length commit messages (~52 characters)
+
+## Evidence
+
+- Average commit message length: 52 chars
+- Based on 17 commits
+
+---
+id: react-native-vision-camera-mlkit-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Naming Files
+
+## Action
+
+Use PascalCase naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: PascalCase
+
+---
+id: react-native-vision-camera-mlkit-import-relative
+trigger: "when importing modules"
+confidence: 0.75
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Import Relative
+
+## Action
+
+Use relative imports for project files
+
+## Evidence
+
+- Import analysis shows relative import pattern
+- Example: import { x } from '../lib/x'
+
+---
+id: react-native-vision-camera-mlkit-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: react-native-vision-camera-mlkit-arch-type-based
+trigger: "when adding new code"
+confidence: 0.8
+domain: architecture
+source: repo-analysis
+source_repo: https://github.com/pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Arch Type Based
+
+## Action
+
+Place code in the appropriate type folder (components/, services/, utils/, etc.)
+
+## Evidence
+
+- Type-based module organization detected
+- Folders: core, features
+
+---
+id: react-native-vision-camera-mlkit-test-separate
+trigger: "when writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Test Separate
+
+## Action
+
+Place tests in the tests/ or __tests__/ directory, mirroring src structure
+
+## Evidence
+
+- Separate test directory pattern detected
+- Tests live in dedicated test folders
+
+---
+id: react-native-vision-camera-mlkit-workflow-feature-development
+trigger: "when implementing a new feature"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Workflow Feature Development
+
+## Action
+
+Follow the feature-development workflow:
+1. Add feature implementation
+2. Add tests for feature
+3. Update documentation
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~14x per month
+- Files: example/src/screens/*, example/src/components/ui/*, example/src/stores/*
+
+---
+id: react-native-vision-camera-mlkit-workflow-add-or-update-native-mlkit-feature
+trigger: "when doing add or update native mlkit feature"
+confidence: 0.55
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Workflow Add Or Update Native Mlkit Feature
+
+## Action
+
+Follow the add-or-update-native-mlkit-feature workflow:
+1. Add or update native Android files (handlers, plugins, models, factories, adapters, serializers, registry, build.gradle).
+2. Add or update native iOS files (handlers, plugins, models, factories, adapters, serializers, registry, VisionCameraMLKit.mm).
+3. Update or add cross-platform TypeScript files (feature index, types, src/index.ts).
+4. Update example app integration (screens, stores, CameraView, Podfile.lock, project.pbxproj).
+5. Update documentation (README.md, docs/feature.md).
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~1x per month
+- Files: android/src/main/java/com/visioncameramlkit/bridge/handlers/*, android/src/main/java/com/visioncameramlkit/bridge/plugins/*, android/src/main/java/com/visioncameramlkit/bridge/registry/PluginRegistry.kt
+
+---
+id: react-native-vision-camera-mlkit-workflow-code-quality-fixes-native
+trigger: "when doing code quality fixes native"
+confidence: 0.55
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Workflow Code Quality Fixes Native
+
+## Action
+
+Follow the code-quality-fixes-native workflow:
+1. Identify code quality issues in Android and/or iOS native code.
+2. Refactor or clean up code in multiple related files (handlers, plugins, models, modules, etc.).
+3. Commit changes with a fix or chore message.
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~1x per month
+- Files: android/src/main/java/com/visioncameramlkit/bridge/handlers/*, android/src/main/java/com/visioncameramlkit/bridge/plugins/*, android/src/main/java/com/visioncameramlkit/bridge/registry/PluginRegistry.kt
+
+---
+id: react-native-vision-camera-mlkit-workflow-update-ios-pods-and-xcode-project
+trigger: "when doing update ios pods and xcode project"
+confidence: 0.55
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Workflow Update Ios Pods And Xcode Project
+
+## Action
+
+Follow the update-ios-pods-and-xcode-project workflow:
+1. Update example/ios/Podfile and/or Podfile.lock.
+2. Update example/ios/VisionCameraMLKitExample.xcodeproj/project.pbxproj.
+3. Commit with chore(xcode) or similar message.
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~1x per month
+- Files: example/ios/Podfile, example/ios/Podfile.lock, example/ios/VisionCameraMLKitExample.xcodeproj/project.pbxproj
+
+---
+id: react-native-vision-camera-mlkit-workflow-documentation-update
+trigger: "when doing documentation update"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Workflow Documentation Update
+
+## Action
+
+Follow the documentation-update workflow:
+1. Edit README.md or docs/*.md to add, clarify, or reorganize information.
+2. Commit with docs(...) message.
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: README.md, docs/*.md
+
+---
+id: react-native-vision-camera-mlkit-instinct-file-naming
+trigger: "When creating or renaming a file in the Swift codebase"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Instinct File Naming
+
+## Action
+
+Use PascalCase for file names
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.files
+- Observed in ios/Bridge/Handlers/*, ios/Domain/Models/*
+
+---
+id: react-native-vision-camera-mlkit-instinct-function-naming
+trigger: "When defining a function in Swift"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Instinct Function Naming
+
+## Action
+
+Use camelCase for function names
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.functions
+- Observed in ios/Infrastructure/MLKit/*
+
+---
+id: react-native-vision-camera-mlkit-instinct-class-naming
+trigger: "When defining a class in Swift"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Instinct Class Naming
+
+## Action
+
+Use PascalCase for class names
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.classes
+- Observed in ios/Domain/Models/*
+
+---
+id: react-native-vision-camera-mlkit-instinct-constant-naming
+trigger: "When declaring a constant in Swift"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Instinct Constant Naming
+
+## Action
+
+Use SCREAMING_SNAKE_CASE for constant names
+
+## Evidence
+
+- Pattern in codeStyle.namingConventions.constants
+- Observed in ios/Infrastructure/MLKit/*
+
+---
+id: react-native-vision-camera-mlkit-instinct-import-style
+trigger: "When importing modules in Swift or TypeScript"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Instinct Import Style
+
+## Action
+
+Use relative import paths
+
+## Evidence
+
+- Pattern in codeStyle.importStyle
+- Seen in src/features/*/index.ts
+
+---
+id: react-native-vision-camera-mlkit-instinct-export-style
+trigger: "When exporting modules in TypeScript"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Instinct Export Style
+
+## Action
+
+Use named exports
+
+## Evidence
+
+- Pattern in codeStyle.exportStyle
+- Seen in src/features/*/index.ts
+
+---
+id: react-native-vision-camera-mlkit-instinct-test-location
+trigger: "When adding or updating tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Instinct Test Location
+
+## Action
+
+Place test files in a separate test directory
+
+## Evidence
+
+- Pattern in architecture.folderStructure.testLocation
+- Files like **/*.test.*
+
+---
+id: react-native-vision-camera-mlkit-instinct-test-feature-workflow
+trigger: "When implementing a new feature"
+confidence: 0.85
+domain: testing
+source: repo-analysis
+source_repo: pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Instinct Test Feature Workflow
+
+## Action
+
+Add corresponding tests for the feature
+
+## Evidence
+
+- Workflow feature-development includes 'Add tests for feature'
+- example/src/screens/*, example/src/components/ui/*, **/*.test.*
+
+---
+id: react-native-vision-camera-mlkit-instinct-git-commit-format
+trigger: "When making a commit"
+confidence: 0.9
+domain: git
+source: repo-analysis
+source_repo: pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Instinct Git Commit Format
+
+## Action
+
+Use conventional commit format: <type>(<scope>): <description>
+
+## Evidence
+
+- Pattern in commits.type and commits.prefixes
+- Examples like 'feat(example/HomeScreen): improve UI by sorting list by status complete'
+
+---
+id: react-native-vision-camera-mlkit-instinct-git-commit-length
+trigger: "When writing a commit message"
+confidence: 0.7
+domain: git
+source: repo-analysis
+source_repo: pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Instinct Git Commit Length
+
+## Action
+
+Keep the commit message around 52 characters on average
+
+## Evidence
+
+- Pattern in commits.averageLength
+- Examples in commit history
+
+---
+id: react-native-vision-camera-mlkit-instinct-add-mlkit-feature
+trigger: "When adding or updating a native ML Kit feature (e.g., barcode scanning, text recognition)"
+confidence: 0.95
+domain: workflow
+source: repo-analysis
+source_repo: pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Instinct Add Mlkit Feature
+
+## Action
+
+Update native Android/iOS files, cross-platform TypeScript files, example integration, and documentation in a coordinated sequence
+
+## Evidence
+
+- Workflow add-or-update-native-mlkit-feature
+- Files and commit sequences in workflow and example
+
+---
+id: react-native-vision-camera-mlkit-instinct-code-quality-native
+trigger: "When improving code quality in native Android or iOS code"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Instinct Code Quality Native
+
+## Action
+
+Refactor or clean up code in related native files and commit with fix or chore message
+
+## Evidence
+
+- Workflow code-quality-fixes-native
+- Commits like 'fix(android): kotlin code quality fixes'
+
+---
+id: react-native-vision-camera-mlkit-instinct-update-ios-pods
+trigger: "When iOS dependencies or Xcode versions change"
+confidence: 0.88
+domain: workflow
+source: repo-analysis
+source_repo: pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Instinct Update Ios Pods
+
+## Action
+
+Update Podfile, Podfile.lock, and Xcode project files and commit with chore(xcode) or similar message
+
+## Evidence
+
+- Workflow update-ios-pods-and-xcode-project
+- Files example/ios/Podfile, Podfile.lock, VisionCameraMLKitExample.xcodeproj/project.pbxproj
+
+---
+id: react-native-vision-camera-mlkit-instinct-documentation-update
+trigger: "When features, fixes, or developer guidance change"
+confidence: 0.85
+domain: workflow
+source: repo-analysis
+source_repo: pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Instinct Documentation Update
+
+## Action
+
+Edit README.md or docs/*.md and commit with docs(...) message
+
+## Evidence
+
+- Workflow documentation-update
+- Commits like 'docs(README): add quote to md line'
+

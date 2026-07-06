@@ -9,6 +9,9 @@
 .vscode/
 jsconfig.json
 
+# Local AI development context
+.context/
+
 # Xcode
 #
 build/

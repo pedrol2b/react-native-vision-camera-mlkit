@@ -72,6 +72,57 @@ target 'VisionCameraMLKitExample' do
     Pod::UI.puts('Applied Xcode 26 fmt workaround (FMT_USE_CONSTEVAL=0)'.yellow)
   end
 
+  def apply_glog_xcode_26_workaround(installer)
+    modulemap = File.join(installer.sandbox.root, 'Target Support Files', 'glog', 'glog.modulemap')
+    patched = false
+
+    if File.exist?(modulemap)
+      content = File.read(modulemap)
+      modulemap_content = content.gsub(/\n  module \* \{ export \*\ }/, '')
+
+      if modulemap_content != content
+        File.write(modulemap, modulemap_content)
+        patched = true
+      end
+    end
+
+    Dir.glob(File.join(installer.sandbox.root, 'Target Support Files', '**', '*.xcconfig')).each do |xcconfig|
+      content = File.read(xcconfig)
+      xcconfig_content = content
+        .gsub(' -Xcc -fmodule-map-file="${PODS_ROOT}/Headers/Public/glog/glog.modulemap"', '')
+        .gsub(' -fmodule-map-file="${PODS_ROOT}/Headers/Public/glog/glog.modulemap"', '')
+
+      if xcconfig_content != content
+        File.write(xcconfig, xcconfig_content)
+        patched = true
+      end
+    end
+
+    Pod::UI.puts('Applied Xcode 26 glog workaround'.yellow) if patched
+  end
+
+  def apply_worklets_header_search_paths_workaround(installer)
+    header_path = '"${PODS_ROOT}/Headers/Private/React-Core"'
+    patched = false
+
+    Dir.glob(File.join(installer.sandbox.root, 'Target Support Files', 'VisionCameraWorklets', '*.xcconfig')).each do |xcconfig|
+      content = File.read(xcconfig)
+      next if content.include?(header_path)
+
+      xcconfig_content = content.gsub(
+        /^(HEADER_SEARCH_PATHS = .*)$/,
+        "\\1 #{header_path}"
+      )
+
+      next if xcconfig_content == content
+
+      File.write(xcconfig, xcconfig_content)
+      patched = true
+    end
+
+    Pod::UI.puts('Applied VisionCameraWorklets React-Core header path workaround'.yellow) if patched
+  end
+
   post_install do |installer|
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
     react_native_post_install(
@@ -82,5 +133,7 @@ target 'VisionCameraMLKitExample' do
     )
 
     apply_fmt_xcode_26_workaround(installer)
+    apply_glog_xcode_26_workaround(installer)
+    apply_worklets_header_search_paths_workaround(installer)
   end
 end

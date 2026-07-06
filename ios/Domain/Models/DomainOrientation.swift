@@ -1,28 +1,14 @@
 import Foundation
 
-#if canImport(UIKit)
-  import UIKit
-  public typealias NativeImageOrientation = UIImage.Orientation
-#else
-  public enum NativeImageOrientation {
-    case up
-    case down
-    case left
-    case right
-    case upMirrored
-    case downMirrored
-    case leftMirrored
-    case rightMirrored
-  }
-#endif
+import UIKit
 
-@objc public enum DomainOrientation: Int {
+enum DomainOrientation: Int {
   case portrait
   case portraitUpsideDown
   case landscapeLeft
   case landscapeRight
 
-  public init?(string: String?) {
+  init?(string: String?) {
     switch string {
     case "portrait": self = .portrait
     case "portrait-upside-down": self = .portraitUpsideDown
@@ -33,7 +19,7 @@ import Foundation
   }
 
   /// Maps a UIImage.Orientation (typically from EXIF metadata) back to a DomainOrientation value.
-  public static func fromUIImageOrientation(_ imageOrientation: NativeImageOrientation)
+  static func fromUIImageOrientation(_ imageOrientation: UIImage.Orientation)
     -> DomainOrientation
   {
     switch imageOrientation {
@@ -45,7 +31,7 @@ import Foundation
     }
   }
 
-  public var asUIImageOrientation: NativeImageOrientation {
+  var asUIImageOrientation: UIImage.Orientation {
     switch self {
     case .portrait: return .up
     case .portraitUpsideDown: return .down

@@ -20,6 +20,6 @@
       }
     }
   },
-  "ignorePaths": ["**/example/**"],
+  "ignorePaths": ["**/example/**", "**/node_modules/**"],
   "gitAttributesGeneratedFlag": true
 }

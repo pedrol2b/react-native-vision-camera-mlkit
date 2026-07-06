@@ -6,7 +6,7 @@ public struct ImagePreprocessingOptions {
   let scaleFactor: CGFloat
   let orientation: DomainOrientation?
 
-  public init(
+  init(
     invertColors: Bool = false,
     outputOrientation: OutputOrientation? = nil,
     scaleFactor: CGFloat = 1.0,

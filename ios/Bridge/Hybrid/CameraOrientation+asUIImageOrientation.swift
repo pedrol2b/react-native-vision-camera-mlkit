@@ -1,4 +1,5 @@
 import UIKit
+import VisionCamera
 
 extension CameraOrientation {
   var asUIImageOrientation: UIImage.Orientation {

@@ -8,12 +8,9 @@ import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Matrix
 import android.graphics.Paint
-import android.media.Image
 import androidx.core.graphics.scale
 import androidx.exifinterface.media.ExifInterface
 import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.common.internal.ImageConvertUtils
-import com.mrousavy.camera.frameprocessors.Frame
 import com.visioncameramlkit.domain.models.ImageMetadata
 import com.visioncameramlkit.domain.models.ImagePreprocessingOptions
 import com.visioncameramlkit.domain.models.Orientation
@@ -27,80 +24,6 @@ class ImagePreprocessor : IImagePreprocessor {
   private fun clampScale(scaleFactor: Float?): Float {
     val scale = scaleFactor ?: 1.0f
     return scale.coerceIn(0.9f, 1.0f)
-  }
-
-  override fun preprocessFrame(
-    frame: Frame,
-    options: ImagePreprocessingOptions,
-  ): ProcessedImage {
-    val effectiveScale = clampScale(options.scaleFactor)
-
-    val inputImage =
-      if (options.invertColors) {
-        createInvertedInputImage(frame, effectiveScale)
-      } else {
-        createInputImage(frame, effectiveScale)
-      }
-
-    val metadata =
-      ImageMetadata(
-        width = (frame.imageProxy.width * effectiveScale).toInt(),
-        height = (frame.imageProxy.height * effectiveScale).toInt(),
-        rotation = frame.imageProxy.imageInfo.rotationDegrees,
-        isInverted = options.invertColors,
-      )
-
-    return ProcessedImage(inputImage, metadata)
-  }
-
-  private fun createInputImage(
-    frame: Frame,
-    scaleFactor: Float,
-  ): InputImage {
-    val mediaImage: Image = frame.image
-
-    val image = InputImage.fromMediaImage(mediaImage, frame.imageProxy.imageInfo.rotationDegrees)
-    val frameBitmap = ImageConvertUtils.getInstance().getUpRightBitmap(image)
-
-    val finalBitmap =
-      if (scaleFactor < 1.0f) {
-        frameBitmap.scale(
-          (frameBitmap.width * scaleFactor).toInt(),
-          (frameBitmap.height * scaleFactor).toInt(),
-          false,
-        )
-      } else {
-        frameBitmap
-      }
-
-    return InputImage.fromBitmap(finalBitmap, 0)
-  }
-
-  private fun createInvertedInputImage(
-    frame: Frame,
-    scaleFactor: Float,
-  ): InputImage {
-    val mediaImage: Image = frame.image
-
-    val image = InputImage.fromMediaImage(mediaImage, frame.imageProxy.imageInfo.rotationDegrees)
-    val frameBitmap = ImageConvertUtils.getInstance().getUpRightBitmap(image)
-
-    // Scale first if needed
-    val scaledBitmap =
-      if (scaleFactor < 1.0f) {
-        frameBitmap.scale(
-          (frameBitmap.width * scaleFactor).toInt(),
-          (frameBitmap.height * scaleFactor).toInt(),
-          false,
-        )
-      } else {
-        frameBitmap
-      }
-
-    // Then invert
-    val invertedBitmap = invertBitmap(scaledBitmap)
-
-    return InputImage.fromBitmap(invertedBitmap, 0)
   }
 
   private fun invertBitmap(bitmap: Bitmap): Bitmap =

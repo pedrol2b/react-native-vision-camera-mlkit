@@ -1,6 +1,5 @@
 package com.visioncameramlkit.application.usecases
 
-import com.mrousavy.camera.frameprocessors.Frame
 import com.visioncameramlkit.domain.models.BarcodeScanningOptions
 import com.visioncameramlkit.domain.models.BarcodeScanningResult
 import com.visioncameramlkit.domain.models.ImagePreprocessingOptions
@@ -12,21 +11,6 @@ class RecognizeBarcodesUseCase(
   private val imagePreprocessor: IImagePreprocessor,
   private val recognitionService: IRecognitionService<BarcodeScanningResult>,
 ) {
-  fun execute(
-    frame: Frame,
-    options: BarcodeScanningOptions,
-  ): BarcodeScanningResult {
-    val preprocessingOptions =
-      ImagePreprocessingOptions(
-        invertColors = options.invertColors,
-        outputOrientation = options.outputOrientation,
-        scaleFactor = options.scaleFactor,
-      )
-
-    val processedImage = imagePreprocessor.preprocessFrame(frame, preprocessingOptions)
-    return recognitionService.recognize(processedImage)
-  }
-
   fun execute(
     imageFile: File,
     imageOptions: ImagePreprocessingOptions,

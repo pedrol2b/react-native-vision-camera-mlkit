@@ -1,6 +1,7 @@
 require "json"
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
+load 'nitrogen/generated/ios/VisionCameraMLKit+autolinking.rb'
 
 # Load MLKit configuration from global variable set in Podfile
 # Default configuration
@@ -152,6 +153,8 @@ Pod::Spec.new do |s|
   end
 
   # ===== GoogleMLKit Vision =====
+
+  add_nitrogen_files(s)
 
   if respond_to?(:install_modules_dependencies, true)
     install_modules_dependencies(s)

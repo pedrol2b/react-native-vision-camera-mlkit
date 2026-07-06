@@ -6,15 +6,14 @@ import {
   type NavigationProp,
   type RouteProp,
 } from '@react-navigation/native';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSharedValue } from 'react-native-reanimated';
 import {
+  type CameraRef,
   useCameraDevice,
   useCameraPermission,
-  type Camera,
-  type Orientation,
 } from 'react-native-vision-camera';
-import { useSharedValue as useWorkletsSharedValue } from 'react-native-worklets-core';
+import type { Orientation } from 'react-native-vision-camera-mlkit';
 import { CameraControls } from '../components/ui';
 import {
   CameraView,
@@ -40,14 +39,12 @@ const CameraScreen = () => {
   const { params, name } = useRoute<RouteProp<RootStackParamList, 'Camera'>>();
   const { open: openTerminal } = useTerminal();
 
-  const cameraRef = useRef<Camera>(null);
+  const cameraRef = useRef<CameraRef>(null);
 
   const [cameraPosition, setCameraPosition] = useState<CameraPosition>('back');
   const [torchState, setTorchState] = useState<TorchState>('off');
-  const [isFpsGraphEnabled, setIsFpsGraphEnabled] = useState<boolean>(false);
+  const [, setIsFpsGraphEnabled] = useState<boolean>(false);
 
-  const frameOutputOrientation =
-    useWorkletsSharedValue<Orientation>(DEFAULT_ORIENTATION);
   const outputOrientation = useSharedValue<Orientation>(DEFAULT_ORIENTATION);
 
   const { isFrameProcessorEnabled } = useSettingsStore();
@@ -61,14 +58,6 @@ const CameraScreen = () => {
   const appState = useAppState();
 
   const isActive = isFocused && appState === 'active';
-
-  const onOutputOrientationChangedCallback = useCallback(
-    (o: Orientation) => {
-      outputOrientation.value = o;
-      frameOutputOrientation.value = o;
-    },
-    [outputOrientation, frameOutputOrientation]
-  );
 
   const flipCamera = () =>
     setCameraPosition((prev) => (prev === 'back' ? 'front' : 'back'));
@@ -100,10 +89,8 @@ const CameraScreen = () => {
         pluginId={params.id}
         flipCamera={flipCamera}
         isFrameProcessorEnabled={isFrameProcessorEnabled}
-        frameOutputOrientation={frameOutputOrientation}
-        onOutputOrientationChangedCallback={onOutputOrientationChangedCallback}
-        torch={torchState}
-        enableFpsGraph={isFpsGraphEnabled}
+        frameOutputOrientation={outputOrientation}
+        torchMode={torchState}
       />
       <CameraControls
         onFlipCamera={flipCamera}

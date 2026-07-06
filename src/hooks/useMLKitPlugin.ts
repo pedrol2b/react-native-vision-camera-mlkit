@@ -27,7 +27,7 @@ export const useMLKitPlugin = (
     return {
       recognize: (frame: Frame, args?: MLKitBaseArguments): any => {
         'worklet';
-        return plugin.call(frame, args ?? {});
+        return plugin.recognize(frame, args ?? {});
       },
     };
   }, [feature, options]);

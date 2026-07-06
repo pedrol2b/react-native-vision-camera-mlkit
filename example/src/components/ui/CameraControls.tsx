@@ -9,7 +9,7 @@ import {
 } from 'lucide-react-native';
 import { StyleSheet, View } from 'react-native';
 import type { SharedValue } from 'react-native-reanimated';
-import type { Orientation } from 'react-native-vision-camera';
+import type { Orientation } from 'react-native-vision-camera-mlkit';
 
 /** Defaults to dark theme for the CameraView */
 import { darkTheme as theme } from '../../styles/themes';

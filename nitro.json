@@ -1,0 +1,25 @@
+{
+  "$schema": "https://nitro.margelo.com/nitro.schema.json",
+  "cxxNamespace": ["visioncameramlkit"],
+  "ios": {
+    "iosModuleName": "VisionCameraMLKit"
+  },
+  "android": {
+    "androidNamespace": ["visioncameramlkit"],
+    "androidCxxLibName": "VisionCameraMLKit"
+  },
+  "autolinking": {
+    "VisionCameraMLKit": {
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "HybridVisionCameraMLKit"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "HybridVisionCameraMLKit"
+      }
+    }
+  },
+  "ignorePaths": ["**/example/**"],
+  "gitAttributesGeneratedFlag": true
+}

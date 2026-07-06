@@ -6,7 +6,7 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.module.model.ReactModuleInfo
 import com.facebook.react.module.model.ReactModuleInfoProvider
 import com.facebook.react.uimanager.ViewManager
-import com.visioncameramlkit.bridge.registry.PluginRegistry
+import com.margelo.nitro.visioncameramlkit.VisionCameraMLKitOnLoad
 import com.visioncameramlkit.infrastructure.modules.VisionCameraMLKitModule
 
 class VisionCameraMLKitPackage : BaseReactPackage() {
@@ -16,7 +16,6 @@ class VisionCameraMLKitPackage : BaseReactPackage() {
   ): NativeModule? =
     when (name) {
       VisionCameraMLKitModule.NAME -> {
-        PluginRegistry.ensureRegistered()
         VisionCameraMLKitModule(reactContext)
       }
 
@@ -27,7 +26,6 @@ class VisionCameraMLKitPackage : BaseReactPackage() {
 
   override fun getReactModuleInfoProvider(): ReactModuleInfoProvider =
     ReactModuleInfoProvider {
-      PluginRegistry.ensureRegistered()
       mapOf(
         VisionCameraMLKitModule.NAME to
           ReactModuleInfo(
@@ -42,4 +40,10 @@ class VisionCameraMLKitPackage : BaseReactPackage() {
     }
 
   override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> = emptyList()
+
+  companion object {
+    init {
+      VisionCameraMLKitOnLoad.initializeNative()
+    }
+  }
 }

@@ -121,109 +121,159 @@ export type BarcodeAddressData = {
   typeName?: string | null;
 };
 
+export type BarcodeWifiData = {
+  ssid?: string | null;
+  password?: string | null;
+  encryptionType?: number | null;
+  encryptionTypeName?: string | null;
+  type?: number | string | null;
+  typeName?: string | null;
+};
+
+export type BarcodeUrlData = {
+  title?: string | null;
+  url?: string | null;
+};
+
+export type BarcodeSmsData = {
+  message?: string | null;
+  phoneNumber?: string | null;
+};
+
+export type BarcodeGeoData = {
+  lat?: number | null;
+  lng?: number | null;
+};
+
+export type BarcodeCalendarEventData = {
+  summary?: string | null;
+  description?: string | null;
+  location?: string | null;
+  organizer?: string | null;
+  status?: string | null;
+  start?: BarcodeCalendarDateTime | null;
+  end?: BarcodeCalendarDateTime | null;
+};
+
+export type BarcodeContactInfoData = {
+  name?: BarcodePersonName | null;
+  organization?: string | null;
+  title?: string | null;
+  phones?: BarcodePhoneData[] | null;
+  emails?: BarcodeEmailData[] | null;
+  addresses?: BarcodeAddressData[] | null;
+  urls?: string[] | null;
+};
+
+export type BarcodeDriverLicenseData = {
+  documentType?: string | null;
+  licenseNumber?: string | null;
+  firstName?: string | null;
+  middleName?: string | null;
+  lastName?: string | null;
+  gender?: string | number | null;
+  addressStreet?: string | null;
+  addressCity?: string | null;
+  addressState?: string | null;
+  addressZip?: string | null;
+  birthDate?: string | null;
+  issueDate?: string | null;
+  expiryDate?: string | null;
+  issuingCountry?: string | null;
+};
+
+export type BarcodeTextData = {
+  text?: string | null;
+};
+
+export type BarcodeProductData = {
+  product?: string | null;
+};
+
+export type BarcodeIsbnData = {
+  isbn?: string | null;
+};
+
+export type BarcodeUnknownData = {
+  rawValue?: string | null;
+};
+
+export type BarcodeWifiParsedValue = {
+  type: 'TYPE_WIFI';
+  data: BarcodeWifiData;
+};
+
+export type BarcodeUrlParsedValue = {
+  type: 'TYPE_URL';
+  data: BarcodeUrlData;
+};
+
+export type BarcodeSmsParsedValue = {
+  type: 'TYPE_SMS';
+  data: BarcodeSmsData;
+};
+
+export type BarcodeEmailParsedValue = {
+  type: 'TYPE_EMAIL';
+  data: BarcodeEmailData;
+};
+
+export type BarcodePhoneParsedValue = {
+  type: 'TYPE_PHONE';
+  data: BarcodePhoneData;
+};
+
+export type BarcodeGeoParsedValue = {
+  type: 'TYPE_GEO';
+  data: BarcodeGeoData;
+};
+
+export type BarcodeCalendarParsedValue = {
+  type: 'TYPE_CALENDAR_EVENT';
+  data: BarcodeCalendarEventData;
+};
+
+export type BarcodeContactParsedValue = {
+  type: 'TYPE_CONTACT_INFO';
+  data: BarcodeContactInfoData;
+};
+
+export type BarcodeDriverLicenseParsedValue = {
+  type: 'TYPE_DRIVER_LICENSE';
+  data: BarcodeDriverLicenseData;
+};
+
+export type BarcodeTextParsedValue = {
+  type: 'TYPE_TEXT';
+  data: BarcodeTextData;
+};
+
+export type BarcodeProductParsedValue = {
+  type: 'TYPE_PRODUCT';
+  data: BarcodeProductData;
+};
+
+export type BarcodeIsbnParsedValue = {
+  type: 'TYPE_ISBN';
+  data: BarcodeIsbnData;
+};
+
+export type BarcodeUnknownParsedValue = {
+  type: 'TYPE_UNKNOWN';
+  data: BarcodeUnknownData;
+};
+
 export type BarcodeParsedValue =
-  | {
-      type: 'TYPE_WIFI';
-      data: {
-        ssid?: string | null;
-        password?: string | null;
-        encryptionType?: number | null;
-        encryptionTypeName?: string | null;
-        type?: number | string | null;
-        typeName?: string | null;
-      };
-    }
-  | {
-      type: 'TYPE_URL';
-      data: {
-        title?: string | null;
-        url?: string | null;
-      };
-    }
-  | {
-      type: 'TYPE_SMS';
-      data: {
-        message?: string | null;
-        phoneNumber?: string | null;
-      };
-    }
-  | {
-      type: 'TYPE_EMAIL';
-      data: BarcodeEmailData;
-    }
-  | {
-      type: 'TYPE_PHONE';
-      data: BarcodePhoneData;
-    }
-  | {
-      type: 'TYPE_GEO';
-      data: {
-        lat?: number | null;
-        lng?: number | null;
-      };
-    }
-  | {
-      type: 'TYPE_CALENDAR_EVENT';
-      data: {
-        summary?: string | null;
-        description?: string | null;
-        location?: string | null;
-        organizer?: string | null;
-        status?: string | null;
-        start?: BarcodeCalendarDateTime | null;
-        end?: BarcodeCalendarDateTime | null;
-      };
-    }
-  | {
-      type: 'TYPE_CONTACT_INFO';
-      data: {
-        name?: BarcodePersonName | null;
-        organization?: string | null;
-        title?: string | null;
-        phones?: BarcodePhoneData[] | null;
-        emails?: BarcodeEmailData[] | null;
-        addresses?: BarcodeAddressData[] | null;
-        urls?: string[] | null;
-      };
-    }
-  | {
-      type: 'TYPE_DRIVER_LICENSE';
-      data: {
-        documentType?: string | null;
-        licenseNumber?: string | null;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        gender?: string | number | null;
-        addressStreet?: string | null;
-        addressCity?: string | null;
-        addressState?: string | null;
-        addressZip?: string | null;
-        birthDate?: string | null;
-        issueDate?: string | null;
-        expiryDate?: string | null;
-        issuingCountry?: string | null;
-      };
-    }
-  | {
-      type: 'TYPE_TEXT';
-      data: {
-        text?: string | null;
-      };
-    }
-  | {
-      type: 'TYPE_PRODUCT';
-      data: {
-        product?: string | null;
-      };
-    }
-  | {
-      type: 'TYPE_ISBN';
-      data: {
-        isbn?: string | null;
-      };
-    }
-  | {
-      type: 'TYPE_UNKNOWN';
-      data: Record<string, unknown>;
-    };
+  | BarcodeWifiParsedValue
+  | BarcodeUrlParsedValue
+  | BarcodeSmsParsedValue
+  | BarcodeEmailParsedValue
+  | BarcodePhoneParsedValue
+  | BarcodeGeoParsedValue
+  | BarcodeCalendarParsedValue
+  | BarcodeContactParsedValue
+  | BarcodeDriverLicenseParsedValue
+  | BarcodeTextParsedValue
+  | BarcodeProductParsedValue
+  | BarcodeIsbnParsedValue
+  | BarcodeUnknownParsedValue;

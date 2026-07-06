@@ -7,7 +7,7 @@ import Reanimated, {
   withSpring,
   type SharedValue,
 } from 'react-native-reanimated';
-import type { Orientation } from 'react-native-vision-camera';
+import type { Orientation } from 'react-native-vision-camera-mlkit';
 
 const ROTATION_MAP = {
   'portrait': '0deg',

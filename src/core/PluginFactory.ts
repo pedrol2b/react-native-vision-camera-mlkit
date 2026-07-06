@@ -1,7 +1,9 @@
 import { Platform } from 'react-native';
-import { VisionCameraProxy } from 'react-native-vision-camera';
-import { FEATURE_ERROR_MAP, LINKING_ERROR } from '../shared/constants';
+import { FEATURE_ERROR_MAP } from '../shared/constants';
+import type { BarcodeScanningOptions } from '../features/barcode-scanning/types';
+import type { TextRecognitionOptions } from '../features/text-recognition/types';
 import { MLKIT_FEATURE_KEYS } from './constants';
+import { VisionCameraMLKit } from './VisionCameraMLKit';
 import type { MLKitBaseOptions, MLKitFeature } from './types';
 
 /**
@@ -72,13 +74,18 @@ buildscript {
   static initPlugin(feature: MLKitFeature, options: MLKitBaseOptions) {
     PluginFactory.assertFeatureAvailable(feature);
 
-    const plugin = VisionCameraProxy.initFrameProcessorPlugin(feature, options);
-
-    if (!plugin) {
-      throw new Error(LINKING_ERROR);
+    switch (feature) {
+      case MLKIT_FEATURE_KEYS.TEXT_RECOGNITION:
+        return VisionCameraMLKit.createTextRecognizer(
+          options as TextRecognitionOptions
+        );
+      case MLKIT_FEATURE_KEYS.BARCODE_SCANNING:
+        return VisionCameraMLKit.createBarcodeScanner(
+          options as BarcodeScanningOptions
+        );
+      default:
+        throw new Error(PluginFactory.getFeatureErrorMessage(feature));
     }
-
-    return plugin;
   }
 
   /**
@@ -88,8 +95,7 @@ buildscript {
    */
   static isFeatureAvailable(feature: MLKitFeature): boolean {
     try {
-      const plugin = VisionCameraProxy.initFrameProcessorPlugin(feature, {});
-      return plugin !== undefined && plugin !== null;
+      return VisionCameraMLKit.isFeatureAvailable(feature);
     } catch {
       return false;
     }

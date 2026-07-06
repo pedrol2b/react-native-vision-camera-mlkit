@@ -1,19 +1,25 @@
-import { forwardRef, useCallback, useState, type ComponentProps } from 'react';
+import {
+  forwardRef,
+  useCallback,
+  useMemo,
+  useState,
+  type ComponentProps,
+} from 'react';
 import { StyleSheet } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Reanimated, {
   useAnimatedStyle,
   useSharedValue,
+  type SharedValue,
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
 import {
   Camera,
-  runAsync,
-  runAtTargetFps,
-  Templates,
-  useCameraFormat,
-  useFrameProcessor,
+  CommonResolutions,
+  useAsyncRunner,
+  useFrameOutput,
+  type CameraRef,
 } from 'react-native-vision-camera';
 import {
   useBarcodeScanning,
@@ -21,10 +27,6 @@ import {
   type Orientation,
 } from 'react-native-vision-camera-mlkit';
 import { scheduleOnRN } from 'react-native-worklets';
-import {
-  useRunOnJS,
-  type ISharedValue as SharedWorkletsValue,
-} from 'react-native-worklets-core';
 import { PLUGIN_ID } from '../../constants/PLUGINS';
 import { useTheme } from '../../providers/ThemeProvider';
 import {
@@ -32,8 +34,6 @@ import {
   useSettingsStore,
   useTerminalStore,
 } from '../../stores';
-
-const ReanimatedCamera = Reanimated.createAnimatedComponent(Camera);
 
 const normalizeResultObject = (data: unknown) => {
   if (data === null || data === undefined) return data;
@@ -51,11 +51,10 @@ type CameraViewProps = ComponentProps<typeof Camera> & {
   pluginId: PLUGIN_ID;
   flipCamera: () => void;
   isFrameProcessorEnabled?: boolean;
-  frameOutputOrientation: SharedWorkletsValue<Orientation>;
-  onOutputOrientationChangedCallback: (o: Orientation) => void;
+  frameOutputOrientation: SharedValue<Orientation>;
 };
 
-const CameraView = forwardRef<Camera, CameraViewProps>(
+const CameraView = forwardRef<CameraRef, CameraViewProps>(
   (
     {
       device,
@@ -64,7 +63,7 @@ const CameraView = forwardRef<Camera, CameraViewProps>(
       flipCamera,
       isFrameProcessorEnabled = true,
       frameOutputOrientation,
-      onOutputOrientationChangedCallback,
+      torchMode,
       ...props
     },
     ref
@@ -79,7 +78,6 @@ const CameraView = forwardRef<Camera, CameraViewProps>(
     } = useSettingsStore();
     const { sharedOptions, pluginOptions } = usePluginOptionsStore();
 
-    // Initialize plugins with options from store
     const textRecognitionPlugin = useTextRecognition({
       language: pluginOptions[PLUGIN_ID.TEXT_RECOGNITION].language,
       ...sharedOptions,
@@ -96,14 +94,19 @@ const CameraView = forwardRef<Camera, CameraViewProps>(
 
     const scale = useSharedValue(0);
     const opacity = useSharedValue(0);
+    const frameCount = useSharedValue(0);
+    const asyncRunner = useAsyncRunner();
 
-    const format = useCameraFormat(device, Templates.FrameProcessing);
+    const frameInterval = useMemo(
+      () => Math.max(1, Math.round(30 / frameProcessorFps)),
+      [frameProcessorFps]
+    );
 
     const focus = useCallback(
       (point: { x: number; y: number }) => {
         if (typeof ref === 'function' || !ref?.current) return;
 
-        ref.current.focus(point);
+        ref.current.focusTo(point).catch(console.error);
         setFocusPoint(point);
 
         scale.value = 0;
@@ -144,26 +147,35 @@ const CameraView = forwardRef<Camera, CameraViewProps>(
       transform: [{ scale: scale.value }],
     }));
 
-    const handleResultWorklet = useRunOnJS((data: unknown) => {
+    const addResult = useCallback((data: unknown) => {
       console.log(data);
       useTerminalStore
         .getState()
         .addEntry(normalizeResultObject(data), 'camera');
     }, []);
 
-    const frameProcessor = useFrameProcessor(
-      (frame) => {
+    const frameOutput = useFrameOutput({
+      targetResolution: CommonResolutions.VGA_16_9,
+      pixelFormat,
+      onFrame(frame) {
         'worklet';
 
-        runAtTargetFps(frameProcessorFps, () => {
+        if (!isFrameProcessorEnabled) {
+          frame.dispose();
+          return;
+        }
+
+        frameCount.value = (frameCount.value + 1) % frameInterval;
+        if (frameCount.value !== 0) {
+          frame.dispose();
+          return;
+        }
+
+        const accepted = asyncRunner.runAsync(() => {
           'worklet';
 
-          runAsync(frame, () => {
-            'worklet';
-
+          try {
             let resultObject: any = null;
-
-            // Shared arguments for all plugins
             const withArguments = {
               outputOrientation: frameOutputOrientation.value,
             };
@@ -181,20 +193,18 @@ const CameraView = forwardRef<Camera, CameraViewProps>(
             }
 
             if (resultObject) {
-              handleResultWorklet(resultObject);
+              scheduleOnRN(addResult, resultObject);
             }
-          });
+          } finally {
+            frame.dispose();
+          }
         });
+
+        if (!accepted) {
+          frame.dispose();
+        }
       },
-      [
-        frameProcessorFps,
-        pluginId,
-        frameOutputOrientation,
-        textRecognitionPlugin,
-        barcodeScanningPlugin,
-        handleResultWorklet,
-      ]
-    );
+    });
 
     return (
       <GestureDetector gesture={gesture}>
@@ -203,23 +213,18 @@ const CameraView = forwardRef<Camera, CameraViewProps>(
           accessibilityLabel="Camera viewfinder"
           accessibilityHint="Tap to focus, double tap to flip camera"
         >
-          <ReanimatedCamera
+          <Camera
+            {...props}
             ref={ref}
             device={device}
             isActive={isActive}
-            format={format}
-            pixelFormat={pixelFormat}
-            frameProcessor={
-              isFrameProcessorEnabled ? frameProcessor : undefined
-            }
-            videoStabilizationMode="off"
-            enableZoomGesture={enableZoomGesture}
+            outputs={[frameOutput]}
+            constraints={[{ resolutionBias: frameOutput }]}
+            torchMode={torchMode}
+            enableNativeZoomGesture={enableZoomGesture}
+            enableNativeTapToFocusGesture={enableTapGesture}
             resizeMode="cover"
             style={styles.container}
-            onError={console.error}
-            onOutputOrientationChanged={onOutputOrientationChangedCallback}
-            accessible={false}
-            {...props}
           />
           {focusPoint && (
             <Reanimated.View

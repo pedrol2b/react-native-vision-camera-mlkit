@@ -84,6 +84,11 @@ const CameraView = forwardRef<CameraRef, CameraViewProps>(
       enableZoomGesture,
       enableTapGesture,
       enableDoubleTapGesture,
+      exposureBias,
+      enableLowLightBoost,
+      targetFps,
+      videoStabilizationMode,
+      orientationSource,
     } = useSettingsStore();
     const { sharedOptions, pluginOptions } = usePluginOptionsStore();
 
@@ -130,10 +135,23 @@ const CameraView = forwardRef<CameraRef, CameraViewProps>(
     const frameCount = useSharedValue(0);
     const zoom = useSharedValue(device?.minZoom ?? 1);
     const savedZoom = useSharedValue(device?.minZoom ?? 1);
+    const exposure = useSharedValue(0);
 
     useEffect(() => {
       zoom.value = device?.minZoom ?? 1;
     }, [device, zoom]);
+
+    useEffect(() => {
+      if (!device?.supportsExposureBias) {
+        exposure.value = 0;
+        return;
+      }
+
+      exposure.value = Math.min(
+        Math.max(exposureBias, device.minExposureBias),
+        device.maxExposureBias
+      );
+    }, [device, exposureBias, exposure]);
 
     const frameInterval = useMemo(
       () => Math.max(1, Math.round(30 / frameProcessorFps)),
@@ -269,13 +287,22 @@ const CameraView = forwardRef<CameraRef, CameraViewProps>(
         >
           <Camera
             {...props}
+            {...(enableLowLightBoost && device?.supportsLowLightBoost
+              ? { enableLowLightBoost: true }
+              : {})}
             ref={ref}
             device={device}
             isActive={isActive}
             outputs={[frameOutput]}
-            constraints={[{ resolutionBias: frameOutput }]}
+            constraints={[
+              { resolutionBias: frameOutput },
+              { fps: targetFps },
+              { videoStabilizationMode },
+            ]}
             torchMode={torchMode}
             zoom={zoom}
+            exposure={exposure}
+            orientationSource={orientationSource}
             resizeMode="cover"
             style={styles.container}
           />

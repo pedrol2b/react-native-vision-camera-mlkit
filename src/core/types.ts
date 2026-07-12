@@ -35,18 +35,21 @@ export type MLKitBaseOptions = {
    */
   invertColors?: boolean;
   /**
-   * @deprecated Use `runAtTargetFps()` from Vision Camera instead for better frame rate control.
+   * @deprecated Throttle frames manually inside your `useFrameOutput` `onFrame` callback instead.
    * Process one frame, then skip the next N frames before processing again.
    * For example, `frameProcessInterval: 2` means: process frame 1, skip frames 2-3, process frame 4, etc.
    * @example
    * ```ts
-   * const frameProcessor = useFrameProcessor((frame) => {
-   *   'worklet'
-   *   runAtTargetFps(10, () => {
+   * const frameOutput = useFrameOutput({
+   *   onFrame(frame) {
    *     'worklet'
+   *     if (frameCount.value++ % 10 !== 0) {
+   *       frame.dispose()
+   *       return
+   *     }
    *     const result = textRecognition(frame)
-   *   })
-   * }, [])
+   *   },
+   * })
    * ```
    * @default 0 (process every frame)
    */

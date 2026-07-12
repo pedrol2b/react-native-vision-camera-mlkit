@@ -15,9 +15,10 @@ import {
 } from 'react-native-vision-camera-mlkit';
 ```
 
-## Frame Processor
+## Frame Output
 
-Use `useBarcodeScanning()` for live camera frames.
+Use `useBarcodeScanning()` for live camera frames, inside a `useFrameOutput`
+`onFrame` worklet.
 
 ```ts
 const { barcodeScanning } = useBarcodeScanning({
@@ -27,8 +28,19 @@ const { barcodeScanning } = useBarcodeScanning({
   invertColors: false,
 });
 
-const result = barcodeScanning(frame, {
-  outputOrientation: 'portrait',
+const frameOutput = useFrameOutput({
+  onFrame(frame) {
+    'worklet';
+
+    try {
+      const result = barcodeScanning(frame, {
+        outputOrientation: 'portrait',
+      });
+      console.log(result.barcodes);
+    } finally {
+      frame.dispose();
+    }
+  },
 });
 ```
 
@@ -38,7 +50,7 @@ const result = barcodeScanning(frame, {
 - `enableAllPotentialBarcodes?: boolean` (Android only)
 - `scaleFactor?: number` (`0.9`-`1.0`)
 - `invertColors?: boolean`
-- `frameProcessInterval?: number` (deprecated; prefer `runAtTargetFps`)
+- `frameProcessInterval?: number` (deprecated; throttle frames manually inside `onFrame` instead)
 
 ### Frame arguments
 
@@ -125,6 +137,7 @@ For static image processing, promise rejections can use:
 ## Performance guidance
 
 - Filter `formats` whenever possible for better performance.
-- Use `runAsync(frame, ...)` to avoid blocking frame processing.
-- Use `runAtTargetFps(...)` for throttling.
+- Always call `frame.dispose()` exactly once per frame inside `onFrame`.
+- Throttle by skipping frames manually inside `onFrame` instead of relying on
+  a native-side interval.
 - Keep `scaleFactor` as high as possible for decoding reliability.

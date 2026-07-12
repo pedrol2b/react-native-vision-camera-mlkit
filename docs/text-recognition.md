@@ -14,9 +14,10 @@ import {
 } from 'react-native-vision-camera-mlkit';
 ```
 
-## Frame Processor
+## Frame Output
 
-Use `useTextRecognition()` for live camera frames.
+Use `useTextRecognition()` for live camera frames, inside a `useFrameOutput`
+`onFrame` worklet.
 
 ```ts
 const { textRecognition } = useTextRecognition({
@@ -25,8 +26,19 @@ const { textRecognition } = useTextRecognition({
   invertColors: false,
 });
 
-const result = textRecognition(frame, {
-  outputOrientation: 'portrait',
+const frameOutput = useFrameOutput({
+  onFrame(frame) {
+    'worklet';
+
+    try {
+      const result = textRecognition(frame, {
+        outputOrientation: 'portrait',
+      });
+      console.log(result.text);
+    } finally {
+      frame.dispose();
+    }
+  },
 });
 ```
 
@@ -35,7 +47,7 @@ const result = textRecognition(frame, {
 - `language?: 'LATIN' | 'CHINESE' | 'DEVANAGARI' | 'JAPANESE' | 'KOREAN'`
 - `scaleFactor?: number` (`0.9`-`1.0`)
 - `invertColors?: boolean`
-- `frameProcessInterval?: number` (deprecated; prefer `runAtTargetFps`)
+- `frameProcessInterval?: number` (deprecated; throttle frames manually inside `onFrame` instead)
 
 ### Frame arguments
 
@@ -87,6 +99,7 @@ For static image processing, promise rejections can use:
 
 ## Performance guidance
 
-- Use `runAsync(frame, ...)` to avoid blocking frame processing.
-- Use `runAtTargetFps(...)` for throttling.
+- Always call `frame.dispose()` exactly once per frame inside `onFrame`.
+- Throttle by skipping frames manually inside `onFrame` instead of relying on
+  a native-side interval.
 - Keep `scaleFactor` as high as possible for OCR accuracy.

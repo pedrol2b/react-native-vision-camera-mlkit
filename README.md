@@ -16,40 +16,35 @@
 [![MIT License][license-shield]][license-url]
 [![NPM Version][npm-version-shield]][npm-version-url]
 
-A [React Native Vision Camera](https://github.com/mrousavy/react-native-vision-camera) plugin that exposes high-performance [Google ML Kit](https://developers.google.com/ml-kit) [frame processor](https://react-native-vision-camera.com/docs/guides/frame-processors) features such as text recognition (OCR), face detection, barcode scanning, pose detection, and more.
+A [React Native Vision Camera](https://github.com/mrousavy/react-native-vision-camera) plugin that exposes high-performance [Google ML Kit](https://developers.google.com/ml-kit) [frame output](https://visioncamera.margelo.com/docs/frame-output) features such as text recognition (OCR), face detection, barcode scanning, pose detection, and more.
 
 > The example app is intentionally heavy and demo-focused. For integration details, follow the documentation below.
 
 ## Requirements
 
 - iOS 12+ and Android SDK 21+
-- [react-native-vision-camera](https://www.npmjs.com/package/react-native-vision-camera)
-- [react-native-worklets-core](https://www.npmjs.com/package/react-native-worklets-core)
+- [react-native-vision-camera](https://www.npmjs.com/package/react-native-vision-camera) `>=5` (Nitro-based v5, not v4)
+- [react-native-nitro-modules](https://www.npmjs.com/package/react-native-nitro-modules)
+- [react-native-nitro-image](https://www.npmjs.com/package/react-native-nitro-image)
+- [react-native-vision-camera-worklets](https://www.npmjs.com/package/react-native-vision-camera-worklets)
+- [react-native-worklets](https://www.npmjs.com/package/react-native-worklets)
 
-Install Vision Camera (React Native):
+Install Vision Camera and its Nitro/worklets dependencies:
 
 ```sh
-npm i react-native-vision-camera
+npm i react-native-vision-camera react-native-nitro-modules react-native-nitro-image react-native-vision-camera-worklets react-native-worklets
 cd ios && pod install
-```
-
-Install Worklets Core:
-
-```sh
-npm i react-native-worklets-core
-# or
-yarn add react-native-worklets-core
 ```
 
 Add the Babel plugin in `babel.config.js`:
 
 ```js
 module.exports = {
-  plugins: [['react-native-worklets-core/plugin']],
+  plugins: [['react-native-worklets/plugin']],
 };
 ```
 
-> For Expo, follow the Vision Camera guide: [react-native-vision-camera.com/docs/guides](https://react-native-vision-camera.com/docs/guides)
+> For Expo, follow the Vision Camera guide: [visioncamera.margelo.com/docs](https://visioncamera.margelo.com/docs)
 
 ## Installation
 
@@ -123,13 +118,13 @@ Android-only keys: `faceMeshDetection`, `subjectSegmentation`, `documentScanner`
 - [Text Recognition API](docs/text-recognition.md)
 - [Barcode Scanning API](docs/barcode-scanning.md)
 
-### Text Recognition (Frame Processor)
+### Text Recognition (Frame Output)
 
 ```ts
 import {
-  useFrameProcessor,
-  runAsync,
-  runAtTargetFps,
+  useFrameOutput,
+  CommonResolutions,
+  Camera,
 } from 'react-native-vision-camera';
 import { useTextRecognition } from 'react-native-vision-camera-mlkit';
 
@@ -139,23 +134,29 @@ const { textRecognition } = useTextRecognition({
   invertColors: false,
 });
 
-const frameProcessor = useFrameProcessor(
-  (frame) => {
+const frameOutput = useFrameOutput({
+  targetResolution: CommonResolutions.VGA_16_9,
+  pixelFormat: 'yuv',
+  onFrame(frame) {
     'worklet';
 
-    runAtTargetFps(10, () => {
-      'worklet';
-      runAsync(frame, () => {
-        'worklet';
-        const result = textRecognition(frame, {
-          outputOrientation: 'portrait',
-        });
-        console.log(result.text);
+    try {
+      const result = textRecognition(frame, {
+        outputOrientation: 'portrait',
       });
-    });
+      console.log(result.text);
+    } finally {
+      frame.dispose();
+    }
   },
-  [textRecognition]
-);
+});
+
+<Camera
+  device={device}
+  isActive={true}
+  outputs={[frameOutput]}
+  constraints={[{ resolutionBias: frameOutput }]}
+/>;
 ```
 
 `TextRecognitionOptions`:
@@ -163,7 +164,7 @@ const frameProcessor = useFrameProcessor(
 - `language?: 'LATIN' | 'CHINESE' | 'DEVANAGARI' | 'JAPANESE' | 'KOREAN'`
 - `scaleFactor?: number` (0.9-1.0)
 - `invertColors?: boolean`
-- `frameProcessInterval?: number` (deprecated, use `runAtTargetFps`)
+- `frameProcessInterval?: number` (deprecated, throttle frames manually inside `onFrame` instead)
 
 `TextRecognitionArguments`:
 
@@ -193,13 +194,13 @@ console.log(result.blocks);
 
 > The native bridge normalizes URIs (`file://` is removed on iOS and added on Android if missing). Supported formats: JPEG, PNG, WebP.
 
-### Barcode Scanning (Frame Processor)
+### Barcode Scanning (Frame Output)
 
 ```ts
 import {
-  useFrameProcessor,
-  runAsync,
-  runAtTargetFps,
+  useFrameOutput,
+  CommonResolutions,
+  Camera,
 } from 'react-native-vision-camera';
 import { useBarcodeScanning } from 'react-native-vision-camera-mlkit';
 
@@ -210,33 +211,39 @@ const { barcodeScanning } = useBarcodeScanning({
   invertColors: false,
 });
 
-const frameProcessor = useFrameProcessor(
-  (frame) => {
+const frameOutput = useFrameOutput({
+  targetResolution: CommonResolutions.VGA_16_9,
+  pixelFormat: 'yuv',
+  onFrame(frame) {
     'worklet';
 
-    runAtTargetFps(10, () => {
-      'worklet';
-      runAsync(frame, () => {
-        'worklet';
-        const result = barcodeScanning(frame, {
-          outputOrientation: 'portrait',
-        });
-
-        for (const barcode of result.barcodes) {
-          console.log(
-            barcode.formatName,
-            barcode.valueTypeName,
-            barcode.rawValue
-          );
-          if (barcode.value?.type === 'TYPE_URL') {
-            console.log(barcode.value.data.url);
-          }
-        }
+    try {
+      const result = barcodeScanning(frame, {
+        outputOrientation: 'portrait',
       });
-    });
+
+      for (const barcode of result.barcodes) {
+        console.log(
+          barcode.formatName,
+          barcode.valueTypeName,
+          barcode.rawValue
+        );
+        if (barcode.value?.type === 'TYPE_URL') {
+          console.log(barcode.value.data.url);
+        }
+      }
+    } finally {
+      frame.dispose();
+    }
   },
-  [barcodeScanning]
-);
+});
+
+<Camera
+  device={device}
+  isActive={true}
+  outputs={[frameOutput]}
+  constraints={[{ resolutionBias: frameOutput }]}
+/>;
 ```
 
 `BarcodeScanningOptions`:
@@ -245,7 +252,7 @@ const frameProcessor = useFrameProcessor(
 - `enableAllPotentialBarcodes?: boolean` (Android only)
 - `scaleFactor?: number` (0.9-1.0)
 - `invertColors?: boolean`
-- `frameProcessInterval?: number` (deprecated, use `runAtTargetFps`)
+- `frameProcessInterval?: number` (deprecated, throttle frames manually inside `onFrame` instead)
 
 Supported `formats` values:
 
@@ -344,9 +351,10 @@ assertFeatureAvailable(MLKIT_FEATURE_KEYS.TEXT_RECOGNITION);
 
 ## Performance
 
-- Follow the Vision Camera [performance guide](https://react-native-vision-camera.com/docs/guides/performance)
-- Prefer `runAsync(...)` for heavy ML work to keep the frame processor responsive.
-- Use `runAtTargetFps(...)` to throttle processing instead of `frameProcessInterval`.
+- Follow the Vision Camera [performance guide](https://visioncamera.margelo.com/docs/performance)
+- Always call `frame.dispose()` exactly once per frame inside `onFrame` - the Camera pipeline reuses a small buffer pool and stalls (dropping frames) if buffers aren't released.
+- Throttle processing by skipping frames yourself inside `onFrame` (see the `frameProcessInterval` deprecation note above) instead of relying on a native-side interval.
+- `useAsyncRunner()` can offload genuinely independent heavy work to a separate thread, but avoid wrapping a single native plugin call in it - passing a plugin's worklet-callable method through nested worklet closures into a different Worklet Runtime is fragile and can throw at runtime.
 
 ## iOS Orientation Notes (Text Recognition)
 

@@ -43,7 +43,7 @@ const CameraScreen = () => {
 
   const [cameraPosition, setCameraPosition] = useState<CameraPosition>('back');
   const [torchState, setTorchState] = useState<TorchState>('off');
-  const [, setIsFpsGraphEnabled] = useState<boolean>(false);
+  const [isFpsGraphEnabled, setIsFpsGraphEnabled] = useState<boolean>(false);
 
   const outputOrientation = useSharedValue<Orientation>(DEFAULT_ORIENTATION);
 
@@ -91,6 +91,7 @@ const CameraScreen = () => {
         isFrameProcessorEnabled={isFrameProcessorEnabled}
         frameOutputOrientation={outputOrientation}
         torchMode={torchState}
+        isFpsGraphEnabled={isFpsGraphEnabled}
       />
       <CameraControls
         onFlipCamera={flipCamera}

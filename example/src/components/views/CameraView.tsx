@@ -1,6 +1,7 @@
 import {
   forwardRef,
   useCallback,
+  useEffect,
   useMemo,
   useState,
   type ComponentProps,
@@ -18,6 +19,7 @@ import {
   Camera,
   CommonResolutions,
   useFrameOutput,
+  type CameraDevice,
   type CameraRef,
 } from 'react-native-vision-camera';
 import {
@@ -33,6 +35,7 @@ import {
   useSettingsStore,
   useTerminalStore,
 } from '../../stores';
+import { FpsGraphOverlay } from './FpsGraphOverlay';
 
 const normalizeResultObject = (data: unknown) => {
   if (data === null || data === undefined) return data;
@@ -46,10 +49,16 @@ const normalizeResultObject = (data: unknown) => {
   }
 };
 
-type CameraViewProps = ComponentProps<typeof Camera> & {
+const FPS_SAMPLE_INTERVAL_MS = 500;
+const FPS_HISTORY_LENGTH = 20;
+const FPS_GRAPH_MAX_SCALE = 60;
+
+type CameraViewProps = Omit<ComponentProps<typeof Camera>, 'device'> & {
+  device: CameraDevice;
   pluginId: PLUGIN_ID;
   flipCamera: () => void;
   isFrameProcessorEnabled?: boolean;
+  isFpsGraphEnabled?: boolean;
   frameOutputOrientation: SharedValue<Orientation>;
 };
 
@@ -61,6 +70,7 @@ const CameraView = forwardRef<CameraRef, CameraViewProps>(
       pluginId,
       flipCamera,
       isFrameProcessorEnabled = true,
+      isFpsGraphEnabled = false,
       frameOutputOrientation,
       torchMode,
       ...props
@@ -76,6 +86,30 @@ const CameraView = forwardRef<CameraRef, CameraViewProps>(
       enableDoubleTapGesture,
     } = useSettingsStore();
     const { sharedOptions, pluginOptions } = usePluginOptionsStore();
+
+    const frameArrivalCount = useSharedValue(0);
+    const [fps, setFps] = useState(0);
+    const [fpsHistory, setFpsHistory] = useState<number[]>([]);
+
+    useEffect(() => {
+      if (!isFpsGraphEnabled) return;
+
+      const interval = setInterval(() => {
+        const framesSinceLastSample = frameArrivalCount.value;
+        frameArrivalCount.value = 0;
+
+        const instantaneousFps = Math.round(
+          (framesSinceLastSample * 1000) / FPS_SAMPLE_INTERVAL_MS
+        );
+
+        setFps(instantaneousFps);
+        setFpsHistory((prev) =>
+          [...prev, instantaneousFps].slice(-FPS_HISTORY_LENGTH)
+        );
+      }, FPS_SAMPLE_INTERVAL_MS);
+
+      return () => clearInterval(interval);
+    }, [isFpsGraphEnabled, frameArrivalCount]);
 
     const textRecognitionPlugin = useTextRecognition({
       language: pluginOptions[PLUGIN_ID.TEXT_RECOGNITION].language,
@@ -94,6 +128,12 @@ const CameraView = forwardRef<CameraRef, CameraViewProps>(
     const scale = useSharedValue(0);
     const opacity = useSharedValue(0);
     const frameCount = useSharedValue(0);
+    const zoom = useSharedValue(device?.minZoom ?? 1);
+    const savedZoom = useSharedValue(device?.minZoom ?? 1);
+
+    useEffect(() => {
+      zoom.value = device?.minZoom ?? 1;
+    }, [device, zoom]);
 
     const frameInterval = useMemo(
       () => Math.max(1, Math.round(30 / frameProcessorFps)),
@@ -104,7 +144,12 @@ const CameraView = forwardRef<CameraRef, CameraViewProps>(
       (point: { x: number; y: number }) => {
         if (typeof ref === 'function' || !ref?.current) return;
 
-        ref.current.focusTo(point).catch(console.error);
+        ref.current.focusTo(point).catch((error: Error) => {
+          // A new focus request cancels any still-settling previous one -
+          // this is expected whenever the user taps again quickly.
+          if (error.message.includes('canceled')) return;
+          console.error(error);
+        });
         setFocusPoint(point);
 
         scale.value = 0;
@@ -133,12 +178,29 @@ const CameraView = forwardRef<CameraRef, CameraViewProps>(
         scheduleOnRN(flipCamera);
       });
 
+    const pinchGesture = Gesture.Pinch()
+      .onStart(() => {
+        savedZoom.value = zoom.value;
+      })
+      .onUpdate((event) => {
+        if (!device) return;
+        const nextZoom = savedZoom.value * event.scale;
+        zoom.value = Math.min(
+          Math.max(nextZoom, device.minZoom),
+          device.maxZoom
+        );
+      });
+
     const gestures = [];
     if (enableDoubleTapGesture) gestures.push(doubleTapGesture);
     if (enableTapGesture) gestures.push(tapGesture);
 
-    const gesture =
+    const tapGestureComposition =
       gestures.length > 0 ? Gesture.Exclusive(...gestures) : Gesture.Tap();
+
+    const gesture = enableZoomGesture
+      ? Gesture.Simultaneous(pinchGesture, tapGestureComposition)
+      : tapGestureComposition;
 
     const focusOverlayStyle = useAnimatedStyle(() => ({
       opacity: opacity.value,
@@ -157,6 +219,8 @@ const CameraView = forwardRef<CameraRef, CameraViewProps>(
       pixelFormat,
       onFrame(frame) {
         'worklet';
+
+        frameArrivalCount.value += 1;
 
         if (!isFrameProcessorEnabled) {
           frame.dispose();
@@ -211,8 +275,7 @@ const CameraView = forwardRef<CameraRef, CameraViewProps>(
             outputs={[frameOutput]}
             constraints={[{ resolutionBias: frameOutput }]}
             torchMode={torchMode}
-            enableNativeZoomGesture={enableZoomGesture}
-            enableNativeTapToFocusGesture={enableTapGesture}
+            zoom={zoom}
             resizeMode="cover"
             style={styles.container}
           />
@@ -228,6 +291,13 @@ const CameraView = forwardRef<CameraRef, CameraViewProps>(
                 },
                 focusOverlayStyle,
               ]}
+            />
+          )}
+          {isFpsGraphEnabled && (
+            <FpsGraphOverlay
+              fps={fps}
+              history={fpsHistory}
+              maxFps={FPS_GRAPH_MAX_SCALE}
             />
           )}
         </Reanimated.View>

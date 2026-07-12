@@ -1,4 +1,5 @@
 export { CameraView } from './CameraView';
+export { FpsGraphOverlay } from './FpsGraphOverlay';
 export { HeaderView } from './HeaderView';
 export { NoCameraPermissionErrorView } from './NoCameraPermissionErrorView';
 export { NoDeviceErrorView } from './NoDeviceErrorView';

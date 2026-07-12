@@ -17,7 +17,6 @@ import Reanimated, {
 import {
   Camera,
   CommonResolutions,
-  useAsyncRunner,
   useFrameOutput,
   type CameraRef,
 } from 'react-native-vision-camera';
@@ -95,7 +94,6 @@ const CameraView = forwardRef<CameraRef, CameraViewProps>(
     const scale = useSharedValue(0);
     const opacity = useSharedValue(0);
     const frameCount = useSharedValue(0);
-    const asyncRunner = useAsyncRunner();
 
     const frameInterval = useMemo(
       () => Math.max(1, Math.round(30 / frameProcessorFps)),
@@ -171,36 +169,28 @@ const CameraView = forwardRef<CameraRef, CameraViewProps>(
           return;
         }
 
-        const accepted = asyncRunner.runAsync(() => {
-          'worklet';
+        try {
+          let resultObject: any = null;
+          const withArguments = {
+            outputOrientation: frameOutputOrientation.value,
+          };
 
-          try {
-            let resultObject: any = null;
-            const withArguments = {
-              outputOrientation: frameOutputOrientation.value,
-            };
-
-            if (pluginId === PLUGIN_ID.TEXT_RECOGNITION) {
-              resultObject = textRecognitionPlugin.textRecognition(
-                frame,
-                withArguments
-              );
-            } else if (pluginId === PLUGIN_ID.BARCODE_SCANNING) {
-              resultObject = barcodeScanningPlugin.barcodeScanning(
-                frame,
-                withArguments
-              );
-            }
-
-            if (resultObject) {
-              scheduleOnRN(addResult, resultObject);
-            }
-          } finally {
-            frame.dispose();
+          if (pluginId === PLUGIN_ID.TEXT_RECOGNITION) {
+            resultObject = textRecognitionPlugin.textRecognition(
+              frame,
+              withArguments
+            );
+          } else if (pluginId === PLUGIN_ID.BARCODE_SCANNING) {
+            resultObject = barcodeScanningPlugin.barcodeScanning(
+              frame,
+              withArguments
+            );
           }
-        });
 
-        if (!accepted) {
+          if (resultObject) {
+            scheduleOnRN(addResult, resultObject);
+          }
+        } finally {
           frame.dispose();
         }
       },

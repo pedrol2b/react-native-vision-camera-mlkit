@@ -1,7 +1,9 @@
+import { useMemo } from 'react';
 import type { Frame } from 'react-native-vision-camera';
 import { NativeBridge } from '../../core/NativeBridge';
 import { MLKIT_FEATURE_KEYS } from '../../core/constants';
 import { useMLKitPlugin } from '../../hooks/useMLKitPlugin';
+import type { BarcodeScanner } from '../../specs/BarcodeScanner.nitro';
 import type {
   BarcodeScanningArguments,
   BarcodeScanningImageOptions,
@@ -27,17 +29,23 @@ export const processImageBarcodeScanning = async (
  * Hook for barcode scanning from camera frames.
  */
 export const useBarcodeScanning = (options: BarcodeScanningOptions = {}) => {
-  const plugin = useMLKitPlugin(MLKIT_FEATURE_KEYS.BARCODE_SCANNING, options);
+  const plugin = useMLKitPlugin<BarcodeScanner>(
+    MLKIT_FEATURE_KEYS.BARCODE_SCANNING,
+    options
+  );
 
-  return {
-    barcodeScanning: (
-      frame: Frame,
-      args?: BarcodeScanningArguments
-    ): BarcodeScanningResult => {
-      'worklet';
-      return plugin.recognize(frame, args);
-    },
-  };
+  return useMemo(
+    () => ({
+      barcodeScanning: (
+        frame: Frame,
+        args?: BarcodeScanningArguments
+      ): BarcodeScanningResult => {
+        'worklet';
+        return plugin.recognize(frame, args ?? {}) as BarcodeScanningResult;
+      },
+    }),
+    [plugin]
+  );
 };
 
 export type {

@@ -10,7 +10,7 @@
     "build:ios": "react-native build-ios --mode Debug --destination \"${IOS_DESTINATION:-generic/platform=iOS Simulator}\""
   },
   "dependencies": {
-    "@gorhom/bottom-sheet": "^5",
+    "@gorhom/bottom-sheet": "^5.2.14",
     "@react-native-community/blur": "^4.4.1",
     "@react-native-community/slider": "^5.1.2",
     "@react-navigation/elements": "^2.9.3",

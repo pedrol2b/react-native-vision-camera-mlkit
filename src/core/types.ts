@@ -21,6 +21,30 @@ export type Corner = {
   y: number;
 };
 
+/**
+ * Whether a {@link RegionOfInterest}'s `x`/`y`/`width`/`height` are
+ * normalized to the `0..1` range (relative to the source frame/image) or
+ * absolute pixel values.
+ */
+export type RegionOfInterestUnit = 'normalized' | 'pixel';
+
+/**
+ * Restricts ML Kit processing to a rectangular region of the source
+ * frame/image. Cropping happens before recognition to reduce CPU/GPU work;
+ * result coordinates (bounding boxes, corners) are always mapped back to
+ * full source coordinates, so overlays don't need to know a crop happened.
+ */
+export type RegionOfInterest = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  /**
+   * @default 'normalized'
+   */
+  unit?: RegionOfInterestUnit;
+};
+
 export type MLKitBaseOptions = {
   /**
    * Optional image downscaling for performance optimization.
@@ -34,6 +58,12 @@ export type MLKitBaseOptions = {
    * @default false
    */
   invertColors?: boolean;
+  /**
+   * Crop processing to a rectangular region of the frame before running
+   * ML Kit, to reduce CPU/GPU work. Result coordinates are mapped back to
+   * full source coordinates.
+   */
+  roi?: RegionOfInterest;
   /**
    * @deprecated Throttle frames manually inside your `useFrameOutput` `onFrame` callback instead.
    * Process one frame, then skip the next N frames before processing again.
@@ -92,6 +122,12 @@ export type ImageProcessingBaseOptions = {
    * @default false
    */
   invertColors?: boolean;
+  /**
+   * Crop processing to a rectangular region of the image before running
+   * ML Kit, to reduce CPU/GPU work. Result coordinates are mapped back to
+   * full source coordinates.
+   */
+  roi?: RegionOfInterest;
 };
 
 export type ImageProcessingError =

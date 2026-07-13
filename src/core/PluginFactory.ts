@@ -3,6 +3,7 @@ import { FEATURE_ERROR_MAP } from '../shared/constants';
 import type { BarcodeScanningOptions } from '../features/barcode-scanning/types';
 import type { TextRecognitionOptions } from '../features/text-recognition/types';
 import { MLKIT_FEATURE_KEYS } from './constants';
+import { validateRegionOfInterest } from './validateRegionOfInterest';
 import { VisionCameraMLKit } from './VisionCameraMLKit';
 import type { MLKitBaseOptions, MLKitFeature } from './types';
 
@@ -73,6 +74,10 @@ buildscript {
    */
   static initPlugin(feature: MLKitFeature, options: MLKitBaseOptions) {
     PluginFactory.assertFeatureAvailable(feature);
+
+    if (options.roi) {
+      validateRegionOfInterest(options.roi);
+    }
 
     switch (feature) {
       case MLKIT_FEATURE_KEYS.TEXT_RECOGNITION:

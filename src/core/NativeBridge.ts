@@ -1,7 +1,8 @@
 import { Platform } from 'react-native';
 import VisionCameraMLKitModule from '../VisionCameraMLKitSpec';
 import { INVALID_URI_ERROR, MISSING_MODULE_ERROR } from '../shared/constants';
-import type { MLKitFeature } from './types';
+import { validateRegionOfInterest } from './validateRegionOfInterest';
+import type { ImageProcessingBaseOptions, MLKitFeature } from './types';
 
 /**
  * Bridge class for native MLKit image processing
@@ -17,7 +18,7 @@ export class NativeBridge {
   static async processImage(
     feature: MLKitFeature,
     uri: string,
-    options: object = {}
+    options: ImageProcessingBaseOptions = {}
   ): Promise<any> {
     if (
       !VisionCameraMLKitModule ||
@@ -26,6 +27,10 @@ export class NativeBridge {
       throw new Error(MISSING_MODULE_ERROR);
     }
     const normalizedUri = this.validateAndNormalizeUri(uri);
+
+    if (options.roi) {
+      validateRegionOfInterest(options.roi);
+    }
 
     return await VisionCameraMLKitModule.processImage(
       feature,

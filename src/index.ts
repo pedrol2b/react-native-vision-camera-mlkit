@@ -25,6 +25,8 @@ export {
   type MLKitBaseOptions,
   type MLKitFeature,
   type Orientation,
+  type RegionOfInterest,
+  type RegionOfInterestUnit,
 } from './core/types';
 
 export type { BarcodeScanner } from './specs/BarcodeScanner.nitro';

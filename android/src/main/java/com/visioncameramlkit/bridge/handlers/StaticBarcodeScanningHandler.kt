@@ -7,6 +7,7 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableMap
 import com.visioncameramlkit.application.usecases.RecognizeBarcodesUseCase
 import com.visioncameramlkit.bridge.parsers.BarcodeScanningOptionParser
+import com.visioncameramlkit.bridge.parsers.RegionOfInterestOptionParser
 import com.visioncameramlkit.domain.models.BarcodeScanningOptions
 import com.visioncameramlkit.domain.models.ImagePreprocessingOptions
 import com.visioncameramlkit.domain.models.Orientation
@@ -127,6 +128,7 @@ class StaticBarcodeScanningHandler(
       invertColors = options.getOrDefault("invertColors", false),
       orientation = options.getString("orientation")?.let { parseOrientation(it) },
       scaleFactor = options.getOrDefault("scaleFactor", 1.0f),
+      roi = RegionOfInterestOptionParser.parse(options),
     )
 
   private fun parseBarcodeOptions(options: ReadableMap): BarcodeScanningOptions =

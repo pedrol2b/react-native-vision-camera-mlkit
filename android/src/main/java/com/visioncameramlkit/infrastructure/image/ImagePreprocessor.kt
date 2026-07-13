@@ -8,6 +8,7 @@ import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Matrix
 import android.graphics.Paint
+import android.graphics.Rect
 import androidx.core.graphics.scale
 import androidx.exifinterface.media.ExifInterface
 import com.google.mlkit.vision.common.InputImage
@@ -15,6 +16,8 @@ import com.visioncameramlkit.domain.models.ImageMetadata
 import com.visioncameramlkit.domain.models.ImagePreprocessingOptions
 import com.visioncameramlkit.domain.models.Orientation
 import com.visioncameramlkit.domain.models.ProcessedImage
+import com.visioncameramlkit.domain.models.RegionOfInterest
+import com.visioncameramlkit.domain.models.resolveToPixelRect
 import com.visioncameramlkit.domain.services.IImagePreprocessor
 import java.io.File
 
@@ -24,6 +27,23 @@ class ImagePreprocessor : IImagePreprocessor {
   private fun clampScale(scaleFactor: Float?): Float {
     val scale = scaleFactor ?: 1.0f
     return scale.coerceIn(0.9f, 1.0f)
+  }
+
+  /**
+   * Crops [bitmap] to the given [roi], if any. Returns the (possibly unchanged) bitmap
+   * alongside the pixel offset of the crop origin, so callers can remap result
+   * coordinates back to the pre-crop pixel space.
+   */
+  fun cropToRegionOfInterest(
+    bitmap: Bitmap,
+    roi: RegionOfInterest?,
+  ): Pair<Bitmap, Rect> {
+    if (roi == null) {
+      return bitmap to Rect(0, 0, bitmap.width, bitmap.height)
+    }
+    val rect = roi.resolveToPixelRect(bitmap.width, bitmap.height)
+    val croppedBitmap = createBitmap(bitmap, rect.left, rect.top, rect.width(), rect.height())
+    return croppedBitmap to rect
   }
 
   fun invertBitmap(bitmap: Bitmap): Bitmap =
@@ -82,28 +102,30 @@ class ImagePreprocessor : IImagePreprocessor {
     val rotatedBitmap = rotateBitmap(bitmap, effectiveOrientation)
     val effectiveScale = clampScale(options.scaleFactor)
 
+    val (croppedBitmap, cropRect) = cropToRegionOfInterest(rotatedBitmap, options.roi)
+
     val processedBitmap =
       if (options.invertColors) {
         val scaledBitmap =
           if (effectiveScale < 1.0f) {
-            rotatedBitmap.scale(
-              (rotatedBitmap.width * effectiveScale).toInt(),
-              (rotatedBitmap.height * effectiveScale).toInt(),
+            croppedBitmap.scale(
+              (croppedBitmap.width * effectiveScale).toInt(),
+              (croppedBitmap.height * effectiveScale).toInt(),
               false,
             )
           } else {
-            rotatedBitmap
+            croppedBitmap
           }
         invertBitmap(scaledBitmap)
       } else {
         if (effectiveScale < 1.0f) {
-          rotatedBitmap.scale(
-            (rotatedBitmap.width * effectiveScale).toInt(),
-            (rotatedBitmap.height * effectiveScale).toInt(),
+          croppedBitmap.scale(
+            (croppedBitmap.width * effectiveScale).toInt(),
+            (croppedBitmap.height * effectiveScale).toInt(),
             false,
           )
         } else {
-          rotatedBitmap
+          croppedBitmap
         }
       }
 
@@ -115,6 +137,9 @@ class ImagePreprocessor : IImagePreprocessor {
         height = processedBitmap.height,
         rotation = 0, // Static images are already oriented
         isInverted = options.invertColors,
+        offsetX = cropRect.left,
+        offsetY = cropRect.top,
+        scaleFactor = effectiveScale,
       )
 
     return ProcessedImage(inputImage, metadata)

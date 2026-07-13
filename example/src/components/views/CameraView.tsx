@@ -36,6 +36,7 @@ import {
   useTerminalStore,
 } from '../../stores';
 import { FpsGraphOverlay } from './FpsGraphOverlay';
+import { ROIOverlay } from './ROIOverlay';
 
 const normalizeResultObject = (data: unknown) => {
   if (data === null || data === undefined) return data;
@@ -327,6 +328,7 @@ const CameraView = forwardRef<CameraRef, CameraViewProps>(
               maxFps={FPS_GRAPH_MAX_SCALE}
             />
           )}
+          {sharedOptions.roi && <ROIOverlay roi={sharedOptions.roi} />}
         </Reanimated.View>
       </GestureDetector>
     );

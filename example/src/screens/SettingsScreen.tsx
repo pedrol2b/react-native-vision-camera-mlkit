@@ -1,6 +1,7 @@
 import { useRoute, type RouteProp } from '@react-navigation/native';
 import { ScrollView, StyleSheet } from 'react-native';
 import {
+  RegionOfInterestControl,
   Section,
   SectionPicker,
   SectionSlider,
@@ -252,6 +253,16 @@ const SettingsScreen = () => {
           description="Allow double tap gesture to flip the camera."
           value={enableDoubleTapGesture}
           onValueChange={setEnableDoubleTapGesture}
+        />
+      </Section>
+
+      <Section
+        title="Region of Interest"
+        description="Crop ML Kit processing to a rectangle of the frame."
+      >
+        <RegionOfInterestControl
+          value={sharedOptions.roi}
+          onValueChange={(roi) => setSharedOption('roi', roi)}
         />
       </Section>
     </ScrollView>

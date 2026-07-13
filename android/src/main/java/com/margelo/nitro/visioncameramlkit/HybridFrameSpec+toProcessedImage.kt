@@ -31,7 +31,8 @@ internal fun ImagePreprocessor.preprocessFrame(
   val needsBitmapProcessing =
     options.invertColors ||
       effectiveScale < 1.0f ||
-      frame.isMirrored
+      frame.isMirrored ||
+      options.roi != null
 
   if (!needsBitmapProcessing) {
     val mediaImage =
@@ -52,15 +53,17 @@ internal fun ImagePreprocessor.preprocessFrame(
   }
 
   val orientedBitmap = image.toBitmap(frame.orientation, frame.isMirrored)
+  val (croppedBitmap, cropRect) = cropToRegionOfInterest(orientedBitmap, options.roi)
+
   val scaledBitmap =
     if (effectiveScale < 1.0f) {
-      orientedBitmap.scale(
-        (orientedBitmap.width * effectiveScale).toInt(),
-        (orientedBitmap.height * effectiveScale).toInt(),
+      croppedBitmap.scale(
+        (croppedBitmap.width * effectiveScale).toInt(),
+        (croppedBitmap.height * effectiveScale).toInt(),
         false,
       )
     } else {
-      orientedBitmap
+      croppedBitmap
     }
 
   val processedBitmap =
@@ -78,6 +81,9 @@ internal fun ImagePreprocessor.preprocessFrame(
         height = processedBitmap.height,
         rotation = 0,
         isInverted = options.invertColors,
+        offsetX = cropRect.left,
+        offsetY = cropRect.top,
+        scaleFactor = effectiveScale,
       ),
   )
 }

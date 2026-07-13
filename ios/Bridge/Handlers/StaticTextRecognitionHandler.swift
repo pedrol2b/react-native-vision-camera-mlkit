@@ -98,10 +98,34 @@ import Foundation
     {
       let invertColors = options["invertColors"] as? Bool ?? false
       let orientation = (options["orientation"] as? String).flatMap { DomainOrientation(string: $0) }
+      let roi = parseRegionOfInterest(options["roi"])
 
       return ImagePreprocessingOptions(
         invertColors: invertColors,
-        orientation: orientation
+        orientation: orientation,
+        roi: roi
+      )
+    }
+
+    private func parseRegionOfInterest(_ value: Any?) -> DomainRegionOfInterest? {
+      guard let dictionary = value as? [String: Any],
+        let x = (dictionary["x"] as? NSNumber)?.doubleValue,
+        let y = (dictionary["y"] as? NSNumber)?.doubleValue,
+        let width = (dictionary["width"] as? NSNumber)?.doubleValue,
+        let height = (dictionary["height"] as? NSNumber)?.doubleValue
+      else {
+        return nil
+      }
+
+      let unit: DomainRegionOfInterestUnit =
+        (dictionary["unit"] as? String) == "pixel" ? .pixel : .normalized
+
+      return DomainRegionOfInterest(
+        x: CGFloat(x),
+        y: CGFloat(y),
+        width: CGFloat(width),
+        height: CGFloat(height),
+        unit: unit
       )
     }
 

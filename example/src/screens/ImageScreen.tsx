@@ -15,6 +15,7 @@ import {
 import {
   Button,
   Divider,
+  RegionOfInterestControl,
   Section,
   SectionImageInput,
   SectionPicker,
@@ -212,6 +213,10 @@ const ImageScreen = () => {
               }
             />
           )}
+          <RegionOfInterestControl
+            value={sharedOptions.roi}
+            onValueChange={(roi) => setSharedOption('roi', roi)}
+          />
           {pluginId === PLUGIN_ID.BARCODE_SCANNING && (
             <>
               <SectionSwitch

@@ -13,7 +13,8 @@ extension BarcodeScannerOptions {
   func toImagePreprocessingOptions() -> ImagePreprocessingOptions {
     return ImagePreprocessingOptions(
       invertColors: invertColors ?? false,
-      scaleFactor: CGFloat(scaleFactor ?? 1.0)
+      scaleFactor: CGFloat(scaleFactor ?? 1.0),
+      roi: roi?.toDomainRegionOfInterest()
     )
   }
 }

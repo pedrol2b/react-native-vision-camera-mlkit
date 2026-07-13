@@ -1,5 +1,6 @@
 import type { BarcodeFormat } from '../features/barcode-scanning/types';
 import type { TextRecognitionLanguage } from '../features/text-recognition/types';
+import type { RegionOfInterest } from '../core/types';
 
 /**
  * ML Kit features that can be compiled into this package.
@@ -35,6 +36,13 @@ export interface MLKitRecognizerOptions {
    * Legacy frame skipping option kept for compatibility while v5 examples use frame output throttling.
    */
   frameProcessInterval?: number;
+
+  /**
+   * Crop processing to a rectangular region of the frame before running
+   * ML Kit, to reduce CPU/GPU work. Result coordinates are mapped back to
+   * full source frame coordinates.
+   */
+  roi?: RegionOfInterest;
 }
 
 /**

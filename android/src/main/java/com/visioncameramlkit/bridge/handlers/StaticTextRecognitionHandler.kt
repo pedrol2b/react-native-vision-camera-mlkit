@@ -6,6 +6,7 @@ import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableMap
 import com.visioncameramlkit.application.usecases.RecognizeTextUseCase
+import com.visioncameramlkit.bridge.parsers.RegionOfInterestOptionParser
 import com.visioncameramlkit.domain.models.ImagePreprocessingOptions
 import com.visioncameramlkit.domain.models.Orientation
 import com.visioncameramlkit.domain.models.TextRecognitionLanguage
@@ -134,6 +135,7 @@ class StaticTextRecognitionHandler(
     ImagePreprocessingOptions(
       invertColors = options.getBoolean("invertColors"),
       orientation = options.getString("orientation")?.let { parseOrientation(it) },
+      roi = RegionOfInterestOptionParser.parse(options),
     )
 
   private fun parseOrientation(orientation: String): Orientation? =

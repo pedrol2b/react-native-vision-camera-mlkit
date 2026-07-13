@@ -164,6 +164,7 @@ const frameOutput = useFrameOutput({
 - `language?: 'LATIN' | 'CHINESE' | 'DEVANAGARI' | 'JAPANESE' | 'KOREAN'`
 - `scaleFactor?: number` (0.9-1.0)
 - `invertColors?: boolean`
+- `roi?: RegionOfInterest` (crop processing to a rectangle of the frame; see [Region of Interest](#region-of-interest))
 - `frameProcessInterval?: number` (deprecated, throttle frames manually inside `onFrame` instead)
 
 `TextRecognitionArguments`:
@@ -191,6 +192,7 @@ console.log(result.blocks);
 - `language?: 'LATIN' | 'CHINESE' | 'DEVANAGARI' | 'JAPANESE' | 'KOREAN'`
 - `orientation?: 'portrait' | 'portrait-upside-down' | 'landscape-left' | 'landscape-right'`
 - `invertColors?: boolean`
+- `roi?: RegionOfInterest` (crop processing to a rectangle of the image; see [Region of Interest](#region-of-interest))
 
 > The native bridge normalizes URIs (`file://` is removed on iOS and added on Android if missing). Supported formats: JPEG, PNG, WebP.
 
@@ -252,6 +254,7 @@ const frameOutput = useFrameOutput({
 - `enableAllPotentialBarcodes?: boolean` (Android only)
 - `scaleFactor?: number` (0.9-1.0)
 - `invertColors?: boolean`
+- `roi?: RegionOfInterest` (crop processing to a rectangle of the frame; see [Region of Interest](#region-of-interest))
 - `frameProcessInterval?: number` (deprecated, throttle frames manually inside `onFrame` instead)
 
 Supported `formats` values:
@@ -305,6 +308,7 @@ for (const barcode of result.barcodes) {
 - `orientation?: 'portrait' | 'portrait-upside-down' | 'landscape-left' | 'landscape-right'`
 - `invertColors?: boolean`
 - `scaleFactor?: number` (0.9-1.0)
+- `roi?: RegionOfInterest` (crop processing to a rectangle of the image; see [Region of Interest](#region-of-interest))
 
 `BarcodeScanningResult` includes:
 
@@ -347,6 +351,29 @@ import {
 } from 'react-native-vision-camera-mlkit';
 
 assertFeatureAvailable(MLKIT_FEATURE_KEYS.TEXT_RECOGNITION);
+```
+
+### Region of Interest
+
+Every feature accepts an optional `roi` to crop processing to a rectangle of the frame/image before running ML Kit, reducing CPU/GPU work. Result coordinates (bounding boxes, corners) are always mapped back to full source coordinates, so overlays don't need to account for the crop.
+
+```ts
+type RegionOfInterest = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  /** @default 'normalized' */
+  unit?: 'normalized' | 'pixel';
+};
+```
+
+By default `x`/`y`/`width`/`height` are normalized to the `0..1` range relative to the source frame/image (so `x + width` and `y + height` must each be `<= 1`); set `unit: 'pixel'` to use absolute pixel values instead.
+
+```ts
+const { textRecognition } = useTextRecognition({
+  roi: { x: 0.25, y: 0.25, width: 0.5, height: 0.5 },
+});
 ```
 
 ## Performance

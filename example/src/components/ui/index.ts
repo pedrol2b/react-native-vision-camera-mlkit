@@ -4,6 +4,7 @@ export { CameraControls } from './CameraControls';
 export { Divider } from './Divider';
 export { GithubFab } from './GithubFab';
 export { LinkCard } from './LinkCard';
+export { RegionOfInterestControl } from './RegionOfInterestControl';
 export { Section } from './Section';
 export { SectionImageInput } from './SectionImageInput';
 export { SectionPicker } from './SectionPicker';

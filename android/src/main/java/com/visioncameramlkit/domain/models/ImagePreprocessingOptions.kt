@@ -6,4 +6,5 @@ data class ImagePreprocessingOptions(
   val outputOrientation: OutputOrientation? = null,
   val scaleFactor: Float = 1.0f,
   val orientation: Orientation? = null,
+  val roi: RegionOfInterest? = null,
 )

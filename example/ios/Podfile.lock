@@ -2447,7 +2447,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - VisionCameraMLKit (1.0.1):
+  - VisionCameraMLKit (2.0.0):
     - GoogleMLKit/BarcodeScanning
     - GoogleMLKit/TextRecognition
     - GoogleMLKit/TextRecognitionChinese
@@ -2908,7 +2908,7 @@ SPEC CHECKSUMS:
   RNSVG: 6cae8d4082913be2eb43eaec2a456222c42195ed
   RNWorklets: 53439575fed8525fb8d1cabcc05a3d4d91e6ffe4
   VisionCamera: 2d364657571d6b6404830269d05b1de244586a40
-  VisionCameraMLKit: fa9794aa8b135e32be2d6aeacc22bc07b0b34d82
+  VisionCameraMLKit: fe1db106ab49d735ac1972c0af27c06778ef8c7e
   VisionCameraWorklets: 8393549fac54f37a4cf6a7b1088688cf9b309b7f
   Yoga: 94172d87dd5d83fc929bf1ee53121b5d4490b5f2
 

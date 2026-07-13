@@ -50,6 +50,7 @@ const frameOutput = useFrameOutput({
 - `enableAllPotentialBarcodes?: boolean` (Android only)
 - `scaleFactor?: number` (`0.9`-`1.0`)
 - `invertColors?: boolean`
+- `roi?: RegionOfInterest` (crop processing to a rectangle of the frame; see the [Region of Interest](../README.md#region-of-interest) section in the main README)
 - `frameProcessInterval?: number` (deprecated; throttle frames manually inside `onFrame` instead)
 
 ### Frame arguments
@@ -77,6 +78,7 @@ const result = await processImageBarcodeScanning(imageUri, {
 - `orientation?: 'portrait' | 'portrait-upside-down' | 'landscape-left' | 'landscape-right'`
 - `invertColors?: boolean`
 - `scaleFactor?: number` (`0.9`-`1.0`)
+- `roi?: RegionOfInterest` (crop processing to a rectangle of the image; see the [Region of Interest](../README.md#region-of-interest) section in the main README)
 
 ## Supported formats
 

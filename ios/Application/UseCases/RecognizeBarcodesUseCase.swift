@@ -39,7 +39,8 @@ import Foundation
             )
           }
 
-          return try recognitionService.recognize(image: processedImage)
+          let result = try recognitionService.recognize(image: processedImage)
+          return result.remapped(using: processedImage.metadata)
         }
       }
 
@@ -51,8 +52,10 @@ import Foundation
         return try autoreleasepool {
           let preprocessingOptions = ImagePreprocessingOptions(
             invertColors: imageOptions.invertColors,
+            outputOrientation: imageOptions.outputOrientation,
             scaleFactor: imageOptions.scaleFactor,
-            orientation: imageOptions.orientation
+            orientation: imageOptions.orientation,
+            roi: imageOptions.roi
           )
 
           guard
@@ -69,7 +72,8 @@ import Foundation
           }
 
           _ = barcodeOptions
-          return try recognitionService.recognize(image: processedImage)
+          let result = try recognitionService.recognize(image: processedImage)
+          return result.remapped(using: processedImage.metadata)
         }
       }
     }

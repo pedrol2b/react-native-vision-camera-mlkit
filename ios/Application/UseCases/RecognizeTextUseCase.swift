@@ -41,7 +41,8 @@ import Foundation
             )
           }
 
-          return try recognitionService.recognize(image: processedImage)
+          let result = try recognitionService.recognize(image: processedImage)
+          return result.remapped(using: processedImage.metadata)
         }
       }
 
@@ -66,7 +67,8 @@ import Foundation
             )
           }
 
-          return try recognitionService.recognize(image: processedImage)
+          let result = try recognitionService.recognize(image: processedImage)
+          return result.remapped(using: processedImage.metadata)
         }
       }
     }

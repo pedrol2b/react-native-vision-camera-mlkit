@@ -26,15 +26,34 @@ import Foundation
       return min(max(scale, 0.9), 1.0)
     }
 
-    // Create scaled VisionImage from CIImage using Core Image affine transform
+    // Create scaled VisionImage from CIImage using Core Image affine transform.
+    // Crop happens before scale, matching the static-image pipeline's crop-then-scale order.
     private func createScaledVisionImage(
       from ciImage: CIImage,
       scaleFactor: CGFloat,
       frameOrientation: UIImage.Orientation,
-      outputOrientation: OutputOrientation?
+      outputOrientation: OutputOrientation?,
+      roi: DomainRegionOfInterest?
     ) -> VisionImage? {
+      var workingImage = ciImage
+
+      if let roi = roi {
+        guard (try? roi.validate()) != nil else {
+          return nil
+        }
+        let extent = workingImage.extent
+        let pixelRect = roi.resolvedPixelRect(
+          imageWidth: extent.width,
+          imageHeight: extent.height
+        )
+        // CIImage's coordinate origin is at the extent's origin (not necessarily .zero),
+        // so the crop rect must be offset into the image's own coordinate space.
+        let cropRect = pixelRect.offsetBy(dx: extent.minX, dy: extent.minY)
+        workingImage = workingImage.cropped(to: cropRect)
+      }
+
       // Apply scaling using CIAffineTransform
-      let scaledCIImage = ciImage.transformed(
+      let scaledCIImage = workingImage.transformed(
         by: CGAffineTransform(scaleX: scaleFactor, y: scaleFactor)
       )
 
@@ -84,6 +103,12 @@ import Foundation
       let effectiveScale = clampScale(options.scaleFactor)
       let frameOrientation = frame.orientation.asUIImageOrientation
 
+      if let roi = options.roi {
+        guard (try? roi.validate()) != nil else {
+          return nil
+        }
+      }
+
       let image: VisionImage
 
       if options.invertColors {
@@ -92,36 +117,65 @@ import Foundation
             sampleBuffer: sampleBuffer,
             frameOrientation: frameOrientation,
             outputOrientation: options.outputOrientation,
-            scaleFactor: effectiveScale
+            scaleFactor: effectiveScale,
+            roi: options.roi
           )
         else {
           return nil
         }
         image = invertedImage
       } else {
-        image = createVisionImageFromFrame(
-          sampleBuffer: sampleBuffer,
-          frameOrientation: frameOrientation,
-          outputOrientation: options.outputOrientation,
-          scaleFactor: effectiveScale
-        )
+        guard
+          let convertedImage = createVisionImageFromFrame(
+            sampleBuffer: sampleBuffer,
+            frameOrientation: frameOrientation,
+            outputOrientation: options.outputOrientation,
+            scaleFactor: effectiveScale,
+            roi: options.roi
+          )
+        else {
+          return nil
+        }
+        image = convertedImage
       }
 
       guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
         return nil
       }
 
+      // Use pre-crop, pre-scale pixel-buffer dimensions to resolve the ROI's pixel rect so the
+      // crop offset lands in the same coordinate space as the scaled width/height below.
+      let originalWidth = CGFloat(CVPixelBufferGetWidth(imageBuffer))
+      let originalHeight = CGFloat(CVPixelBufferGetHeight(imageBuffer))
+
+      var offsetX: CGFloat = 0
+      var offsetY: CGFloat = 0
+      var croppedWidth = originalWidth
+      var croppedHeight = originalHeight
+
+      if let roi = options.roi {
+        let pixelRect = roi.resolvedPixelRect(
+          imageWidth: originalWidth,
+          imageHeight: originalHeight
+        )
+        offsetX = pixelRect.origin.x
+        offsetY = pixelRect.origin.y
+        croppedWidth = pixelRect.width
+        croppedHeight = pixelRect.height
+      }
+
       // Use scaled dimensions for metadata
-      let originalWidth = CVPixelBufferGetWidth(imageBuffer)
-      let originalHeight = CVPixelBufferGetHeight(imageBuffer)
-      let width = Int(CGFloat(originalWidth) * effectiveScale)
-      let height = Int(CGFloat(originalHeight) * effectiveScale)
+      let width = Int(croppedWidth * effectiveScale)
+      let height = Int(croppedHeight * effectiveScale)
 
       let metadata = ImageMetadata(
         width: width,
         height: height,
         orientation: frameOrientation,
-        isInverted: options.invertColors
+        isInverted: options.invertColors,
+        offsetX: offsetX,
+        offsetY: offsetY,
+        scaleFactor: effectiveScale
       )
 
       return ProcessedImage(image: image, metadata: metadata)
@@ -131,8 +185,9 @@ import Foundation
       sampleBuffer: CMSampleBuffer,
       frameOrientation: UIImage.Orientation,
       outputOrientation: OutputOrientation?,
-      scaleFactor: CGFloat
-    ) -> VisionImage {
+      scaleFactor: CGFloat,
+      roi: DomainRegionOfInterest?
+    ) -> VisionImage? {
       // MLKit works more reliably when frames are converted to UIImage
       // YUV CMSampleBuffer can have orientation and format handling issues
       if let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
@@ -151,23 +206,27 @@ import Foundation
           || pixelFormatType
             == kCVPixelFormatType_Lossless_420YpCbCr8BiPlanarFullRange
 
-        // Force conversion when scaling is needed to ensure consistent behavior
-        // Never bypass scaling if scaleFactor < 1.0
-        if needsConversion || scaleFactor < 1.0 {
-          if let convertedImage = convertToSupportedFormat(
-            pixelBuffer: pixelBuffer,
-            frameOrientation: frameOrientation,
-            outputOrientation: outputOrientation,
-            scaleFactor: scaleFactor
-          ) {
-            return convertedImage
+        // Force conversion when scaling or an ROI crop is needed to ensure consistent behavior.
+        // Never bypass scaling/cropping if scaleFactor < 1.0 or an ROI is set, since the raw
+        // CMSampleBuffer fast path below cannot crop.
+        if needsConversion || scaleFactor < 1.0 || roi != nil {
+          guard
+            let convertedImage = convertToSupportedFormat(
+              pixelBuffer: pixelBuffer,
+              frameOrientation: frameOrientation,
+              outputOrientation: outputOrientation,
+              scaleFactor: scaleFactor,
+              roi: roi
+            )
+          else {
+            // Conversion failed - this should not happen for scaling/cropping cases
+            return nil
           }
-          // Conversion failed - this should not happen for scaling cases
-          fatalError("Conversion failed when scaling is required")
+          return convertedImage
         }
       }
 
-      // Fallback: Use CMSampleBuffer directly (for BGRA and scaleFactor == 1.0)
+      // Fallback: Use CMSampleBuffer directly (for BGRA, scaleFactor == 1.0, and no ROI)
       let image = VisionImage(buffer: sampleBuffer)
       image.orientation = getVisionOrientation(
         frameOrientation: frameOrientation,
@@ -180,7 +239,8 @@ import Foundation
       sampleBuffer: CMSampleBuffer,
       frameOrientation: UIImage.Orientation,
       outputOrientation: OutputOrientation?,
-      scaleFactor: CGFloat
+      scaleFactor: CGFloat,
+      roi: DomainRegionOfInterest?
     ) -> VisionImage? {
       guard let buffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
         return nil
@@ -197,7 +257,8 @@ import Foundation
         from: invertedCIImage,
         scaleFactor: scaleFactor,
         frameOrientation: frameOrientation,
-        outputOrientation: outputOrientation
+        outputOrientation: outputOrientation,
+        roi: roi
       )
     }
 
@@ -231,7 +292,8 @@ import Foundation
       pixelBuffer: CVPixelBuffer,
       frameOrientation: UIImage.Orientation,
       outputOrientation: OutputOrientation?,
-      scaleFactor: CGFloat
+      scaleFactor: CGFloat,
+      roi: DomainRegionOfInterest?
     ) -> VisionImage? {
       // Convert to CIImage
       let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
@@ -241,7 +303,8 @@ import Foundation
         from: ciImage,
         scaleFactor: scaleFactor,
         frameOrientation: frameOrientation,
-        outputOrientation: outputOrientation
+        outputOrientation: outputOrientation,
+        roi: roi
       )
     }
 
@@ -260,6 +323,40 @@ import Foundation
       let effectiveScale = clampScale(options.scaleFactor)
 
       var processedImage = uiImage
+      var offsetX: CGFloat = 0
+      var offsetY: CGFloat = 0
+
+      // Apply optional ROI crop, right after decode/orientation-resolution and before
+      // scale/invert (UIImage.imageOrientation metadata already encodes orientation for the
+      // static path, so there's no separate rotate step here).
+      if let roi = options.roi {
+        guard (try? roi.validate()) != nil else {
+          return nil
+        }
+
+        // Crop in the same pixel space ML Kit will see: the CGImage's pixel dimensions,
+        // not the orientation-aware `image.size`.
+        guard let cgImage = processedImage.cgImage else {
+          return nil
+        }
+
+        let pixelRect = roi.resolvedPixelRect(
+          imageWidth: CGFloat(cgImage.width),
+          imageHeight: CGFloat(cgImage.height)
+        )
+
+        guard let croppedCGImage = cgImage.cropping(to: pixelRect) else {
+          return nil
+        }
+
+        offsetX = pixelRect.origin.x
+        offsetY = pixelRect.origin.y
+        processedImage = UIImage(
+          cgImage: croppedCGImage,
+          scale: processedImage.scale,
+          orientation: processedImage.imageOrientation
+        )
+      }
 
       // Apply optional downscale for static images.
       if effectiveScale < 1.0 {
@@ -287,7 +384,10 @@ import Foundation
         width: pixelWidth,
         height: pixelHeight,
         orientation: visionOrientation,
-        isInverted: options.invertColors
+        isInverted: options.invertColors,
+        offsetX: offsetX,
+        offsetY: offsetY,
+        scaleFactor: effectiveScale
       )
 
       return ProcessedImage(image: visionImage, metadata: metadata)

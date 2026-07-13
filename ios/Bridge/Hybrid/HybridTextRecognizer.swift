@@ -34,7 +34,8 @@ final class HybridTextRecognizer: HybridTextRecognizerSpec {
         throw RuntimeError.error(withMessage: "Failed to preprocess VisionCamera frame.")
       }
 
-      return try recognitionService.recognize(image: processedImage).toNitroResult()
+      let result = try recognitionService.recognize(image: processedImage)
+      return result.remapped(using: processedImage.metadata).toNitroResult()
     #else
       throw RuntimeError.error(withMessage: "TextRecognition is not enabled in the native ML Kit configuration.")
     #endif

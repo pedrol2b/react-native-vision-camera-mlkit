@@ -1,12 +1,12 @@
-import { BottomSheetFlatList, BottomSheetModal } from '@gorhom/bottom-sheet';
+import { ModalBottomSheet } from '@swmansion/react-native-bottom-sheet';
+import { useCallback, useMemo, useState } from 'react';
 import {
-  forwardRef,
-  useCallback,
-  useMemo,
-  useState,
-  type ComponentProps,
-} from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+  FlatList,
+  Pressable,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../providers/ThemeProvider';
 import {
@@ -15,31 +15,30 @@ import {
 } from '../../stores/terminalStore';
 import { TerminalEntryRow, Text } from '../ui';
 
-type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+type TerminalBottomSheetProps = {
+  index: number;
+  onIndexChange: (index: number) => void;
+};
 
-type TerminalBottomSheetProps = Optional<
-  ComponentProps<typeof BottomSheetModal>,
-  'children'
->;
-
-const TerminalBottomSheet = forwardRef<
-  BottomSheetModal,
-  TerminalBottomSheetProps
->((props, ref) => {
+const TerminalBottomSheet = ({
+  index,
+  onIndexChange,
+}: TerminalBottomSheetProps) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
 
   const entries = useTerminalStore((state) => state.entries);
   const clear = useTerminalStore((state) => state.clear);
 
   const [wrapLines, setWrapLines] = useState(true);
 
-  const snapPoints = useMemo(() => ['25%', '60%', '90%'], []);
+  const detents = useMemo(
+    () => [0, windowHeight * 0.25, windowHeight * 0.6, windowHeight * 0.9],
+    [windowHeight]
+  );
 
-  const handleClose = useCallback(() => {
-    if (!ref || typeof ref === 'function') return;
-    ref.current?.dismiss();
-  }, [ref]);
+  const handleClose = useCallback(() => onIndexChange(0), [onIndexChange]);
 
   const renderItem = useCallback(
     ({ item }: { item: TerminalEntry }) => (
@@ -64,17 +63,37 @@ const TerminalBottomSheet = forwardRef<
     []
   );
 
+  const surface = useMemo(
+    () => (
+      <View
+        style={[
+          StyleSheet.absoluteFill,
+          styles.surface,
+          { backgroundColor: theme.colors.surface },
+        ]}
+      />
+    ),
+    [theme.colors.surface]
+  );
+
   return (
-    <BottomSheetModal
-      ref={ref}
-      snapPoints={snapPoints}
-      enablePanDownToClose
-      containerStyle={styles.modalContainer}
-      topInset={insets.top}
-      handleIndicatorStyle={{ backgroundColor: theme.colors.border }}
-      backgroundStyle={{ backgroundColor: theme.colors.surface }}
-      {...props}
+    <ModalBottomSheet
+      detents={detents}
+      index={index}
+      onIndexChange={onIndexChange}
+      surface={surface}
     >
+      <View style={styles.handleContainer}>
+        <View
+          style={[
+            styles.handleIndicator,
+            {
+              width: windowWidth * 0.075,
+              backgroundColor: theme.colors.border,
+            },
+          ]}
+        />
+      </View>
       <View
         style={[
           styles.header,
@@ -108,7 +127,7 @@ const TerminalBottomSheet = forwardRef<
           </Pressable>
         </View>
       </View>
-      <BottomSheetFlatList
+      <FlatList
         data={entries}
         keyExtractor={(item: TerminalEntry) => item.id}
         renderItem={renderItem}
@@ -121,9 +140,9 @@ const TerminalBottomSheet = forwardRef<
         maxToRenderPerBatch={8}
         ItemSeparatorComponent={ItemSeparatorComponent}
       />
-    </BottomSheetModal>
+    </ModalBottomSheet>
   );
-});
+};
 
 const styles = StyleSheet.create({
   header: {
@@ -150,9 +169,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 12,
   },
-  modalContainer: {
-    zIndex: 10,
-    elevation: 10,
+  surface: {
+    borderRadius: 15,
+  },
+  handleContainer: {
+    alignItems: 'center',
+    paddingVertical: 10,
+  },
+  handleIndicator: {
+    height: 4,
+    borderRadius: 4,
   },
   itemSeparator: {
     height: 12,
@@ -162,7 +188,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-TerminalBottomSheet.displayName = 'TerminalBottomSheet';
 
 export { TerminalBottomSheet };

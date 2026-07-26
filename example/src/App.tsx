@@ -1,4 +1,4 @@
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { BottomSheetProvider } from '@swmansion/react-native-bottom-sheet';
 import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -15,13 +15,13 @@ const App = () => (
   <GestureHandlerRootView style={styles.container}>
     <SafeAreaProvider>
       <ThemeProvider>
-        <BottomSheetModalProvider>
+        <BottomSheetProvider>
           <TerminalProvider>
             <PortalProvider>
               <RootNavigator />
             </PortalProvider>
           </TerminalProvider>
-        </BottomSheetModalProvider>
+        </BottomSheetProvider>
       </ThemeProvider>
     </SafeAreaProvider>
   </GestureHandlerRootView>

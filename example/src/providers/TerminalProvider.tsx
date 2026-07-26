@@ -1,15 +1,15 @@
-import type { SNAP_POINT_TYPE } from '@gorhom/bottom-sheet';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import type { ReactNode } from 'react';
 import {
   createContext,
   useCallback,
   useContext,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 import { TerminalBottomSheet } from '../components/views';
+
+const CLOSED_INDEX = 0;
+const OPEN_INDEX = 1;
 
 type TerminalContextType = {
   open: () => void;
@@ -24,29 +24,20 @@ type TerminalProviderProps = {
 };
 
 export const TerminalProvider = ({ children }: TerminalProviderProps) => {
-  const modalRef = useRef<BottomSheetModal>(null);
+  const [index, setIndex] = useState(CLOSED_INDEX);
 
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleChange = useCallback(
-    (index: number, _position: number, _type: SNAP_POINT_TYPE) =>
-      setIsOpen(index >= 0),
-    []
-  );
+  const open = useCallback(() => setIndex(OPEN_INDEX), []);
+  const close = useCallback(() => setIndex(CLOSED_INDEX), []);
 
   const value = useMemo(
-    () => ({
-      open: () => modalRef.current?.present(),
-      close: () => modalRef.current?.dismiss(),
-      isOpen,
-    }),
-    [isOpen]
+    () => ({ open, close, isOpen: index > CLOSED_INDEX }),
+    [open, close, index]
   );
 
   return (
     <TerminalContext.Provider value={value}>
       {children}
-      <TerminalBottomSheet ref={modalRef} onChange={handleChange} />
+      <TerminalBottomSheet index={index} onIndexChange={setIndex} />
     </TerminalContext.Provider>
   );
 };

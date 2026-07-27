@@ -19,6 +19,9 @@ jsconfig.json
 .claude/homunculus/
 .codex/config.toml
 
+# ECC-generated AI tooling scaffolding (not personal, kept local by preference)
+.agents/
+
 # Xcode
 #
 build/

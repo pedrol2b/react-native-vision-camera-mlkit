@@ -1,102 +1,200 @@
-- name: 🐛 bug
-  description: Something isn't working as expected
-  color: d73a49
-- name: ✨ feature
-  description: New feature request
-  color: a2eeef
-- name: 🚀 enhancement
-  description: Enhancement to existing feature
-  color: 84B6EB
-- name: 🔧 build error
-  description: Build or compilation issues
-  color: 008672
-- name: 📚 documentation
-  description: Documentation improvements or additions
-  color: 0075ca
-- name: 💭 question
-  description: Questions or clarifications needed
-  color: d876e3
-- name: 🤖 android
-  description: Android platform specific
-  color: 4BC74F
-- name: 🍏 ios
-  description: iOS platform specific
-  color: 3DDC84
-- name: 📝 text-recognition
-  description: Text Recognition feature
-  color: fbca04
-- name: 👤 face-detection
-  description: Face Detection feature
-  color: f9d0c4
-- name: 🎭 face-mesh-detection
-  description: Face Mesh Detection feature
-  color: e99695
-- name: 🏃 pose-detection
-  description: Pose Detection feature
-  color: d4c5f9
-- name: ✂️ selfie-segmentation
-  description: Selfie Segmentation feature
-  color: bfc1c6
-- name: 📐 subject-segmentation
-  description: Subject Segmentation feature
-  color: 8b4513
-- name: 📄 document-scanner
-  description: Document Scanner feature
-  color: 2e8b57
-- name: 📱 barcode-scanning
-  description: Barcode Scanning feature
-  color: ff69b4
-- name: 🏷️ image-labeling
-  description: Image Labeling feature
-  color: 00ced1
-- name: 🔍 object-detection
-  description: Object Detection feature
-  color: dc143c
-- name: ✍️ digital-ink-recognition
-  description: Digital Ink Recognition feature
-  color: 8a2be2
-- name: ❌ needs-reproduction
-  description: Issue needs reproduction steps
-  color: FF0000
-- name: ⌛ awaiting-author
-  description: Waiting for author feedback or requested information
-  color: FBCA04
-- name: 🖇 duplicate
-  description: This issue or pull request already exists
-  color: cfd3d7
-- name: ❌ invalid
-  description: This doesn't seem right
-  color: e4e669
-- name: ☠️ wontfix
-  description: This will not be worked on
-  color: ffffff
-- name: ⏳ stale
-  description: Issue has not had recent activity
-  color: 808080
-- name: 🚧 wip
-  description: Work in progress
-  color: fbca04
-- name: 🔴 critical
-  description: Critical issue affecting core functionality
-  color: b60205
-- name: 🟠 high
-  description: High priority issue
-  color: fbca04
-- name: 🟡 medium
-  description: Medium priority issue
-  color: fef2c0
-- name: 🟢 low
-  description: Low priority issue
-  color: 0e8a16
-- name: ⚠️ breaking change
-  description: Breaking change that requires migration
-  color: d93f0b
-- name: 🎈 performance
-  description: Performance related issue or improvement
-  color: 006b75
-- name: 📦 dependencies
-  description: Pull requests that update dependencies
-  color: 0366d6
-- name: 💄 types
-  description: TypeScript type definitions or issues
-  color: 1d76db
+# =============================================================================
+# Type
+# =============================================================================
+- name: "type: bug"
+  description: "Something is not working as expected"
+  color: "D73A4A"
+- name: "type: feature"
+  description: "Introduces new functionality"
+  color: "1D76DB"
+- name: "type: enhancement"
+  description: "Improves existing functionality or behavior"
+  color: "A2EEEF"
+- name: "type: refactor"
+  description: "Restructures code without intentionally changing behavior"
+  color: "5319E7"
+- name: "type: maintenance"
+  description: "Routine maintenance, tooling, configuration, or internal project work"
+  color: "C2E0C6"
+- name: "type: documentation"
+  description: "Adds, updates, or corrects documentation"
+  color: "0075CA"
+- name: "type: test"
+  description: "Adds, updates, or fixes automated tests"
+  color: "BFDADC"
+- name: "type: cleanup"
+  description: "Removes unused code or improves project organization"
+  color: "C5DEF5"
+- name: "type: dependency"
+  description: "Adds, removes, or updates a project dependency"
+  color: "0366D6"
+- name: "type: breaking change"
+  description: "Introduces an incompatible change that may require migration"
+  color: "B60205"
+- name: "type: deprecation"
+  description: "Deprecates functionality, APIs, or implementation paths"
+  color: "8B0000"
+- name: "type: question"
+  description: "Requests clarification, guidance, or additional information"
+  color: "D876E3"
+
+# =============================================================================
+# Status
+# =============================================================================
+- name: "status: blocked"
+  description: "Progress is blocked by a dependency, decision, or external factor"
+  color: "B60205"
+- name: "status: needs information"
+  description: "Additional information is required before work can continue"
+  color: "D93F0B"
+- name: "status: needs reproduction"
+  description: "Reproduction steps or a minimal reproducible example are required"
+  color: "D93F0B"
+- name: "status: ready"
+  description: "Ready to be worked on or reviewed"
+  color: "0E8A16"
+- name: "status: in progress"
+  description: "Work is currently in progress"
+  color: "FBCA04"
+- name: "status: needs review"
+  description: "Ready for code, product, design, or technical review"
+  color: "0052CC"
+- name: "status: changes requested"
+  description: "Changes are required before the work can be approved"
+  color: "D93F0B"
+- name: "status: duplicate"
+  description: "This issue or pull request duplicates existing work"
+  color: "CFD3D7"
+- name: "status: invalid"
+  description: "This issue or pull request is incomplete, incorrect, or not actionable"
+  color: "E4E669"
+- name: "status: stale"
+  description: "This issue or pull request has had no recent activity"
+  color: "EDEDED"
+- name: "status: wontfix"
+  description: "This issue is acknowledged but will not be addressed"
+  color: "FFFFFF"
+
+# =============================================================================
+# Priority
+# =============================================================================
+- name: "priority: critical"
+  description: "Requires immediate attention due to severe user or business impact"
+  color: "B60205"
+- name: "priority: high"
+  description: "High-impact work that should be addressed soon"
+  color: "D93F0B"
+- name: "priority: medium"
+  description: "Normal-priority work"
+  color: "FBCA04"
+- name: "priority: low"
+  description: "Low-impact work that can be handled when capacity allows"
+  color: "0E8A16"
+
+# =============================================================================
+# Platform
+# =============================================================================
+- name: "platform: android"
+  description: "Specific to Android"
+  color: "3DDC84"
+- name: "platform: ios"
+  description: "Specific to iOS"
+  color: "A2AAAD"
+- name: "platform: shared"
+  description: "Affects shared or cross-platform application code"
+  color: "6F42C1"
+
+# =============================================================================
+# Technology
+# =============================================================================
+- name: "technology: kotlin"
+  description: "Specific to Kotlin code or tooling"
+  color: "7F52FF"
+- name: "technology: swift"
+  description: "Specific to Swift code or tooling"
+  color: "F05138"
+- name: "technology: react native"
+  description: "Specific to React Native"
+  color: "61DAFB"
+- name: "technology: typescript"
+  description: "Specific to TypeScript code or tooling"
+  color: "3178C6"
+
+# =============================================================================
+# Area
+# =============================================================================
+- name: "area: accessibility"
+  description: "Accessibility behavior, support, or compliance"
+  color: "D4C5F9"
+- name: "area: build"
+  description: "Build configuration, compilation, signing, packaging, or release builds"
+  color: "006B75"
+- name: "area: ci/cd"
+  description: "Continuous integration, delivery, automation, or deployment pipelines"
+  color: "0E8A16"
+- name: "area: navigation"
+  description: "Application navigation, routing, deep links, or screen transitions"
+  color: "84B6EB"
+- name: "area: performance"
+  description: "Startup time, responsiveness, memory, battery, or resource usage"
+  color: "F9C513"
+- name: "area: permissions"
+  description: "System permissions, privacy prompts, or permission handling"
+  color: "D4C5F9"
+- name: "area: release"
+  description: "Versioning, publishing, store submission, rollout, or release management"
+  color: "0E8A16"
+- name: "area: security"
+  description: "Security vulnerabilities, hardening, data protection, or privacy concerns"
+  color: "B60205"
+- name: "area: testing"
+  description: "Test infrastructure, fixtures, mocks, coverage, or test reliability"
+  color: "BFDADC"
+- name: "area: ui/ux"
+  description: "User interface, interaction, layout, or user experience"
+  color: "E99695"
+
+# =============================================================================
+# Quality and impact
+# =============================================================================
+- name: "impact: crash"
+  description: "Causes or prevents an application crash"
+  color: "B60205"
+- name: "impact: regression"
+  description: "Previously working behavior has stopped working"
+  color: "D93F0B"
+- name: "impact: user-facing"
+  description: "Directly changes or affects the user experience"
+  color: "1D76DB"
+- name: "impact: internal"
+  description: "Primarily affects internal implementation or developer workflows"
+  color: "C5DEF5"
+
+# =============================================================================
+# Pull request
+# =============================================================================
+- name: "pr: do not merge"
+  description: "Must not be merged until the blocking condition is resolved"
+  color: "B60205"
+- name: "pr: ready for review"
+  description: "The pull request is ready for review"
+  color: "0E8A16"
+- name: "pr: work in progress"
+  description: "The pull request is still under active development"
+  color: "FBCA04"
+- name: "pr: requires migration"
+  description: "Requires a data, configuration, API, or consumer migration"
+  color: "D93F0B"
+- name: "pr: requires release notes"
+  description: "Requires an entry in the changelog or release notes"
+  color: "0075CA"
+
+# =============================================================================
+# Contribution
+# =============================================================================
+- name: "contribution: good first issue"
+  description: "Suitable for first-time contributors"
+  color: "7057FF"
+- name: "contribution: help wanted"
+  description: "Additional assistance or community contributions are welcome"
+  color: "008672"

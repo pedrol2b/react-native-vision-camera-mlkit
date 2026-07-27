@@ -103,11 +103,8 @@
     "react": "19.2.3",
     "react-native": "0.86.0",
     "react-native-builder-bob": "^0.40.13",
-    "react-native-nitro-image": "0.15.1",
     "react-native-nitro-modules": "0.36.1",
     "react-native-vision-camera": "^5.1.0",
-    "react-native-vision-camera-worklets": "^5.1.0",
-    "react-native-worklets": "0.10.2",
     "release-it": "^19.0.4",
     "turbo": "^2.5.6",
     "typescript": "^5.9.2"
@@ -115,11 +112,8 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
-    "react-native-nitro-image": "*",
     "react-native-nitro-modules": "*",
-    "react-native-vision-camera": ">=5",
-    "react-native-vision-camera-worklets": "*",
-    "react-native-worklets": "*"
+    "react-native-vision-camera": ">=5"
   },
   "workspaces": [
     "example"

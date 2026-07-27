@@ -12,6 +12,16 @@ jsconfig.json
 # Local AI development context
 .context/
 
+# Personal AI tooling state (machine/user-specific, not shared project tooling)
+.claude/settings.local.json
+.claude/ecc-tools.json
+.claude/identity.json
+.claude/homunculus/
+.codex/config.toml
+
+# ECC-generated AI tooling scaffolding (not personal, kept local by preference)
+.agents/
+
 # Xcode
 #
 build/

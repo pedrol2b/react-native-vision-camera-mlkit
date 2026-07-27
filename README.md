@@ -57,7 +57,10 @@ The **static-image APIs** (`processImageTextRecognition`,
 `processImageBarcodeScanning`) don't use frame processors and don't need
 Vision Camera, Worklets, or a camera at all.
 
-> For Expo, follow the Vision Camera guide: [visioncamera.margelo.com/docs](https://visioncamera.margelo.com/docs)
+> For Expo, follow the Vision Camera guide for camera permissions/setup:
+> [visioncamera.margelo.com/docs](https://visioncamera.margelo.com/docs).
+> This library's own Expo config plugin (selective ML Kit dependencies) is
+> documented below.
 
 ## Installation
 
@@ -123,6 +126,36 @@ $VisionCameraMLKit = {
 ```
 
 Android-only keys: `faceMeshDetection`, `subjectSegmentation`, `documentScanner`.
+
+### Expo (config plugin)
+
+If you're using an Expo prebuild workflow (`expo prebuild`, EAS Build, or a
+custom dev client), a config plugin mirrors the same selective ML Kit flags
+into the generated `android/build.gradle` and `ios/Podfile` automatically, so
+you don't have to hand-edit native config. Add it to your `app.json`/
+`app.config.js` `plugins` array with the same keys as above:
+
+```json
+{
+  "expo": {
+    "plugins": [
+      [
+        "react-native-vision-camera-mlkit",
+        {
+          "textRecognition": true,
+          "barcodeScanning": true,
+          "faceDetection": false
+        }
+      ]
+    ]
+  }
+}
+```
+
+Any key you omit keeps the library's own default (see the Android/iOS
+sections above). Passing an unrecognized key throws at prebuild time instead
+of silently being ignored. Requires `@expo/config-plugins` (already a
+dependency of `expo` itself, so Expo projects have it for free).
 
 ## Usage
 

@@ -25,24 +25,37 @@ A [React Native Vision Camera](https://github.com/mrousavy/react-native-vision-c
 - iOS 12+ and Android SDK 21+
 - [react-native-vision-camera](https://www.npmjs.com/package/react-native-vision-camera) `>=5` (Nitro-based v5, not v4)
 - [react-native-nitro-modules](https://www.npmjs.com/package/react-native-nitro-modules)
-- [react-native-nitro-image](https://www.npmjs.com/package/react-native-nitro-image)
-- [react-native-vision-camera-worklets](https://www.npmjs.com/package/react-native-vision-camera-worklets)
-- [react-native-worklets](https://www.npmjs.com/package/react-native-worklets)
 
-Install Vision Camera and its Nitro/worklets dependencies:
+Install Vision Camera and its Nitro dependency:
 
 ```sh
-npm i react-native-vision-camera react-native-nitro-modules react-native-nitro-image react-native-vision-camera-worklets react-native-worklets
+npm i react-native-vision-camera react-native-nitro-modules
 cd ios && pod install
 ```
 
-Add the Babel plugin in `babel.config.js`:
+> `react-native-vision-camera` has its own peer dependencies (currently
+> `react-native-nitro-image`); follow the prompts from your package manager
+> or the [Vision Camera docs](https://visioncamera.margelo.com/docs) to
+> install those too.
+
+If you're using the **live-frame hooks** (`useTextRecognition`,
+`useBarcodeScanning`), you also need Vision Camera's frame processor
+dependencies, since those hooks run inside a `useFrameOutput` worklet:
+
+```sh
+npm i react-native-vision-camera-worklets react-native-worklets
+```
 
 ```js
+// babel.config.js
 module.exports = {
   plugins: [['react-native-worklets/plugin']],
 };
 ```
+
+The **static-image APIs** (`processImageTextRecognition`,
+`processImageBarcodeScanning`) don't use frame processors and don't need
+Vision Camera, Worklets, or a camera at all.
 
 > For Expo, follow the Vision Camera guide: [visioncamera.margelo.com/docs](https://visioncamera.margelo.com/docs)
 

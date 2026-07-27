@@ -78,6 +78,7 @@ const TerminalBottomSheet = ({
 
   return (
     <ModalBottomSheet
+      style={styles.sheetHost}
       detents={detents}
       index={index}
       onIndexChange={onIndexChange}
@@ -171,6 +172,10 @@ const styles = StyleSheet.create({
   },
   surface: {
     borderRadius: 15,
+  },
+  sheetHost: {
+    zIndex: 10,
+    elevation: 10,
   },
   handleContainer: {
     alignItems: 'center',

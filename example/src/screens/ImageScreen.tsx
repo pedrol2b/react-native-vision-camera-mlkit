@@ -1,11 +1,12 @@
 import {
   StackActions,
+  useFocusEffect,
   useNavigation,
   useRoute,
   type NavigationProp,
   type RouteProp,
 } from '@react-navigation/native';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
@@ -40,9 +41,15 @@ const ImageScreen = () => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
 
-  const { open: openTerminal } = useTerminal();
+  const { open: openTerminal, close: closeTerminal } = useTerminal();
 
   const addEntry = useTerminalStore((state) => state.addEntry);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => closeTerminal();
+    }, [closeTerminal])
+  );
 
   const BOTTOM_OFFSET = insets.bottom + 46;
 

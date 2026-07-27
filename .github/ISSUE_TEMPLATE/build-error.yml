@@ -1,7 +1,7 @@
 name: 🔧 Build Error
 description: Report build issues with react-native-vision-camera-mlkit
 title: '🔧 Build error: '
-labels: [🔧 build error]
+labels: ["type: bug", "area: build"]
 body:
   - type: dropdown
     attributes:

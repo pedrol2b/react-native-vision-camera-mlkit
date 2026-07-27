@@ -1,12 +1,13 @@
 import {
   StackActions,
+  useFocusEffect,
   useIsFocused,
   useNavigation,
   useRoute,
   type NavigationProp,
   type RouteProp,
 } from '@react-navigation/native';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSharedValue } from 'react-native-reanimated';
 import {
   type CameraRef,
@@ -37,7 +38,7 @@ const DEFAULT_ORIENTATION: Orientation = 'portrait';
 const CameraScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { params, name } = useRoute<RouteProp<RootStackParamList, 'Camera'>>();
-  const { open: openTerminal } = useTerminal();
+  const { toggle: toggleTerminal, close: closeTerminal } = useTerminal();
 
   const cameraRef = useRef<CameraRef>(null);
 
@@ -76,6 +77,12 @@ const CameraScreen = () => {
     !hasCameraPermission && requestCameraPermission();
   }, [hasCameraPermission, requestCameraPermission]);
 
+  useFocusEffect(
+    useCallback(() => {
+      return () => closeTerminal();
+    }, [closeTerminal])
+  );
+
   if (!hasCameraPermission) return <NoCameraPermissionErrorView />;
   if (!device) return <NoDeviceErrorView />;
   if (!isPluginId(params.id)) return <NoPluginErrorView />;
@@ -98,7 +105,7 @@ const CameraScreen = () => {
         torch={torchState}
         onToggleTorch={toggleTorch}
         onToggleFpsGraph={toggleFpsGraph}
-        onOpenTerminal={openTerminal}
+        onToggleTerminal={toggleTerminal}
         onOpenSettings={openSettings}
         outputOrientation={outputOrientation}
       />

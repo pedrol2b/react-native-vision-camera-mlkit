@@ -11,6 +11,7 @@ import {
   type TextRecognitionOptions,
   type TextRecognitionArguments,
   type TextRecognitionImageOptions,
+  type TextRecognitionResult,
 } from 'react-native-vision-camera-mlkit';
 ```
 
@@ -77,13 +78,21 @@ const result = await processImageTextRecognition(imageUri, {
 
 ## Result shape
 
-Text recognition returns:
+`TextRecognitionResult` is a nested hierarchy: text → blocks → lines → elements
+(→ symbols on Android). Every level carries its own `bounds`/`corners`
+geometry, already mapped back to full source coordinates (see
+[Region of Interest](../README.md#region-of-interest)).
 
-- top-level text content
-- blocks
-- lines
-- elements
-- geometry (`bounds`, `corners`) with transformed coordinates
+- `text: string` — the full recognized text.
+- `blocks: TextBlock[]`
+  - `text: string`, `bounds`, `corners`, `languages: string[]` (ISO 639-1/639-2)
+  - `lines: TextLine[]`
+    - `text: string`, `bounds`, `corners`, `languages: string[]`
+    - `confidence: number | null`, `angle: number | null` (Android only)
+    - `elements: TextElement[]`
+      - `text: string`, `bounds`, `corners`, `languages: string[]`
+      - `confidence: number | null`, `angle: number | null` (Android only)
+      - `symbols: TextSymbol[]` (Android only) — `text`, `bounds`, `corners`, `confidence`, `angle`
 
 ## iOS orientation note
 

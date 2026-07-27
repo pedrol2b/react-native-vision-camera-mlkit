@@ -16,7 +16,7 @@
 [![MIT License][license-shield]][license-url]
 [![NPM Version][npm-version-shield]][npm-version-url]
 
-A [React Native Vision Camera](https://github.com/mrousavy/react-native-vision-camera) plugin that exposes high-performance [Google ML Kit](https://developers.google.com/ml-kit) [frame output](https://visioncamera.margelo.com/docs/frame-output) features such as text recognition (OCR), face detection, barcode scanning, pose detection, and more.
+A [React Native Vision Camera](https://github.com/mrousavy/react-native-vision-camera) plugin that exposes high-performance [Google ML Kit](https://developers.google.com/ml-kit) [frame output](https://visioncamera.margelo.com/docs/frame-output) features. Ships today: text recognition (OCR) and barcode scanning. Face detection, pose detection, and other ML Kit vision features are planned — see the [roadmap](#google-ml-kit-vision-features-roadmap) below.
 
 > The example app is intentionally heavy and demo-focused. For integration details, follow the documentation below.
 
@@ -400,12 +400,18 @@ const { textRecognition } = useTextRecognition({
 
 iOS camera sensors are fixed in landscape orientation. The frame buffer stays landscape-shaped even when the UI rotates, so ML Kit needs an explicit orientation hint to rotate text correctly. On iOS, pass `outputOrientation` to `textRecognition(frame, { outputOrientation })` so ML Kit can map the buffer to upright text. Android handles rotation automatically.
 
+## Troubleshooting
+
 ### ⚠️ iOS Simulator (Apple Silicon) – Heads-up
 
 On Apple Silicon Macs, building for the **iOS Simulator (arm64)** may fail after installing this package.
 
 This is a **known limitation of Google ML Kit**, which does not currently ship an `arm64-simulator` slice for some iOS frameworks.
 The library works correctly on **physical iOS devices** and on the **iOS Simulator when running under Rosetta**.
+
+### Xcode 26.4 Build Failures (fmt / consteval)
+
+If your iOS build fails in Pods with errors referencing `fmt/include/fmt/base.h` or `FMT_USE_CONSTEVAL` after updating to Xcode 26.4, see [docs/xcode-26.4-fmt-consteval-workaround.md](docs/xcode-26.4-fmt-consteval-workaround.md) for the root cause and a `post_install` Podfile patch. This is a React Native / Xcode toolchain issue, not specific to this library.
 
 ## Google ML Kit Vision Features Roadmap
 

@@ -27,6 +27,16 @@ If you want to use Android Studio or XCode to edit the native code, you can open
 
 To edit the Java or Kotlin files, open `android` in Android studio and find the source files at `react-native-vision-camera-mlkit` under `Android`.
 
+> If you hit an iOS build failure in Pods referencing `fmt/include/fmt/base.h` or `FMT_USE_CONSTEVAL` on Xcode 26.4, see [docs/xcode-26.4-fmt-consteval-workaround.md](docs/xcode-26.4-fmt-consteval-workaround.md).
+
+### Working with the Nitro spec
+
+This library is a [Nitro Module](https://nitro.margelo.com). The native interface is defined in `src/specs/*.nitro.ts`. If you change a `.nitro.ts` spec file, regenerate the generated Swift/Kotlin/C++ bindings before rebuilding the example app:
+
+```sh
+yarn specs
+```
+
 You can use various commands from the root directory to work with the project.
 
 To start the packager, `cd` into the `example` directory, `cd example`, and then:
@@ -73,11 +83,14 @@ We follow the [conventional commits specification](https://www.conventionalcommi
 - `fix`: bug fixes, e.g. fix crash due to deprecated method.
 - `feat`: new features, e.g. add new method to the module.
 - `refactor`: code refactor, e.g. migrate from class components to hooks.
-- `docs`: changes into documentation, e.g. add usage example for the module..
+- `docs`: changes into documentation, e.g. add usage example for the module.
 - `test`: adding or updating tests, e.g. add integration tests using detox.
-- `chore`: tooling changes, e.g. change CI config.
+- `chore`: tooling changes, e.g. change dependency versions.
+- `perf`: performance improvements, e.g. optimize a hot path.
+- `ci`: CI/CD pipeline changes, e.g. update a GitHub Actions workflow.
+- `build`: build system or external dependency changes, e.g. bump the RN version.
 
-Our pre-commit hooks verify that your commit message matches this format when committing.
+Our `commit-msg` hook (via commitlint) verifies that your commit message matches this format when committing.
 
 ### Linting and tests
 
@@ -85,7 +98,7 @@ Our pre-commit hooks verify that your commit message matches this format when co
 
 We use [TypeScript](https://www.typescriptlang.org/) for type checking, [ESLint](https://eslint.org/) with [Prettier](https://prettier.io/) for linting and formatting the code, and [Jest](https://jestjs.io/) for testing.
 
-Our pre-commit hooks verify that the linter and tests pass when committing.
+Our `pre-commit` hook (via lefthook) runs ESLint and a TypeScript check on staged files. Tests aren't run automatically on commit, so run `yarn test` yourself before opening a pull request.
 
 ### Scripts
 
@@ -95,9 +108,12 @@ The `package.json` file contains various scripts for common tasks:
 - `yarn typecheck`: type-check files with TypeScript.
 - `yarn lint`: lint files with ESLint.
 - `yarn test`: run unit tests with Jest.
+- `yarn specs`: regenerate native bindings from the Nitro spec (`src/specs/*.nitro.ts`) with nitrogen.
+- `yarn clean`: remove build artifacts for the library and the example app (Android/iOS).
 - `yarn start`: start the Metro server for the example app.
 - `yarn android`: run the example app on Android.
 - `yarn ios`: run the example app on iOS.
+- `yarn prepare`: build the library for publishing with `react-native-builder-bob` (runs automatically as Yarn's `prepare` lifecycle hook after install; rarely needed manually).
 
 ### Sending a pull request
 
@@ -108,5 +124,4 @@ When you're sending a pull request:
 - Prefer small pull requests focused on one change.
 - Verify that linters and tests are passing.
 - Review the documentation to make sure it looks good.
-- Follow the pull request template when opening a pull request.
-- For pull requests that change the API or implementation, discuss with maintainers first by opening an issue.
+- For pull requests that change the API or implementation, discuss with maintainers first by opening an issue (see the [issue templates](.github/ISSUE_TEMPLATE) for bug reports, build errors, and feature requests).

@@ -104,10 +104,10 @@ const result = await processImageBarcodeScanning(imageUri, {
 
 Each barcode includes:
 
-- geometry: `bounds`, `corners`
-- identity: `format`, `formatName`, `valueType`, `valueTypeName`
+- geometry: `bounds`, `corners` (optional — may be absent for potential barcodes)
+- identity: `format`, `formatName`, `valueType`, `valueTypeName` — `format`/`valueType` are the raw ML Kit numeric codes; the `*Name` variants are the human-readable string equivalents and are what you should match against in application code
 - raw payload: `rawValue`, `displayValue`, `rawBytes`
-- `isPotential` (true for potential/undecoded barcode candidates)
+- `isPotential` (true for potential/undecoded barcode candidates; when `true`, `rawValue`/`rawBytes` may be `null`)
 - parsed payload: `value?: BarcodeParsedValue`
 
 ### Parsed value typing

@@ -59,7 +59,9 @@ representative at an online or offline event.
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported to the community leaders responsible for enforcement at [issues](https://github.com/pedrol2b/react-native-vision-camera-mlkit/issues).
+reported to the community leaders responsible for enforcement by emailing
+**pedrolbb.e@gmail.com**. Please do not report Code of Conduct violations via
+public GitHub issues, since those reports are not private.
 All complaints will be reviewed and investigated promptly and fairly.
 
 All community leaders are obligated to respect the privacy and security of the

@@ -209,6 +209,11 @@
       }
     }
   },
+  "codegenConfig": {
+    "name": "VisionCameraMLKitSpec",
+    "type": "modules",
+    "jsSrcsDir": "src/specs"
+  },
   "create-react-native-library": {
     "languages": "kotlin-objc",
     "type": "turbo-module",

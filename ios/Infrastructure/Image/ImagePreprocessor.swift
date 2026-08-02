@@ -1,10 +1,16 @@
 import Foundation
+import ImageIO
 
 #if canImport(MLKitVision) && canImport(VisionCamera)
   import MLKitVision
   import VisionCamera
 
   class ImagePreprocessor: IImagePreprocessor {
+
+    private struct DecodedStaticImage {
+      let image: UIImage
+      let sourceScaleFactor: CGFloat
+    }
 
     // Reuse CIContext across frames to avoid repeated allocation overhead
     // CIContext creation is expensive (~10-20ms), reusing reduces per-frame cost significantly
@@ -31,8 +37,7 @@ import Foundation
     private func createScaledVisionImage(
       from ciImage: CIImage,
       scaleFactor: CGFloat,
-      frameOrientation: UIImage.Orientation,
-      outputOrientation: OutputOrientation?,
+      visionOrientation: UIImage.Orientation,
       roi: DomainRegionOfInterest?
     ) -> VisionImage? {
       var workingImage = ciImage
@@ -75,10 +80,7 @@ import Foundation
       )
 
       let visionImage = VisionImage(image: uiImage)
-      visionImage.orientation = getVisionOrientation(
-        frameOrientation: frameOrientation,
-        outputOrientation: outputOrientation
-      )
+      visionImage.orientation = visionOrientation
       return visionImage
     }
 
@@ -102,6 +104,10 @@ import Foundation
 
       let effectiveScale = clampScale(options.scaleFactor)
       let frameOrientation = frame.orientation.asUIImageOrientation
+      let visionOrientation = resolveVisionOrientation(
+        frameOrientation: frameOrientation,
+        outputOrientation: options.outputOrientation
+      )
 
       if let roi = options.roi {
         guard (try? roi.validate()) != nil else {
@@ -115,8 +121,7 @@ import Foundation
         guard
           let invertedImage = createInvertedVisionImageFromFrame(
             sampleBuffer: sampleBuffer,
-            frameOrientation: frameOrientation,
-            outputOrientation: options.outputOrientation,
+            visionOrientation: visionOrientation,
             scaleFactor: effectiveScale,
             roi: options.roi
           )
@@ -128,8 +133,7 @@ import Foundation
         guard
           let convertedImage = createVisionImageFromFrame(
             sampleBuffer: sampleBuffer,
-            frameOrientation: frameOrientation,
-            outputOrientation: options.outputOrientation,
+            visionOrientation: visionOrientation,
             scaleFactor: effectiveScale,
             roi: options.roi
           )
@@ -171,7 +175,7 @@ import Foundation
       let metadata = ImageMetadata(
         width: width,
         height: height,
-        orientation: frameOrientation,
+        orientation: visionOrientation,
         isInverted: options.invertColors,
         offsetX: offsetX,
         offsetY: offsetY,
@@ -183,8 +187,7 @@ import Foundation
 
     private func createVisionImageFromFrame(
       sampleBuffer: CMSampleBuffer,
-      frameOrientation: UIImage.Orientation,
-      outputOrientation: OutputOrientation?,
+      visionOrientation: UIImage.Orientation,
       scaleFactor: CGFloat,
       roi: DomainRegionOfInterest?
     ) -> VisionImage? {
@@ -213,8 +216,7 @@ import Foundation
           guard
             let convertedImage = convertToSupportedFormat(
               pixelBuffer: pixelBuffer,
-              frameOrientation: frameOrientation,
-              outputOrientation: outputOrientation,
+              visionOrientation: visionOrientation,
               scaleFactor: scaleFactor,
               roi: roi
             )
@@ -228,17 +230,13 @@ import Foundation
 
       // Fallback: Use CMSampleBuffer directly (for BGRA, scaleFactor == 1.0, and no ROI)
       let image = VisionImage(buffer: sampleBuffer)
-      image.orientation = getVisionOrientation(
-        frameOrientation: frameOrientation,
-        outputOrientation: outputOrientation
-      )
+      image.orientation = visionOrientation
       return image
     }
 
     private func createInvertedVisionImageFromFrame(
       sampleBuffer: CMSampleBuffer,
-      frameOrientation: UIImage.Orientation,
-      outputOrientation: OutputOrientation?,
+      visionOrientation: UIImage.Orientation,
       scaleFactor: CGFloat,
       roi: DomainRegionOfInterest?
     ) -> VisionImage? {
@@ -256,13 +254,12 @@ import Foundation
       return createScaledVisionImage(
         from: invertedCIImage,
         scaleFactor: scaleFactor,
-        frameOrientation: frameOrientation,
-        outputOrientation: outputOrientation,
+        visionOrientation: visionOrientation,
         roi: roi
       )
     }
 
-    private func getVisionOrientation(
+    private func resolveVisionOrientation(
       frameOrientation: UIImage.Orientation,
       outputOrientation: OutputOrientation?
     )
@@ -290,8 +287,7 @@ import Foundation
 
     private func convertToSupportedFormat(
       pixelBuffer: CVPixelBuffer,
-      frameOrientation: UIImage.Orientation,
-      outputOrientation: OutputOrientation?,
+      visionOrientation: UIImage.Orientation,
       scaleFactor: CGFloat,
       roi: DomainRegionOfInterest?
     ) -> VisionImage? {
@@ -302,8 +298,7 @@ import Foundation
       return createScaledVisionImage(
         from: ciImage,
         scaleFactor: scaleFactor,
-        frameOrientation: frameOrientation,
-        outputOrientation: outputOrientation,
+        visionOrientation: visionOrientation,
         roi: roi
       )
     }
@@ -311,24 +306,29 @@ import Foundation
     func preprocessImage(imageFile: URL, options: ImagePreprocessingOptions)
       -> ProcessedImage?
     {
-      guard let imageData = try? Data(contentsOf: imageFile),
-        let uiImage = UIImage(data: imageData)
+      guard
+        let decoded = decodeStaticImage(
+          imageFile,
+          explicitOrientation: options.orientation?.asUIImageOrientation
+        )
       else {
         return nil
       }
 
-      // Use user-provided orientation override when available.
-      // Otherwise use the resulting UIImage orientation after processing.
-      let requestedOrientation = options.orientation?.asUIImageOrientation
+      // An explicit orientation describes the source pixels and overrides embedded EXIF.
+      // Normalize either orientation into pixels before resolving ROI coordinates.
+      let effectiveOrientation =
+        options.orientation?.asUIImageOrientation ?? decoded.image.imageOrientation
+      guard let normalizedImage = decoded.image.normalized(to: effectiveOrientation) else {
+        return nil
+      }
       let effectiveScale = clampScale(options.scaleFactor)
 
-      var processedImage = uiImage
+      var processedImage = normalizedImage
       var offsetX: CGFloat = 0
       var offsetY: CGFloat = 0
 
-      // Apply optional ROI crop, right after decode/orientation-resolution and before
-      // scale/invert (UIImage.imageOrientation metadata already encodes orientation for the
-      // static path, so there's no separate rotate step here).
+      // Apply optional ROI crop in normalized, visually oriented pixel coordinates.
       if let roi = options.roi {
         guard (try? roi.validate()) != nil else {
           return nil
@@ -349,12 +349,12 @@ import Foundation
           return nil
         }
 
-        offsetX = pixelRect.origin.x
-        offsetY = pixelRect.origin.y
+        offsetX = pixelRect.origin.x / decoded.sourceScaleFactor
+        offsetY = pixelRect.origin.y / decoded.sourceScaleFactor
         processedImage = UIImage(
           cgImage: croppedCGImage,
           scale: processedImage.scale,
-          orientation: processedImage.imageOrientation
+          orientation: .up
         )
       }
 
@@ -370,8 +370,7 @@ import Foundation
 
       // Create VisionImage
       let visionImage = VisionImage(image: processedImage)
-      let visionOrientation = requestedOrientation ?? processedImage.imageOrientation
-      visionImage.orientation = visionOrientation
+      visionImage.orientation = .up
 
       let pixelWidth =
         processedImage.cgImage?.width
@@ -383,14 +382,75 @@ import Foundation
       let metadata = ImageMetadata(
         width: pixelWidth,
         height: pixelHeight,
-        orientation: visionOrientation,
+        orientation: .up,
         isInverted: options.invertColors,
         offsetX: offsetX,
         offsetY: offsetY,
-        scaleFactor: effectiveScale
+        scaleFactor: decoded.sourceScaleFactor * effectiveScale
       )
 
       return ProcessedImage(image: visionImage, metadata: metadata)
+    }
+
+    private func decodeStaticImage(
+      _ imageFile: URL,
+      explicitOrientation: UIImage.Orientation?
+    ) -> DecodedStaticImage? {
+      guard
+        let source = CGImageSourceCreateWithURL(imageFile as CFURL, nil),
+        let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil)
+          as? [CFString: Any],
+        let width = properties[kCGImagePropertyPixelWidth] as? Int,
+        let height = properties[kCGImagePropertyPixelHeight] as? Int,
+        let decodePlan = StaticImageDecodePlan.make(
+          sourceWidth: width,
+          sourceHeight: height
+        )
+      else {
+        return nil
+      }
+
+      let thumbnailOptions: [CFString: Any] = [
+        kCGImageSourceCreateThumbnailFromImageAlways: true,
+        kCGImageSourceCreateThumbnailWithTransform: explicitOrientation == nil,
+        kCGImageSourceThumbnailMaxPixelSize: decodePlan.thumbnailMaxPixelSize,
+        kCGImageSourceShouldCacheImmediately: true,
+      ]
+
+      guard
+        let thumbnail = CGImageSourceCreateThumbnailAtIndex(
+          source,
+          0,
+          thumbnailOptions as CFDictionary
+        )
+      else {
+        return nil
+      }
+
+      guard
+        StaticImageLimits.acceptsDecoded(
+          width: thumbnail.width,
+          height: thumbnail.height
+        )
+      else {
+        return nil
+      }
+
+      let actualScale = CGFloat(
+        decodePlan.sourceScaleFactor(
+          decodedWidth: thumbnail.width,
+          decodedHeight: thumbnail.height
+        )
+      )
+
+      return DecodedStaticImage(
+        image: UIImage(
+          cgImage: thumbnail,
+          scale: 1,
+          orientation: explicitOrientation ?? .up
+        ),
+        sourceScaleFactor: actualScale
+      )
     }
 
     private func scaleUIImage(_ image: UIImage, scaleFactor: CGFloat) -> UIImage {

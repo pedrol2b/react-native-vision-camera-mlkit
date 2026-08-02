@@ -2,6 +2,60 @@ import { validateRegionOfInterest } from '../core/validateRegionOfInterest';
 import type { RegionOfInterest } from '../core/types';
 
 describe('validateRegionOfInterest', () => {
+  it.each([null, [], 'not-an-object', 42])(
+    'rejects a non-object ROI: %p',
+    (roi) => {
+      expect(() => validateRegionOfInterest(roi)).toThrow(
+        'Invalid RegionOfInterest: expected a plain object.'
+      );
+    }
+  );
+
+  it.each(['x', 'y', 'width', 'height'] as const)(
+    'rejects an ROI missing its own %s field',
+    (missingField) => {
+      const roi = { x: 0, y: 0, width: 1, height: 1 };
+      delete roi[missingField];
+
+      expect(() => validateRegionOfInterest(roi)).toThrow(
+        'Invalid RegionOfInterest: x, y, width, and height must be own finite numbers.'
+      );
+    }
+  );
+
+  it.each([
+    { x: Number.NaN, y: 0, width: 1, height: 1 },
+    { x: 0, y: Number.POSITIVE_INFINITY, width: 1, height: 1 },
+    { x: 0, y: 0, width: Number.NEGATIVE_INFINITY, height: 1 },
+    { x: 0, y: 0, width: 1, height: Number.NaN },
+  ])('rejects non-finite ROI dimensions: %p', (roi) => {
+    expect(() => validateRegionOfInterest(roi)).toThrow(
+      'Invalid RegionOfInterest: x, y, width, and height must be own finite numbers.'
+    );
+  });
+
+  it('rejects an unsupported ROI unit', () => {
+    expect(() =>
+      validateRegionOfInterest({
+        x: 0,
+        y: 0,
+        width: 1,
+        height: 1,
+        unit: 'view',
+      })
+    ).toThrow(
+      'Invalid RegionOfInterest: unit must be "normalized" or "pixel" when provided.'
+    );
+  });
+
+  it('rejects fields inherited from another object', () => {
+    const inheritedRoi = Object.create({ x: 0, y: 0, width: 1, height: 1 });
+
+    expect(() => validateRegionOfInterest(inheritedRoi)).toThrow(
+      'Invalid RegionOfInterest: expected a plain object.'
+    );
+  });
+
   it('accepts a valid normalized region', () => {
     expect(() =>
       validateRegionOfInterest({ x: 0.25, y: 0.25, width: 0.5, height: 0.5 })

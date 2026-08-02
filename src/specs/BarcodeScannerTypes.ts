@@ -1,4 +1,5 @@
 import type { BoundingBox, Corner } from '../core/types';
+import type { AnyMap } from 'react-native-nitro-modules';
 import type {
   BarcodeFormat,
   BarcodeValueTypeName,
@@ -52,6 +53,12 @@ export interface BarcodeScannerBarcode {
    * Raw byte payload when available.
    */
   rawBytes?: number[];
+
+  /**
+   * Parsed ML Kit barcode payload. This stays untyped at the Nitro boundary
+   * because its public representation is a discriminated union.
+   */
+  value?: AnyMap;
 
   /**
    * Whether this is an undecoded potential barcode.

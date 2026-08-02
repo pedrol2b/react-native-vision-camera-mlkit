@@ -1,5 +1,8 @@
 buildscript {
   ext {
+    def v2FeaturesEnabled =
+      !Boolean.parseBoolean(System.getenv("VISION_CAMERA_MLKIT_DISABLE_V2_FEATURES"))
+
     buildToolsVersion = "36.0.0"
     minSdkVersion = 24
     compileSdkVersion = 36
@@ -9,11 +12,11 @@ buildscript {
 
     set('react-native-vision-camera-mlkit', [
       mlkit: [
-        textRecognition          : true,
-        textRecognitionChinese   : true,
-        textRecognitionDevanagari: true,
-        textRecognitionJapanese  : true,
-        textRecognitionKorean    : true,
+        textRecognition          : v2FeaturesEnabled,
+        textRecognitionChinese   : v2FeaturesEnabled,
+        textRecognitionDevanagari: v2FeaturesEnabled,
+        textRecognitionJapanese  : v2FeaturesEnabled,
+        textRecognitionKorean    : v2FeaturesEnabled,
         faceDetection            : false,
         faceMeshDetection        : false,
         poseDetection            : false,
@@ -21,7 +24,7 @@ buildscript {
         selfieSegmentation       : false,
         subjectSegmentation      : false,
         documentScanner          : false,
-        barcodeScanning          : true,
+        barcodeScanning          : v2FeaturesEnabled,
         imageLabeling            : false,
         objectDetection          : false,
         digitalInkRecognition    : false,

@@ -17,6 +17,7 @@ import com.visioncameramlkit.domain.models.ImagePreprocessingOptions
 import com.visioncameramlkit.domain.models.Orientation
 import com.visioncameramlkit.domain.models.ProcessedImage
 import com.visioncameramlkit.domain.models.RegionOfInterest
+import com.visioncameramlkit.domain.models.StaticImageLimits
 import com.visioncameramlkit.domain.models.resolveToPixelRect
 import com.visioncameramlkit.domain.services.IImagePreprocessor
 import java.io.File
@@ -91,6 +92,19 @@ class ImagePreprocessor : IImagePreprocessor {
     imageFile: File,
     options: ImagePreprocessingOptions,
   ): ProcessedImage {
+    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+    BitmapFactory.decodeFile(imageFile.absolutePath, bounds)
+    require(bounds.outWidth > 0 && bounds.outHeight > 0) {
+      "Failed to read static image dimensions"
+    }
+    require(
+      bounds.outWidth <= StaticImageLimits.MAX_DIMENSION &&
+        bounds.outHeight <= StaticImageLimits.MAX_DIMENSION &&
+        bounds.outWidth.toLong() * bounds.outHeight.toLong() <= StaticImageLimits.MAX_PIXEL_COUNT,
+    ) {
+      "Static image exceeds the 4 MP or 4,096 px dimension limit."
+    }
+
     val bitmap =
       BitmapFactory.decodeFile(imageFile.absolutePath)
         ?: throw UnsupportedOperationException("Failed to decode image file")
@@ -100,33 +114,34 @@ class ImagePreprocessor : IImagePreprocessor {
     val effectiveOrientation = options.orientation ?: readExifOrientation(imageFile)
 
     val rotatedBitmap = rotateBitmap(bitmap, effectiveOrientation)
+    // Bitmap.createBitmap returns the source instance itself when no transform is
+    // actually applied (e.g. no rotation needed), so only recycle on a genuine copy.
+    if (rotatedBitmap !== bitmap) bitmap.recycle()
+
     val effectiveScale = clampScale(options.scaleFactor)
 
     val (croppedBitmap, cropRect) = cropToRegionOfInterest(rotatedBitmap, options.roi)
+    if (croppedBitmap !== rotatedBitmap) rotatedBitmap.recycle()
+
+    val scaledBitmap =
+      if (effectiveScale < 1.0f) {
+        croppedBitmap.scale(
+          (croppedBitmap.width * effectiveScale).toInt(),
+          (croppedBitmap.height * effectiveScale).toInt(),
+          false,
+        )
+      } else {
+        croppedBitmap
+      }
+    if (scaledBitmap !== croppedBitmap) croppedBitmap.recycle()
 
     val processedBitmap =
       if (options.invertColors) {
-        val scaledBitmap =
-          if (effectiveScale < 1.0f) {
-            croppedBitmap.scale(
-              (croppedBitmap.width * effectiveScale).toInt(),
-              (croppedBitmap.height * effectiveScale).toInt(),
-              false,
-            )
-          } else {
-            croppedBitmap
-          }
-        invertBitmap(scaledBitmap)
+        val invertedBitmap = invertBitmap(scaledBitmap)
+        scaledBitmap.recycle()
+        invertedBitmap
       } else {
-        if (effectiveScale < 1.0f) {
-          croppedBitmap.scale(
-            (croppedBitmap.width * effectiveScale).toInt(),
-            (croppedBitmap.height * effectiveScale).toInt(),
-            false,
-          )
-        } else {
-          croppedBitmap
-        }
+        scaledBitmap
       }
 
     val inputImage = InputImage.fromBitmap(processedBitmap, 0)

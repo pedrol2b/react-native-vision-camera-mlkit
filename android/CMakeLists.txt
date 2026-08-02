@@ -34,7 +34,6 @@ target_sources(
 find_library(LOG_LIB log)
 find_package(fbjni REQUIRED)
 find_package(ReactAndroid REQUIRED)
-find_package(react-native-nitro-image REQUIRED)
 find_package(react-native-nitro-modules REQUIRED)
 find_package(react-native-vision-camera REQUIRED)
 
@@ -44,7 +43,6 @@ target_link_libraries(
   android
   fbjni::fbjni
   ReactAndroid::jsi
-  react-native-nitro-image::NitroImage
   react-native-nitro-modules::NitroModules
   react-native-vision-camera::VisionCamera
 )

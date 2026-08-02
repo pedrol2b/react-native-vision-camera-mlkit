@@ -41,8 +41,6 @@ export type BarcodeScanningImageOptions = ImageProcessingBaseOptions & {
    * For potential barcodes, `rawValue` and `rawBytes` may be null.
    */
   enableAllPotentialBarcodes?: boolean;
-  /** Optional image downscaling for performance optimization. Clamped to [0.9, 1.0]. */
-  scaleFactor?: number;
 };
 
 export type BarcodeScanningArguments = MLKitBaseArguments & {};

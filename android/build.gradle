@@ -188,15 +188,14 @@ dependencies {
   implementation "androidx.exifinterface:exifinterface:1.3.7"
 
   // ===== GoogleMLKit Vision =====
-  // Only include dependencies for enabled features
+  // Base SDKs for the two v2 features are compile-time dependencies because
+  // their public types are referenced by unconditional Kotlin sources. Feature
+  // flags still control runtime availability; optional OCR language models stay
+  // selective so consumers can trim those larger model artifacts.
 
   // Text recognition v2
   // https://developers.google.com/ml-kit/vision/text-recognition/v2/android
-  // Base text-recognition is required whenever any text recognition variant is enabled,
-  // as it provides shared types (TextRecognizer, TextRecognizerOptions, etc.)
-  if (anyTextRecognition) {
-    implementation "com.google.mlkit:text-recognition:16.0.1"
-  }
+  implementation "com.google.mlkit:text-recognition:16.0.1"
   if (mlkitConfig.textRecognitionChinese) {
     implementation "com.google.mlkit:text-recognition-chinese:16.0.1"
   }
@@ -251,9 +250,7 @@ dependencies {
 
   // Barcode scanning
   // https://developers.google.com/ml-kit/vision/barcode-scanning/android
-  if (mlkitConfig.barcodeScanning) {
-    implementation "com.google.mlkit:barcode-scanning:17.3.0"
-  }
+  implementation "com.google.mlkit:barcode-scanning:17.3.0"
 
   // Image labeling (Base Model) -> Custom models will be added soon
   // https://developers.google.com/ml-kit/vision/image-labeling/android

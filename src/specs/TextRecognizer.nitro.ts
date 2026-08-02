@@ -19,4 +19,9 @@ export interface TextRecognizer
     frame: Frame,
     args?: TextRecognitionArguments
   ): TextRecognitionResult;
+
+  /**
+   * Runs ML Kit text recognition on a static image URI.
+   */
+  recognizeImage(uri: string): Promise<TextRecognitionResult>;
 }

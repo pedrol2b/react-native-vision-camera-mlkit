@@ -2,9 +2,9 @@ name: Build Package
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, develop]
   push:
-    branches: [main]
+    branches: [main, develop]
 
 permissions:
   contents: read
@@ -22,6 +22,16 @@ jobs:
 
       - name: Setup environment
         uses: ./.github/actions/setup
+
+      - name: Verify generated Nitro specs are current
+        run: |
+          yarn specs
+          if [ -n "$(git status --porcelain --untracked-files=all -- nitrogen)" ]; then
+            echo "Generated Nitro specs are out of date. Run 'yarn specs' and commit the results."
+            git status --short --untracked-files=all -- nitrogen
+            git diff -- nitrogen
+            exit 1
+          fi
 
       - name: Build library
         run: yarn prepare

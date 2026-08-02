@@ -14,6 +14,7 @@ extension BarcodeScannerOptions {
     return ImagePreprocessingOptions(
       invertColors: invertColors ?? false,
       scaleFactor: CGFloat(scaleFactor ?? 1.0),
+      orientation: orientation?.toDomainOrientation(),
       roi: roi?.toDomainRegionOfInterest()
     )
   }

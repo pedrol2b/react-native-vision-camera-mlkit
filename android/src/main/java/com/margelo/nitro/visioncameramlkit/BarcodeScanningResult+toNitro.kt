@@ -16,11 +16,11 @@ private fun com.visioncameramlkit.domain.models.BarcodeData.toNitroBarcode(): Ba
     rawValue = rawValue,
     displayValue = displayValue,
     rawBytes = rawBytes?.map { it.toDouble() }?.toDoubleArray(),
+    value = value?.toNitroAnyMap(),
     isPotential = isPotential,
   )
 
-private fun String.toNitroBarcodeFormat(): BarcodeFormat =
-  runCatching { BarcodeFormat.valueOf(this) }.getOrDefault(BarcodeFormat.UNKNOWN)
+private fun String.toNitroBarcodeFormat(): BarcodeFormat = runCatching { BarcodeFormat.valueOf(this) }.getOrDefault(BarcodeFormat.UNKNOWN)
 
 private fun String.toNitroBarcodeValueTypeName(): BarcodeValueTypeName =
   runCatching { BarcodeValueTypeName.valueOf(this) }.getOrDefault(BarcodeValueTypeName.TYPE_UNKNOWN)

@@ -2,9 +2,13 @@
 
 This page documents the Text Recognition API in more detail than the README quick-start.
 
+Text recognition is implemented by configured Nitro recognizers for both live
+frames and static images.
+
 ## Imports
 
 ```ts
+import { useFrameOutput } from 'react-native-vision-camera';
 import {
   useTextRecognition,
   processImageTextRecognition,
@@ -49,7 +53,7 @@ const frameOutput = useFrameOutput({
 - `scaleFactor?: number` (`0.9`-`1.0`)
 - `invertColors?: boolean`
 - `roi?: RegionOfInterest` (crop processing to a rectangle of the frame; see the [Region of Interest](../README.md#region-of-interest) section in the main README)
-- `frameProcessInterval?: number` (deprecated; throttle frames manually inside `onFrame` instead)
+- `frameProcessInterval?: number` (deprecated compatibility field; v2 does not use it to throttle processing)
 
 ### Frame arguments
 
@@ -57,7 +61,8 @@ const frameOutput = useFrameOutput({
 
 ## Static Image Processing
 
-Use `processImageTextRecognition(uri, options)` for gallery files / local images.
+Use `processImageTextRecognition(uri, options)` for local images. Each call
+creates a Nitro recognizer with `options` and runs recognition asynchronously.
 
 ```ts
 const result = await processImageTextRecognition(imageUri, {
@@ -71,10 +76,17 @@ const result = await processImageTextRecognition(imageUri, {
 ### Image options
 
 - `language?: 'LATIN' | 'CHINESE' | 'DEVANAGARI' | 'JAPANESE' | 'KOREAN'`
-- `orientation?: 'portrait' | 'portrait-upside-down' | 'landscape-left' | 'landscape-right'`
+- `orientation?: 'portrait' | 'portrait-upside-down' | 'landscape-left' | 'landscape-right'` (overrides EXIF orientation; omit it to use image metadata)
 - `invertColors?: boolean`
 - `scaleFactor?: number` (`0.9`-`1.0`)
 - `roi?: RegionOfInterest` (crop processing to a rectangle of the image; see the [Region of Interest](../README.md#region-of-interest) section in the main README)
+
+Static images must be local and readable. iOS accepts an absolute path or a
+`file://` URI. Android also accepts `content://` URIs, which are copied to a
+temporary cache file. Remote URLs and platform-library schemes such as
+`ph://` are not supported. Static processing does not require Worklets or a
+camera, but VisionCamera v5 and Nitro Modules remain native package
+dependencies.
 
 ## Result shape
 
@@ -101,16 +113,23 @@ Android rotation is handled automatically.
 
 ## Errors
 
-For static image processing, promise rejections can use:
+Static Nitro calls reject invalid schemes, missing or unreadable files, and
+images the platform decoder cannot read. The package exports these
+compatibility error-message constants:
 
 - `IMAGE_NOT_FOUND_ERROR`
 - `INVALID_URI_ERROR`
 - `IMAGE_PROCESSING_FAILED_ERROR`
 - `UNSUPPORTED_IMAGE_FORMAT_ERROR`
 
+These constants are retained for source compatibility and user-facing fallback
+messages. Nitro rejection messages are platform-specific and are not guaranteed
+to equal these strings; do not branch on `error.message`.
+
 ## Performance guidance
 
-- Always call `frame.dispose()` exactly once per frame inside `onFrame`.
-- Throttle by skipping frames manually inside `onFrame` instead of relying on
-  a native-side interval.
+- Always call `frame.dispose()` exactly once for every frame, including frames
+  you skip; keep disposal in a `finally` block around the whole callback.
+- `frameProcessInterval` has no throttling effect in v2. Decide whether to call
+  the recognizer inside `onFrame`, while still disposing every frame.
 - Keep `scaleFactor` as high as possible for OCR accuracy.

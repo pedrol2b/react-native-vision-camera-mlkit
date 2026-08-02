@@ -23,7 +23,8 @@
       "env": [
         "RCT_NEW_ARCH_ENABLED",
         "RCT_USE_RN_DEP",
-        "RCT_USE_PREBUILT_RNCORE"
+        "RCT_USE_PREBUILT_RNCORE",
+        "IOS_DESTINATION"
       ],
       "inputs": [
         "package.json",

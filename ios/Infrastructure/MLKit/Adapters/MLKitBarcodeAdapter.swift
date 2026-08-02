@@ -32,8 +32,8 @@ import Foundation
           data: [
             "ssid": wifi.ssid,
             "password": wifi.password,
-            "type": String(describing: wifi.type),
-            "typeName": String(describing: wifi.type),
+            "encryptionType": Int(wifi.type.rawValue),
+            "encryptionTypeName": wifiEncryptionName(wifi.type),
           ]
         )
       }
@@ -65,8 +65,8 @@ import Foundation
             "address": email.address,
             "subject": email.subject,
             "body": email.body,
-            "type": String(describing: email.type),
-            "typeName": String(describing: email.type),
+            "type": Int(email.type.rawValue),
+            "typeName": emailTypeName(email.type),
           ]
         )
       }
@@ -76,8 +76,8 @@ import Foundation
           type: "TYPE_PHONE",
           data: [
             "number": phone.number,
-            "type": String(describing: phone.type),
-            "typeName": String(describing: phone.type),
+            "type": Int(phone.type.rawValue),
+            "typeName": phoneTypeName(phone.type),
           ]
         )
       }
@@ -114,29 +114,9 @@ import Foundation
             "name": contactInfo.name.map { toPersonName($0) },
             "organization": contactInfo.organization,
             "title": contactInfo.jobTitle,
-            "phones": contactInfo.phones?.map { phone in
-              [
-                "number": phone.number,
-                "type": String(describing: phone.type),
-                "typeName": String(describing: phone.type),
-              ]
-            },
-            "emails": contactInfo.emails?.map { email in
-              [
-                "address": email.address,
-                "subject": email.subject,
-                "body": email.body,
-                "type": String(describing: email.type),
-                "typeName": String(describing: email.type),
-              ]
-            },
-            "addresses": contactInfo.addresses?.map { address in
-              [
-                "addressLines": address.addressLines,
-                "type": String(describing: address.type),
-                "typeName": String(describing: address.type),
-              ]
-            },
+            "phones": contactInfo.phones?.map { toPhone($0) },
+            "emails": contactInfo.emails?.map { toEmail($0) },
+            "addresses": contactInfo.addresses?.map { toAddress($0) },
             "urls": contactInfo.urls,
           ]
         )
@@ -165,9 +145,18 @@ import Foundation
       }
 
       if let rawValue = barcode.rawValue {
+        let type = valueTypeName(barcode.valueType)
+        let dataKey: String
+        switch type {
+        case "TYPE_TEXT": dataKey = "text"
+        case "TYPE_PRODUCT": dataKey = "product"
+        case "TYPE_ISBN": dataKey = "isbn"
+        default: dataKey = "rawValue"
+        }
+
         return BarcodeParsedValue(
-          type: valueTypeName(barcode.valueType),
-          data: ["value": rawValue]
+          type: type,
+          data: [dataKey: rawValue]
         )
       }
 
@@ -183,6 +172,32 @@ import Foundation
         "middle": name.middle,
         "last": name.last,
         "suffix": name.suffix,
+      ]
+    }
+
+    private static func toPhone(_ phone: BarcodePhone) -> [String: Any?] {
+      return [
+        "number": phone.number,
+        "type": Int(phone.type.rawValue),
+        "typeName": phoneTypeName(phone.type),
+      ]
+    }
+
+    private static func toEmail(_ email: BarcodeEmail) -> [String: Any?] {
+      return [
+        "address": email.address,
+        "subject": email.subject,
+        "body": email.body,
+        "type": Int(email.type.rawValue),
+        "typeName": emailTypeName(email.type),
+      ]
+    }
+
+    private static func toAddress(_ address: BarcodeAddress) -> [String: Any?] {
+      return [
+        "addressLines": address.addressLines,
+        "type": Int(address.type.rawValue),
+        "typeName": addressTypeName(address.type),
       ]
     }
 
@@ -253,7 +268,8 @@ import Foundation
       }
     }
 
-    private static func valueTypeName(_ valueType: MLKitBarcodeScanning.BarcodeValueType) -> String {
+    private static func valueTypeName(_ valueType: MLKitBarcodeScanning.BarcodeValueType) -> String
+    {
       switch Int(valueType.rawValue) {
       case 1: return "TYPE_CONTACT_INFO"
       case 2: return "TYPE_EMAIL"
@@ -268,6 +284,41 @@ import Foundation
       case 11: return "TYPE_CALENDAR_EVENT"
       case 12: return "TYPE_DRIVER_LICENSE"
       default: return "TYPE_UNKNOWN"
+      }
+    }
+
+    private static func wifiEncryptionName(_ type: BarcodeWiFiEncryptionType) -> String {
+      switch Int(type.rawValue) {
+      case 1: return "OPEN"
+      case 2: return "WPA"
+      case 3: return "WEP"
+      default: return "UNKNOWN"
+      }
+    }
+
+    private static func phoneTypeName(_ type: BarcodePhoneType) -> String {
+      switch Int(type.rawValue) {
+      case 1: return "WORK"
+      case 2: return "HOME"
+      case 3: return "FAX"
+      case 4: return "MOBILE"
+      default: return "UNKNOWN"
+      }
+    }
+
+    private static func emailTypeName(_ type: BarcodeEmailType) -> String {
+      switch Int(type.rawValue) {
+      case 1: return "WORK"
+      case 2: return "HOME"
+      default: return "UNKNOWN"
+      }
+    }
+
+    private static func addressTypeName(_ type: BarcodeAddressType) -> String {
+      switch Int(type.rawValue) {
+      case 1: return "WORK"
+      case 2: return "HOME"
+      default: return "UNKNOWN"
       }
     }
   }

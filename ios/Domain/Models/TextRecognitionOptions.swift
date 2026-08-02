@@ -1,14 +1,13 @@
 import Foundation
-import UIKit
 
 struct TextRecognitionOptions {
-  let language: TextRecognitionLanguage
+  let language: DomainTextRecognitionLanguage
   let invertColors: Bool
   let outputOrientation: OutputOrientation?
   let scaleFactor: CGFloat
 
   init(
-    language: TextRecognitionLanguage = .latin,
+    language: DomainTextRecognitionLanguage = .latin,
     invertColors: Bool = false,
     outputOrientation: OutputOrientation? = nil,
     scaleFactor: CGFloat = 1.0
@@ -20,7 +19,7 @@ struct TextRecognitionOptions {
   }
 }
 
-enum TextRecognitionLanguage: String {
+enum DomainTextRecognitionLanguage: String {
   case latin = "LATIN"
   case chinese = "CHINESE"
   case devanagari = "DEVANAGARI"

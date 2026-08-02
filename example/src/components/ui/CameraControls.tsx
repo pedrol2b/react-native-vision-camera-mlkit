@@ -9,7 +9,7 @@ import {
 } from 'lucide-react-native';
 import { StyleSheet, View } from 'react-native';
 import type { SharedValue } from 'react-native-reanimated';
-import type { Orientation } from 'react-native-vision-camera';
+import type { Orientation } from 'react-native-vision-camera-mlkit';
 
 /** Defaults to dark theme for the CameraView */
 import { darkTheme as theme } from '../../styles/themes';
@@ -23,7 +23,7 @@ type CameraControlsProps = {
   onToggleTorch: () => void;
   onToggleFpsGraph: () => void;
   onOpenSettings: () => void;
-  onOpenTerminal: () => void;
+  onToggleTerminal: () => void;
   outputOrientation: SharedValue<Orientation>;
 };
 
@@ -33,7 +33,7 @@ const CameraControls = ({
   onToggleTorch,
   onToggleFpsGraph,
   onOpenSettings,
-  onOpenTerminal,
+  onToggleTerminal,
   outputOrientation,
 }: CameraControlsProps) => {
   const Torch = torch === 'on' ? Zap : ZapOff;
@@ -71,9 +71,9 @@ const CameraControls = ({
         <Gauge size={24} color={theme.colors.icon.primary} />
       </CameraButton>
       <CameraButton
-        onPress={onOpenTerminal}
-        accessibilityLabel="Open terminal"
-        accessibilityHint="Shows the terminal with ML Kit results"
+        onPress={onToggleTerminal}
+        accessibilityLabel="Toggle terminal"
+        accessibilityHint="Shows or hides the terminal with ML Kit results"
         outputOrientation={outputOrientation}
       >
         <Terminal size={24} color={theme.colors.icon.primary} />

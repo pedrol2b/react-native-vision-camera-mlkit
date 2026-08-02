@@ -1,7 +1,10 @@
+import { useMemo } from 'react';
 import type { Frame } from 'react-native-vision-camera';
-import { NativeBridge } from '../../core/NativeBridge';
 import { MLKIT_FEATURE_KEYS } from '../../core/constants';
+import { normalizeImageUri } from '../../core/normalizeImageUri';
+import { PluginFactory } from '../../core/PluginFactory';
 import { useMLKitPlugin } from '../../hooks/useMLKitPlugin';
+import type { TextRecognizer } from '../../specs/TextRecognizer.nitro';
 import type {
   TextRecognitionArguments,
   TextRecognitionImageOptions,
@@ -19,11 +22,16 @@ export const processImageTextRecognition = async (
   uri: string,
   options: TextRecognitionImageOptions = {}
 ): Promise<TextRecognitionResult> => {
-  return await NativeBridge.processImage(
+  const recognizer = PluginFactory.initPlugin(
     MLKIT_FEATURE_KEYS.TEXT_RECOGNITION,
-    uri,
     options
-  );
+  ) as TextRecognizer;
+
+  try {
+    return await recognizer.recognizeImage(normalizeImageUri(uri));
+  } finally {
+    recognizer.dispose();
+  }
 };
 
 /**
@@ -32,17 +40,23 @@ export const processImageTextRecognition = async (
  * @returns Plugin object with textRecognition method.
  */
 export const useTextRecognition = (options: TextRecognitionOptions = {}) => {
-  const plugin = useMLKitPlugin(MLKIT_FEATURE_KEYS.TEXT_RECOGNITION, options);
+  const plugin = useMLKitPlugin<TextRecognizer>(
+    MLKIT_FEATURE_KEYS.TEXT_RECOGNITION,
+    options
+  );
 
-  return {
-    textRecognition: (
-      frame: Frame,
-      args?: TextRecognitionArguments
-    ): TextRecognitionResult => {
-      'worklet';
-      return plugin.recognize(frame, args);
-    },
-  };
+  return useMemo(
+    () => ({
+      textRecognition: (
+        frame: Frame,
+        args?: TextRecognitionArguments
+      ): TextRecognitionResult => {
+        'worklet';
+        return plugin.recognize(frame, args ?? {});
+      },
+    }),
+    [plugin]
+  );
 };
 
 export type {

@@ -1,17 +1,22 @@
 import {
   StackActions,
+  useFocusEffect,
   useNavigation,
   useRoute,
   type NavigationProp,
   type RouteProp,
 } from '@react-navigation/native';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { processImageTextRecognition } from 'react-native-vision-camera-mlkit';
+import {
+  processImageBarcodeScanning,
+  processImageTextRecognition,
+} from 'react-native-vision-camera-mlkit';
 import {
   Button,
   Divider,
+  RegionOfInterestControl,
   Section,
   SectionImageInput,
   SectionPicker,
@@ -29,15 +34,22 @@ import { useImageProcessingOptionsStore, useTerminalStore } from '../stores';
 
 const IMAGE_PROCESSOR_MAP = {
   [PLUGIN_ID.TEXT_RECOGNITION]: processImageTextRecognition,
+  [PLUGIN_ID.BARCODE_SCANNING]: processImageBarcodeScanning,
 } as const;
 
 const ImageScreen = () => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
 
-  const { open: openTerminal } = useTerminal();
+  const { open: openTerminal, close: closeTerminal } = useTerminal();
 
   const addEntry = useTerminalStore((state) => state.addEntry);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => closeTerminal();
+    }, [closeTerminal])
+  );
 
   const BOTTOM_OFFSET = insets.bottom + 46;
 
@@ -168,22 +180,29 @@ const ImageScreen = () => {
           />
           <SectionPicker
             label="Orientation"
-            description="Set the image orientation for processing."
-            value={sharedOptions.orientation ?? 'portrait'}
+            description="Set the image orientation for processing. Auto uses the image's EXIF metadata."
+            value={sharedOptions.orientation ?? 'auto'}
             options={[
+              { label: 'Auto (from metadata)', value: 'auto' },
               { label: 'portrait', value: 'portrait' },
               { label: 'portrait-upside-down', value: 'portrait-upside-down' },
               { label: 'landscape-left', value: 'landscape-left' },
               { label: 'landscape-right', value: 'landscape-right' },
             ]}
-            onValueChange={(value) => setSharedOption('orientation', value)}
+            onValueChange={(value) =>
+              setSharedOption(
+                'orientation',
+                value === 'auto' ? undefined : value
+              )
+            }
           />
           {pluginId === PLUGIN_ID.TEXT_RECOGNITION && (
             <SectionPicker
               label="Language"
               description="Select the language for text recognition."
               value={
-                imageProcessingOptions[PLUGIN_ID.TEXT_RECOGNITION].language
+                imageProcessingOptions[PLUGIN_ID.TEXT_RECOGNITION].language ??
+                'LATIN'
               }
               options={[
                 { label: 'Latin', value: 'LATIN' },
@@ -200,6 +219,63 @@ const ImageScreen = () => {
                 )
               }
             />
+          )}
+          <RegionOfInterestControl
+            value={sharedOptions.roi}
+            onValueChange={(roi) => setSharedOption('roi', roi)}
+          />
+          {pluginId === PLUGIN_ID.BARCODE_SCANNING && (
+            <>
+              <SectionSwitch
+                label="Enable Potential Barcodes"
+                description="Return potential barcodes that are not fully decoded yet."
+                value={Boolean(
+                  imageProcessingOptions[PLUGIN_ID.BARCODE_SCANNING]
+                    .enableAllPotentialBarcodes
+                )}
+                onValueChange={(value) =>
+                  setImageProcessingOption(
+                    PLUGIN_ID.BARCODE_SCANNING,
+                    'enableAllPotentialBarcodes',
+                    value
+                  )
+                }
+              />
+              <SectionPicker
+                label="Barcode Format"
+                description="Filter barcode formats for better performance."
+                value={
+                  imageProcessingOptions[PLUGIN_ID.BARCODE_SCANNING].formats
+                    ?.length
+                    ? imageProcessingOptions[PLUGIN_ID.BARCODE_SCANNING]
+                        .formats?.[0] ?? 'ALL_FORMATS'
+                    : 'ALL_FORMATS'
+                }
+                options={[
+                  { label: 'All formats', value: 'ALL_FORMATS' },
+                  { label: 'QR Code', value: 'QR_CODE' },
+                  { label: 'Aztec', value: 'AZTEC' },
+                  { label: 'Code 128', value: 'CODE_128' },
+                  { label: 'Code 39', value: 'CODE_39' },
+                  { label: 'Code 93', value: 'CODE_93' },
+                  { label: 'Codabar', value: 'CODABAR' },
+                  { label: 'Data Matrix', value: 'DATA_MATRIX' },
+                  { label: 'EAN-13', value: 'EAN_13' },
+                  { label: 'EAN-8', value: 'EAN_8' },
+                  { label: 'ITF', value: 'ITF' },
+                  { label: 'UPC-A', value: 'UPC_A' },
+                  { label: 'UPC-E', value: 'UPC_E' },
+                  { label: 'PDF417', value: 'PDF417' },
+                ]}
+                onValueChange={(value) =>
+                  setImageProcessingOption(
+                    PLUGIN_ID.BARCODE_SCANNING,
+                    'formats',
+                    value === 'ALL_FORMATS' ? [] : [value as any]
+                  )
+                }
+              />
+            </>
           )}
         </Section>
       </ScrollView>

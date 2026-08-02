@@ -10,7 +10,7 @@ $VisionCameraMLKit = {
   'poseDetection' => false,
   'poseDetectionAccurate' => false,
   'selfieSegmentation' => false,
-  'barcodeScanning' => false,
+  'barcodeScanning' => true,
   'imageLabeling' => false,
   'objectDetection' => false,
   'digitalInkRecognition' => false,
@@ -53,13 +53,86 @@ target 'VisionCameraMLKitExample' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  def apply_fmt_xcode_26_workaround(installer)
+    fmt_base = File.join(installer.sandbox.root, 'fmt', 'include', 'fmt', 'base.h')
+    return unless File.exist?(fmt_base)
+
+    content = File.read(fmt_base)
+    return if content.include?('Xcode 26 workaround: disable consteval')
+
+    patched = content.gsub(
+      /^(#elif defined\(__cpp_consteval\)\n#  define FMT_USE_CONSTEVAL) 1$/,
+      "// Xcode 26 workaround: disable consteval\n\\1 0"
+    )
+
+    return if patched == content
+
+    File.chmod(0o644, fmt_base)
+    File.write(fmt_base, patched)
+    Pod::UI.puts('Applied Xcode 26 fmt workaround (FMT_USE_CONSTEVAL=0)'.yellow)
+  end
+
+  def apply_glog_xcode_26_workaround(installer)
+    modulemap = File.join(installer.sandbox.root, 'Target Support Files', 'glog', 'glog.modulemap')
+    patched = false
+
+    if File.exist?(modulemap)
+      content = File.read(modulemap)
+      modulemap_content = content.gsub(/\n  module \* \{ export \*\ }/, '')
+
+      if modulemap_content != content
+        File.write(modulemap, modulemap_content)
+        patched = true
+      end
+    end
+
+    Dir.glob(File.join(installer.sandbox.root, 'Target Support Files', '**', '*.xcconfig')).each do |xcconfig|
+      content = File.read(xcconfig)
+      xcconfig_content = content
+        .gsub(' -Xcc -fmodule-map-file="${PODS_ROOT}/Headers/Public/glog/glog.modulemap"', '')
+        .gsub(' -fmodule-map-file="${PODS_ROOT}/Headers/Public/glog/glog.modulemap"', '')
+
+      if xcconfig_content != content
+        File.write(xcconfig, xcconfig_content)
+        patched = true
+      end
+    end
+
+    Pod::UI.puts('Applied Xcode 26 glog workaround'.yellow) if patched
+  end
+
+  def apply_worklets_header_search_paths_workaround(installer)
+    header_path = '"${PODS_ROOT}/Headers/Private/React-Core"'
+    patched = false
+
+    Dir.glob(File.join(installer.sandbox.root, 'Target Support Files', 'VisionCameraWorklets', '*.xcconfig')).each do |xcconfig|
+      content = File.read(xcconfig)
+      next if content.include?(header_path)
+
+      xcconfig_content = content.gsub(
+        /^(HEADER_SEARCH_PATHS = .*)$/,
+        "\\1 #{header_path}"
+      )
+
+      next if xcconfig_content == content
+
+      File.write(xcconfig, xcconfig_content)
+      patched = true
+    end
+
+    Pod::UI.puts('Applied VisionCameraWorklets React-Core header path workaround'.yellow) if patched
+  end
+
   post_install do |installer|
-    # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
     react_native_post_install(
       installer,
       config[:reactNativePath],
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+
+    apply_fmt_xcode_26_workaround(installer)
+    apply_glog_xcode_26_workaround(installer)
+    apply_worklets_header_search_paths_workaround(installer)
   end
 end

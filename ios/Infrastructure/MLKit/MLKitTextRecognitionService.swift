@@ -1,6 +1,6 @@
 import Foundation
 
-#if MLKIT_TEXT_RECOGNITION
+#if MLKIT_TEXT_RECOGNITION_ANY
   import MLKitTextRecognition
 #endif
 
@@ -20,9 +20,9 @@ import Foundation
   import MLKitTextRecognitionKorean
 #endif
 
-#if MLKIT_TEXT_RECOGNITION
+#if MLKIT_TEXT_RECOGNITION_ANY
   class MLKitTextRecognitionService: IRecognitionService {
-    typealias ResultType = TextRecognitionResult
+    typealias ResultType = DomainTextRecognitionResult
 
     private let textRecognizer: TextRecognizer
 
@@ -30,9 +30,9 @@ import Foundation
       self.textRecognizer = textRecognizer
     }
 
-    func recognize(image: ProcessedImage) throws -> TextRecognitionResult {
+    func recognize(image: ProcessedImage) throws -> DomainTextRecognitionResult {
       let text = try textRecognizer.results(in: image.image)
       return MLKitTextAdapter.toDomain(text)
     }
   }
-#endif
+#endif  // MLKIT_TEXT_RECOGNITION_ANY

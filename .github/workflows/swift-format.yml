@@ -2,13 +2,13 @@ name: Swift Format (iOS)
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, develop]
     paths:
       - '.github/workflows/swift-format.yml'
       - 'ios/**/*.swift'
       - '.swift-format'
   push:
-    branches: [main]
+    branches: [main, develop]
     paths:
       - '.github/workflows/swift-format.yml'
       - 'ios/**/*.swift'

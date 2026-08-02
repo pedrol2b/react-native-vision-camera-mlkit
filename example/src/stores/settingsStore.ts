@@ -1,3 +1,7 @@
+import type {
+  OrientationSource,
+  TargetStabilizationMode,
+} from 'react-native-vision-camera';
 import { create } from 'zustand';
 
 type PixelFormat = 'yuv' | 'rgb';
@@ -15,6 +19,16 @@ type SettingsState = {
   setEnableTapGesture: (enabled: boolean) => void;
   enableDoubleTapGesture: boolean;
   setEnableDoubleTapGesture: (enabled: boolean) => void;
+  exposureBias: number;
+  setExposureBias: (bias: number) => void;
+  enableLowLightBoost: boolean;
+  setEnableLowLightBoost: (enabled: boolean) => void;
+  targetFps: number;
+  setTargetFps: (fps: number) => void;
+  videoStabilizationMode: TargetStabilizationMode;
+  setVideoStabilizationMode: (mode: TargetStabilizationMode) => void;
+  orientationSource: OrientationSource;
+  setOrientationSource: (source: OrientationSource) => void;
 };
 
 export const useSettingsStore = create<SettingsState>((set) => ({
@@ -33,4 +47,17 @@ export const useSettingsStore = create<SettingsState>((set) => ({
   enableDoubleTapGesture: true,
   setEnableDoubleTapGesture: (enabled: boolean) =>
     set({ enableDoubleTapGesture: enabled }),
+  exposureBias: 0,
+  setExposureBias: (bias: number) => set({ exposureBias: bias }),
+  enableLowLightBoost: false,
+  setEnableLowLightBoost: (enabled: boolean) =>
+    set({ enableLowLightBoost: enabled }),
+  targetFps: 30,
+  setTargetFps: (fps: number) => set({ targetFps: fps }),
+  videoStabilizationMode: 'auto',
+  setVideoStabilizationMode: (mode: TargetStabilizationMode) =>
+    set({ videoStabilizationMode: mode }),
+  orientationSource: 'device',
+  setOrientationSource: (source: OrientationSource) =>
+    set({ orientationSource: source }),
 }));

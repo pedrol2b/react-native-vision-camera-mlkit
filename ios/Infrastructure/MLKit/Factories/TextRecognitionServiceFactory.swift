@@ -1,6 +1,6 @@
 import Foundation
 
-#if MLKIT_TEXT_RECOGNITION
+#if MLKIT_TEXT_RECOGNITION_ANY
   import MLKitTextRecognition
 #endif
 
@@ -20,10 +20,10 @@ import Foundation
   import MLKitTextRecognitionKorean
 #endif
 
-#if MLKIT_TEXT_RECOGNITION
+#if MLKIT_TEXT_RECOGNITION_ANY
   class TextRecognitionServiceFactory {
 
-    static func createTextRecognizer(language: TextRecognitionLanguage)
+    static func createTextRecognizer(language: DomainTextRecognitionLanguage)
       -> TextRecognizer
     {
       let options: CommonTextRecognizerOptions
@@ -31,7 +31,7 @@ import Foundation
       switch language {
       #if MLKIT_TEXT_RECOGNITION
         case .latin:
-          options = TextRecognizerOptions()
+          options = MLKitTextRecognition.TextRecognizerOptions()
       #endif
       #if MLKIT_TEXT_RECOGNITION_CHINESE
         case .chinese:
@@ -54,11 +54,11 @@ import Foundation
       return TextRecognizer.textRecognizer(options: options)
     }
 
-    static func create(language: TextRecognitionLanguage = .latin)
+    static func create(language: DomainTextRecognitionLanguage = .latin)
       -> MLKitTextRecognitionService
     {
       let textRecognizer = createTextRecognizer(language: language)
       return MLKitTextRecognitionService(textRecognizer: textRecognizer)
     }
   }
-#endif
+#endif  // MLKIT_TEXT_RECOGNITION_ANY

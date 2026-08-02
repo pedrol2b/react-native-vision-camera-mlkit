@@ -21,6 +21,11 @@ apply plugin: "kotlin-android"
 
 apply plugin: "com.facebook.react"
 
+def reactNativeArchitectures() {
+  def value = rootProject.getProperties().get("reactNativeArchitectures")
+  return value ? value.split(",") : ["armeabi-v7a", "x86", "x86_64", "arm64-v8a"]
+}
+
 def getExtOrIntegerDefault(name) {
   return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["VisionCameraMLKit_" + name]).toInteger()
 }
@@ -42,7 +47,7 @@ def getMLKitConfig() {
     selfieSegmentation       : false,
     subjectSegmentation      : false,
     documentScanner          : false,
-    barcodeScanning          : false,
+    barcodeScanning          : true,
     imageLabeling            : false,
     objectDetection          : false,
     digitalInkRecognition    : false,
@@ -69,9 +74,17 @@ def getMLKitConfig() {
 
 def mlkitConfig = getMLKitConfig()
 
+// Compute whether any text recognition variant is enabled
+def anyTextRecognition = mlkitConfig.textRecognition ||
+  mlkitConfig.textRecognitionChinese ||
+  mlkitConfig.textRecognitionDevanagari ||
+  mlkitConfig.textRecognitionJapanese ||
+  mlkitConfig.textRecognitionKorean
+
 android {
   namespace "com.visioncameramlkit"
 
+  ndkVersion getExtOrDefault("ndkVersion")
   compileSdkVersion getExtOrIntegerDefault("compileSdkVersion")
 
   defaultConfig {
@@ -79,6 +92,7 @@ android {
     targetSdkVersion getExtOrIntegerDefault("targetSdkVersion")
 
     // Add build config fields for conditional compilation
+    buildConfigField "boolean", "MLKIT_TEXT_RECOGNITION_ANY", "${anyTextRecognition}"
     buildConfigField "boolean", "MLKIT_TEXT_RECOGNITION", "${mlkitConfig.textRecognition}"
     buildConfigField "boolean", "MLKIT_TEXT_RECOGNITION_CHINESE", "${mlkitConfig.textRecognitionChinese}"
     buildConfigField "boolean", "MLKIT_TEXT_RECOGNITION_DEVANAGARI", "${mlkitConfig.textRecognitionDevanagari}"
@@ -95,10 +109,41 @@ android {
     buildConfigField "boolean", "MLKIT_IMAGE_LABELING", "${mlkitConfig.imageLabeling}"
     buildConfigField "boolean", "MLKIT_OBJECT_DETECTION", "${mlkitConfig.objectDetection}"
     buildConfigField "boolean", "MLKIT_DIGITAL_INK_RECOGNITION", "${mlkitConfig.digitalInkRecognition}"
+
+    externalNativeBuild {
+      cmake {
+        cppFlags "-frtti -fexceptions -Wall -Wextra -fstack-protector-all"
+        arguments "-DANDROID_STL=c++_shared", "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
+        abiFilters (*reactNativeArchitectures())
+
+        buildTypes {
+          debug {
+            cppFlags "-O1 -g"
+          }
+          release {
+            cppFlags "-O2"
+          }
+        }
+      }
+    }
+  }
+
+  externalNativeBuild {
+    cmake {
+      path "CMakeLists.txt"
+    }
   }
 
   buildFeatures {
     buildConfig true
+    prefab true
+    prefabPublishing true
+  }
+
+  prefab {
+    VisionCameraMLKit {
+      headers "${project.buildDir}/headers/visioncameramlkit/"
+    }
   }
 
   buildTypes {
@@ -120,7 +165,10 @@ android {
     main {
       java.srcDirs += [
         "generated/java",
-        "generated/jni"
+        "generated/jni",
+        "../nitrogen/generated/android/kotlin/com/margelo/nitro/visioncameramlkit",
+        anyTextRecognition ? "src/textRecognitionEnabled/java" : "src/textRecognitionDisabled/java",
+        mlkitConfig.barcodeScanning ? "src/barcodeScanningEnabled/java" : "src/barcodeScanningDisabled/java",
       ]
     }
   }
@@ -136,15 +184,23 @@ def kotlin_version = getExtOrDefault("kotlinVersion")
 dependencies {
   implementation "com.facebook.react:react-android"
   api project(":react-native-vision-camera")
+  implementation project(":react-native-nitro-modules")
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
   implementation "androidx.camera:camera-core:1.5.2"
+  implementation "androidx.exifinterface:exifinterface:1.3.7"
 
   // ===== GoogleMLKit Vision =====
-  // Only include dependencies for enabled features
+  // vision-common is always present: it's a small shared-types artifact (InputImage,
+  // etc.) used by the image-preprocessing pipeline regardless of which MLKit feature
+  // is enabled, and carries no OCR/barcode model weights. Every feature-specific SDK
+  // below stays properly gated behind its own flag and its own conditional Kotlin
+  // source set (see sourceSets above), so enabling only one feature (e.g. barcode
+  // scanning) does not pull in or compile against the others.
+  implementation "com.google.mlkit:vision-common:17.3.0"
 
   // Text recognition v2
   // https://developers.google.com/ml-kit/vision/text-recognition/v2/android
-  if (mlkitConfig.textRecognition) {
+  if (anyTextRecognition) {
     implementation "com.google.mlkit:text-recognition:16.0.1"
   }
   if (mlkitConfig.textRecognitionChinese) {
@@ -225,3 +281,15 @@ dependencies {
 
   // ===== GoogleMLKit Vision =====
 }
+
+tasks.register('prepareHeaders', Copy) {
+  from fileTree('./src/main/cpp').filter { it.isFile() }
+  from fileTree('../cpp/').filter { it.isFile() }
+  from fileTree('../nitrogen/generated/android/c++').filter { it.isFile() }
+  from fileTree('../nitrogen/generated/shared/c++').filter { it.isFile() }
+  include "*.hpp"
+  into "${project.buildDir}/headers/visioncameramlkit/VisionCameraMLKit/"
+  includeEmptyDirs = false
+}
+
+preBuild.dependsOn(prepareHeaders)

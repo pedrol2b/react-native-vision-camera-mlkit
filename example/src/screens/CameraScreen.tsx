@@ -1,5 +1,6 @@
 import {
   StackActions,
+  useFocusEffect,
   useIsFocused,
   useNavigation,
   useRoute,
@@ -9,12 +10,11 @@ import {
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSharedValue } from 'react-native-reanimated';
 import {
+  type CameraRef,
   useCameraDevice,
   useCameraPermission,
-  type Camera,
-  type Orientation,
 } from 'react-native-vision-camera';
-import { useSharedValue as useWorkletsSharedValue } from 'react-native-worklets-core';
+import type { Orientation } from 'react-native-vision-camera-mlkit';
 import { CameraControls } from '../components/ui';
 import {
   CameraView,
@@ -38,16 +38,14 @@ const DEFAULT_ORIENTATION: Orientation = 'portrait';
 const CameraScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { params, name } = useRoute<RouteProp<RootStackParamList, 'Camera'>>();
-  const { open: openTerminal } = useTerminal();
+  const { toggle: toggleTerminal, close: closeTerminal } = useTerminal();
 
-  const cameraRef = useRef<Camera>(null);
+  const cameraRef = useRef<CameraRef>(null);
 
   const [cameraPosition, setCameraPosition] = useState<CameraPosition>('back');
   const [torchState, setTorchState] = useState<TorchState>('off');
   const [isFpsGraphEnabled, setIsFpsGraphEnabled] = useState<boolean>(false);
 
-  const frameOutputOrientation =
-    useWorkletsSharedValue<Orientation>(DEFAULT_ORIENTATION);
   const outputOrientation = useSharedValue<Orientation>(DEFAULT_ORIENTATION);
 
   const { isFrameProcessorEnabled } = useSettingsStore();
@@ -61,14 +59,6 @@ const CameraScreen = () => {
   const appState = useAppState();
 
   const isActive = isFocused && appState === 'active';
-
-  const onOutputOrientationChangedCallback = useCallback(
-    (o: Orientation) => {
-      outputOrientation.value = o;
-      frameOutputOrientation.value = o;
-    },
-    [outputOrientation, frameOutputOrientation]
-  );
 
   const flipCamera = () =>
     setCameraPosition((prev) => (prev === 'back' ? 'front' : 'back'));
@@ -87,6 +77,12 @@ const CameraScreen = () => {
     !hasCameraPermission && requestCameraPermission();
   }, [hasCameraPermission, requestCameraPermission]);
 
+  useFocusEffect(
+    useCallback(() => {
+      return () => closeTerminal();
+    }, [closeTerminal])
+  );
+
   if (!hasCameraPermission) return <NoCameraPermissionErrorView />;
   if (!device) return <NoDeviceErrorView />;
   if (!isPluginId(params.id)) return <NoPluginErrorView />;
@@ -100,17 +96,16 @@ const CameraScreen = () => {
         pluginId={params.id}
         flipCamera={flipCamera}
         isFrameProcessorEnabled={isFrameProcessorEnabled}
-        frameOutputOrientation={frameOutputOrientation}
-        onOutputOrientationChangedCallback={onOutputOrientationChangedCallback}
-        torch={torchState}
-        enableFpsGraph={isFpsGraphEnabled}
+        frameOutputOrientation={outputOrientation}
+        torchMode={torchState}
+        isFpsGraphEnabled={isFpsGraphEnabled}
       />
       <CameraControls
         onFlipCamera={flipCamera}
         torch={torchState}
         onToggleTorch={toggleTorch}
         onToggleFpsGraph={toggleFpsGraph}
-        onOpenTerminal={openTerminal}
+        onToggleTerminal={toggleTerminal}
         onOpenSettings={openSettings}
         outputOrientation={outputOrientation}
       />

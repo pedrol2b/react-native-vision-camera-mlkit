@@ -2,14 +2,14 @@ name: Ktlint Format (Android)
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
     paths:
       - '.github/workflows/ktlint-format.yml'
       - 'android/**/*.kt'
       - 'android/**/*.kts'
       - '.editorconfig'
   pull_request:
-    branches: [main]
+    branches: [main, develop]
     paths:
       - '.github/workflows/ktlint-format.yml'
       - 'android/**/*.kt'

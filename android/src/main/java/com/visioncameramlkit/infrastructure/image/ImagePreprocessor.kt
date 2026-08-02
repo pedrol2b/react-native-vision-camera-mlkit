@@ -8,15 +8,17 @@ import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Matrix
 import android.graphics.Paint
-import android.media.Image
+import android.graphics.Rect
 import androidx.core.graphics.scale
+import androidx.exifinterface.media.ExifInterface
 import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.common.internal.ImageConvertUtils
-import com.mrousavy.camera.frameprocessors.Frame
 import com.visioncameramlkit.domain.models.ImageMetadata
 import com.visioncameramlkit.domain.models.ImagePreprocessingOptions
 import com.visioncameramlkit.domain.models.Orientation
 import com.visioncameramlkit.domain.models.ProcessedImage
+import com.visioncameramlkit.domain.models.RegionOfInterest
+import com.visioncameramlkit.domain.models.StaticImageLimits
+import com.visioncameramlkit.domain.models.resolveToPixelRect
 import com.visioncameramlkit.domain.services.IImagePreprocessor
 import java.io.File
 
@@ -28,81 +30,24 @@ class ImagePreprocessor : IImagePreprocessor {
     return scale.coerceIn(0.9f, 1.0f)
   }
 
-  override fun preprocessFrame(
-    frame: Frame,
-    options: ImagePreprocessingOptions,
-  ): ProcessedImage {
-    val effectiveScale = clampScale(options.scaleFactor)
-
-    val inputImage =
-      if (options.invertColors) {
-        createInvertedInputImage(frame, effectiveScale)
-      } else {
-        createInputImage(frame, effectiveScale)
-      }
-
-    val metadata =
-      ImageMetadata(
-        width = (frame.imageProxy.width * effectiveScale).toInt(),
-        height = (frame.imageProxy.height * effectiveScale).toInt(),
-        rotation = frame.imageProxy.imageInfo.rotationDegrees,
-        isInverted = options.invertColors,
-      )
-
-    return ProcessedImage(inputImage, metadata)
+  /**
+   * Crops [bitmap] to the given [roi], if any. Returns the (possibly unchanged) bitmap
+   * alongside the pixel offset of the crop origin, so callers can remap result
+   * coordinates back to the pre-crop pixel space.
+   */
+  fun cropToRegionOfInterest(
+    bitmap: Bitmap,
+    roi: RegionOfInterest?,
+  ): Pair<Bitmap, Rect> {
+    if (roi == null) {
+      return bitmap to Rect(0, 0, bitmap.width, bitmap.height)
+    }
+    val rect = roi.resolveToPixelRect(bitmap.width, bitmap.height)
+    val croppedBitmap = createBitmap(bitmap, rect.left, rect.top, rect.width(), rect.height())
+    return croppedBitmap to rect
   }
 
-  private fun createInputImage(
-    frame: Frame,
-    scaleFactor: Float,
-  ): InputImage {
-    val mediaImage: Image = frame.image
-
-    val image = InputImage.fromMediaImage(mediaImage, frame.imageProxy.imageInfo.rotationDegrees)
-    val frameBitmap = ImageConvertUtils.getInstance().getUpRightBitmap(image)
-
-    val finalBitmap =
-      if (scaleFactor < 1.0f) {
-        frameBitmap.scale(
-          (frameBitmap.width * scaleFactor).toInt(),
-          (frameBitmap.height * scaleFactor).toInt(),
-          false,
-        )
-      } else {
-        frameBitmap
-      }
-
-    return InputImage.fromBitmap(finalBitmap, 0)
-  }
-
-  private fun createInvertedInputImage(
-    frame: Frame,
-    scaleFactor: Float,
-  ): InputImage {
-    val mediaImage: Image = frame.image
-
-    val image = InputImage.fromMediaImage(mediaImage, frame.imageProxy.imageInfo.rotationDegrees)
-    val frameBitmap = ImageConvertUtils.getInstance().getUpRightBitmap(image)
-
-    // Scale first if needed
-    val scaledBitmap =
-      if (scaleFactor < 1.0f) {
-        frameBitmap.scale(
-          (frameBitmap.width * scaleFactor).toInt(),
-          (frameBitmap.height * scaleFactor).toInt(),
-          false,
-        )
-      } else {
-        frameBitmap
-      }
-
-    // Then invert
-    val invertedBitmap = invertBitmap(scaledBitmap)
-
-    return InputImage.fromBitmap(invertedBitmap, 0)
-  }
-
-  private fun invertBitmap(bitmap: Bitmap): Bitmap =
+  fun invertBitmap(bitmap: Bitmap): Bitmap =
     createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888).apply {
       val canvas = Canvas(this)
       val paint = Paint()
@@ -147,36 +92,56 @@ class ImagePreprocessor : IImagePreprocessor {
     imageFile: File,
     options: ImagePreprocessingOptions,
   ): ProcessedImage {
+    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+    BitmapFactory.decodeFile(imageFile.absolutePath, bounds)
+    require(bounds.outWidth > 0 && bounds.outHeight > 0) {
+      "Failed to read static image dimensions"
+    }
+    require(
+      bounds.outWidth <= StaticImageLimits.MAX_DIMENSION &&
+        bounds.outHeight <= StaticImageLimits.MAX_DIMENSION &&
+        bounds.outWidth.toLong() * bounds.outHeight.toLong() <= StaticImageLimits.MAX_PIXEL_COUNT,
+    ) {
+      "Static image exceeds the 4 MP or 4,096 px dimension limit."
+    }
+
     val bitmap =
       BitmapFactory.decodeFile(imageFile.absolutePath)
         ?: throw UnsupportedOperationException("Failed to decode image file")
 
-    val rotatedBitmap = rotateBitmap(bitmap, options.orientation)
+    // Use the user-provided orientation override, or fall back to the image's
+    // embedded EXIF orientation metadata.
+    val effectiveOrientation = options.orientation ?: readExifOrientation(imageFile)
+
+    val rotatedBitmap = rotateBitmap(bitmap, effectiveOrientation)
+    // Bitmap.createBitmap returns the source instance itself when no transform is
+    // actually applied (e.g. no rotation needed), so only recycle on a genuine copy.
+    if (rotatedBitmap !== bitmap) bitmap.recycle()
+
     val effectiveScale = clampScale(options.scaleFactor)
+
+    val (croppedBitmap, cropRect) = cropToRegionOfInterest(rotatedBitmap, options.roi)
+    if (croppedBitmap !== rotatedBitmap) rotatedBitmap.recycle()
+
+    val scaledBitmap =
+      if (effectiveScale < 1.0f) {
+        croppedBitmap.scale(
+          (croppedBitmap.width * effectiveScale).toInt(),
+          (croppedBitmap.height * effectiveScale).toInt(),
+          false,
+        )
+      } else {
+        croppedBitmap
+      }
+    if (scaledBitmap !== croppedBitmap) croppedBitmap.recycle()
 
     val processedBitmap =
       if (options.invertColors) {
-        val scaledBitmap =
-          if (effectiveScale < 1.0f) {
-            rotatedBitmap.scale(
-              (rotatedBitmap.width * effectiveScale).toInt(),
-              (rotatedBitmap.height * effectiveScale).toInt(),
-              false,
-            )
-          } else {
-            rotatedBitmap
-          }
-        invertBitmap(scaledBitmap)
+        val invertedBitmap = invertBitmap(scaledBitmap)
+        scaledBitmap.recycle()
+        invertedBitmap
       } else {
-        if (effectiveScale < 1.0f) {
-          rotatedBitmap.scale(
-            (rotatedBitmap.width * effectiveScale).toInt(),
-            (rotatedBitmap.height * effectiveScale).toInt(),
-            false,
-          )
-        } else {
-          rotatedBitmap
-        }
+        scaledBitmap
       }
 
     val inputImage = InputImage.fromBitmap(processedBitmap, 0)
@@ -187,10 +152,45 @@ class ImagePreprocessor : IImagePreprocessor {
         height = processedBitmap.height,
         rotation = 0, // Static images are already oriented
         isInverted = options.invertColors,
+        offsetX = cropRect.left,
+        offsetY = cropRect.top,
+        scaleFactor = effectiveScale,
       )
 
     return ProcessedImage(inputImage, metadata)
   }
+
+  /**
+   * Reads EXIF orientation from the image file and maps it to an [Orientation].
+   * Falls back to [Orientation.PORTRAIT] if EXIF data is unavailable or unrecognized.
+   */
+  private fun readExifOrientation(imageFile: File): Orientation =
+    try {
+      val exif = ExifInterface(imageFile.absolutePath)
+      when (exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)) {
+        ExifInterface.ORIENTATION_NORMAL,
+        ExifInterface.ORIENTATION_FLIP_HORIZONTAL,
+        -> Orientation.PORTRAIT
+
+        ExifInterface.ORIENTATION_ROTATE_180,
+        ExifInterface.ORIENTATION_FLIP_VERTICAL,
+        -> Orientation.PORTRAIT_UPSIDE_DOWN
+
+        ExifInterface.ORIENTATION_ROTATE_90,
+        ExifInterface.ORIENTATION_TRANSPOSE,
+        -> Orientation.LANDSCAPE_LEFT
+
+        ExifInterface.ORIENTATION_ROTATE_270,
+        ExifInterface.ORIENTATION_TRANSVERSE,
+        -> Orientation.LANDSCAPE_RIGHT
+
+        else -> Orientation.PORTRAIT
+      }
+    } catch (
+      @Suppress("TooGenericExceptionCaught") e: Exception,
+    ) {
+      Orientation.PORTRAIT
+    }
 
   private fun rotateBitmap(
     bitmap: Bitmap,

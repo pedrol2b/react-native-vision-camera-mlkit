@@ -1,5 +1,6 @@
 package com.visioncameramlkit.domain.models
 
+@Suppress("unused")
 enum class Orientation {
   PORTRAIT,
   PORTRAIT_UPSIDE_DOWN,

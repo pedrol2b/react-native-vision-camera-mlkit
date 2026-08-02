@@ -9,6 +9,15 @@
 .vscode/
 jsconfig.json
 
+# Local AI development context
+.context/
+
+# AI tooling (local-only for now; revisit what, if anything, should be
+# deployed to the git remote)
+.agents/
+.claude/
+.codex/
+
 # Xcode
 #
 build/
@@ -83,6 +92,3 @@ lib/
 # React Native Codegen
 ios/generated
 android/generated
-
-# React Native Nitro Modules
-nitrogen/

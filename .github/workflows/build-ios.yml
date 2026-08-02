@@ -2,18 +2,28 @@ name: Build Example (iOS)
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, develop]
     paths:
+      - '.github/workflows/build-ios.yml'
+      - 'cpp/**'
       - 'ios/**'
       - 'example/ios/**'
+      - 'nitrogen/**'
+      - 'nitro.json'
+      - 'src/specs/**'
       - '*.podspec'
       - 'package.json'
       - 'yarn.lock'
   push:
-    branches: [main]
+    branches: [main, develop]
     paths:
+      - '.github/workflows/build-ios.yml'
+      - 'cpp/**'
       - 'ios/**'
       - 'example/ios/**'
+      - 'nitrogen/**'
+      - 'nitro.json'
+      - 'src/specs/**'
       - '*.podspec'
       - 'package.json'
       - 'yarn.lock'
@@ -32,7 +42,7 @@ jobs:
     runs-on: macos-latest
 
     env:
-      XCODE_VERSION: 16.3
+      XCODE_VERSION: latest-stable
       RCT_USE_RN_DEP: 1
       RCT_USE_PREBUILT_RNCORE: 1
 
@@ -86,7 +96,7 @@ jobs:
             exit 1
           fi
 
-          echo "IOS_DESTINATION=platform=iOS Simulator,OS=${IOS_RUNTIME},name=iPhone 15" >> "$GITHUB_ENV"
+          echo "IOS_DESTINATION=OS=${IOS_RUNTIME},name=iPhone 15" >> "$GITHUB_ENV"
 
       - name: Install CocoaPods
         run: |

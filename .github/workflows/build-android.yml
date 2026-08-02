@@ -2,19 +2,29 @@ name: Build Example (Android)
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, develop]
     paths:
+      - '.github/workflows/build-android.yml'
       - 'android/**'
+      - 'cpp/**'
       - 'example/android/**'
+      - 'nitrogen/**'
+      - 'nitro.json'
+      - 'src/specs/**'
       - 'package.json'
       - 'yarn.lock'
       - '*.gradle'
       - '*.gradle.kts'
   push:
-    branches: [main]
+    branches: [main, develop]
     paths:
+      - '.github/workflows/build-android.yml'
       - 'android/**'
+      - 'cpp/**'
       - 'example/android/**'
+      - 'nitrogen/**'
+      - 'nitro.json'
+      - 'src/specs/**'
       - 'package.json'
       - 'yarn.lock'
       - '*.gradle'
@@ -79,3 +89,9 @@ jobs:
 
       - name: Build Android example
         run: yarn turbo run build:android
+
+      - name: Compile library with v2 features disabled
+        working-directory: example/android
+        env:
+          VISION_CAMERA_MLKIT_DISABLE_V2_FEATURES: 'true'
+        run: ./gradlew :react-native-vision-camera-mlkit:compileDebugKotlin --no-daemon

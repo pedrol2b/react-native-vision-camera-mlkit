@@ -82,11 +82,11 @@ OCR languages you do not need to reduce binary size. Configuration keys for
 post-v2 roadmap features remain reserved and disabled; enabling one does not
 provide a public JS/Nitro API in v2.
 
-On Android, the Latin OCR and barcode base SDKs remain compile-time
-dependencies even when their feature flags are disabled because v2's native
-implementation references their API types. Those flags control runtime
-availability; the four optional OCR language modules are still omitted when
-disabled.
+Both `textRecognition` and `barcodeScanning` are fully optional at compile
+time on both platforms: disabling one removes its native SDK from the build
+entirely instead of only gating it at runtime, so consumers who only need
+barcode scanning (or only text recognition) do not pay for the other's
+dependencies or binary size.
 
 ### Android (Gradle)
 

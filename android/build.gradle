@@ -166,7 +166,9 @@ android {
       java.srcDirs += [
         "generated/java",
         "generated/jni",
-        "../nitrogen/generated/android/kotlin/com/margelo/nitro/visioncameramlkit"
+        "../nitrogen/generated/android/kotlin/com/margelo/nitro/visioncameramlkit",
+        anyTextRecognition ? "src/textRecognitionEnabled/java" : "src/textRecognitionDisabled/java",
+        mlkitConfig.barcodeScanning ? "src/barcodeScanningEnabled/java" : "src/barcodeScanningDisabled/java",
       ]
     }
   }
@@ -188,14 +190,19 @@ dependencies {
   implementation "androidx.exifinterface:exifinterface:1.3.7"
 
   // ===== GoogleMLKit Vision =====
-  // Base SDKs for the two v2 features are compile-time dependencies because
-  // their public types are referenced by unconditional Kotlin sources. Feature
-  // flags still control runtime availability; optional OCR language models stay
-  // selective so consumers can trim those larger model artifacts.
+  // vision-common is always present: it's a small shared-types artifact (InputImage,
+  // etc.) used by the image-preprocessing pipeline regardless of which MLKit feature
+  // is enabled, and carries no OCR/barcode model weights. Every feature-specific SDK
+  // below stays properly gated behind its own flag and its own conditional Kotlin
+  // source set (see sourceSets above), so enabling only one feature (e.g. barcode
+  // scanning) does not pull in or compile against the others.
+  implementation "com.google.mlkit:vision-common:17.3.0"
 
   // Text recognition v2
   // https://developers.google.com/ml-kit/vision/text-recognition/v2/android
-  implementation "com.google.mlkit:text-recognition:16.0.1"
+  if (anyTextRecognition) {
+    implementation "com.google.mlkit:text-recognition:16.0.1"
+  }
   if (mlkitConfig.textRecognitionChinese) {
     implementation "com.google.mlkit:text-recognition-chinese:16.0.1"
   }
@@ -250,7 +257,9 @@ dependencies {
 
   // Barcode scanning
   // https://developers.google.com/ml-kit/vision/barcode-scanning/android
-  implementation "com.google.mlkit:barcode-scanning:17.3.0"
+  if (mlkitConfig.barcodeScanning) {
+    implementation "com.google.mlkit:barcode-scanning:17.3.0"
+  }
 
   // Image labeling (Base Model) -> Custom models will be added soon
   // https://developers.google.com/ml-kit/vision/image-labeling/android

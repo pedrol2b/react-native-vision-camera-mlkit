@@ -96,7 +96,7 @@ jobs:
             exit 1
           fi
 
-          echo "IOS_DESTINATION=platform=iOS Simulator,OS=${IOS_RUNTIME},name=iPhone 15" >> "$GITHUB_ENV"
+          echo "IOS_DESTINATION=OS=${IOS_RUNTIME},name=iPhone 15" >> "$GITHUB_ENV"
 
       - name: Install CocoaPods
         run: |

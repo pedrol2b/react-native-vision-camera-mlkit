@@ -147,7 +147,9 @@ you don't have to hand-edit native config. Add it to your `app.json`/
 Any key you omit keeps the library's own default (see the Android/iOS
 sections above). Passing an unrecognized key throws at prebuild time instead
 of silently being ignored. Requires `@expo/config-plugins` (already a
-dependency of `expo` itself, so Expo projects have it for free).
+dependency of `expo` itself, so Expo projects have it for free). See
+[docs/expo-plugin.md](docs/expo-plugin.md) for platform-specific caveats
+(Android-only keys, Kotlin DSL support, idempotency).
 
 Static-image processing accepts local files up to 25 MB encoded size. iOS
 accepts sources up to 25 megapixels and 10,000 pixels on either dimension, then
@@ -162,6 +164,8 @@ to protect application disk, memory, and CPU resources.
 
 - [Text Recognition API](docs/text-recognition.md)
 - [Barcode Scanning API](docs/barcode-scanning.md)
+- [Selective ML Kit Installation](docs/selective-mlkit-install.md)
+- [Expo Config Plugin](docs/expo-plugin.md)
 - [Migrating from v1 to v2](docs/migration-v1-to-v2.md)
 
 ### Text Recognition (Frame Output)

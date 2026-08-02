@@ -1,3 +1,2 @@
-*.pbxproj -text
-# specific for windows script files
-*.bat text eol=crlf
+# Nitrogen owns generated formatting, including intentional trailing spaces.
+nitrogen/generated/** -whitespace

@@ -3,20 +3,20 @@ name: NPM Release
 on:
   release:
     types: [published]
-  workflow_dispatch:
 
 permissions:
   contents: read
-  id-token: write
 
 jobs:
   build:
     name: Build package
     runs-on: ubuntu-latest
+    outputs:
+      tarball: ${{ steps.pack.outputs.tarball }}
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
       - name: Setup environment
         uses: ./.github/actions/setup
@@ -24,17 +24,34 @@ jobs:
       - name: Build package
         run: yarn prepare
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+      - name: Validate release tag
+        run: |
+          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
+          EXPECTED_TAG="v${PACKAGE_VERSION}"
+
+          if [[ "$GITHUB_REF_TYPE" != "tag" || "$GITHUB_REF_NAME" != "$EXPECTED_TAG" ]]; then
+            echo "Release ref must be the package version tag: $EXPECTED_TAG" >&2
+            exit 1
+          fi
+
+      - name: Pack package
+        id: pack
+        run: |
+          TARBALL="$(npm pack | tail -n 1)"
+
+          if [[ ! "$TARBALL" =~ ^react-native-vision-camera-mlkit-[0-9A-Za-z._-]+\.tgz$ ]]; then
+            echo "Unexpected package tarball name: $TARBALL" >&2
+            exit 1
+          fi
+
+          echo "tarball=$TARBALL" >> "$GITHUB_OUTPUT"
+
+      - name: Upload package tarball
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: lib
-          path: |
-            bin
-            android
-            ios
-            package.json
-            README.md
-            LICENSE*
+          name: package-tarball
+          path: ${{ steps.pack.outputs.tarball }}
+          if-no-files-found: error
 
   publish:
     name: Publish to npm
@@ -46,22 +63,18 @@ jobs:
       id-token: write
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup environment
-        uses: ./.github/actions/setup
-
       - name: Setup Node.js for npm
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
-          node-version: 20
+          # npm trusted publishing requires npm >=11.5.1 and Node >=22.14.0.
+          # Node 24.7.0 ships npm 11.5.1.
+          node-version: 24.7.0
           registry-url: https://registry.npmjs.org
 
-      - name: Download build artifacts (overwrite into repo root)
-        uses: actions/download-artifact@v4
+      - name: Download package tarball
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
-          name: lib
+          name: package-tarball
           path: .
 
       - name: Determine npm tag
@@ -80,9 +93,11 @@ jobs:
           fi
 
       - name: Publish package
+        env:
+          PACKAGE_TARBALL: ${{ needs.build.outputs.tarball }}
         run: |
           if [ "${{ steps.npm-tag.outputs.tag }}" = "latest" ]; then
-            npm publish --provenance --access public
+            npm publish "$PACKAGE_TARBALL" --ignore-scripts --provenance --access public
           else
-            npm publish --provenance --access public --tag ${{ steps.npm-tag.outputs.tag }}
+            npm publish "$PACKAGE_TARBALL" --ignore-scripts --provenance --access public --tag ${{ steps.npm-tag.outputs.tag }}
           fi

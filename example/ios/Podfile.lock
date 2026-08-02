@@ -1605,7 +1605,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - react-native-safe-area-context (5.6.2):
+  - react-native-safe-area-context (5.8.0):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -1617,8 +1617,8 @@ PODS:
     - React-graphics
     - React-ImageManager
     - React-jsi
-    - react-native-safe-area-context/common (= 5.6.2)
-    - react-native-safe-area-context/fabric (= 5.6.2)
+    - react-native-safe-area-context/common (= 5.8.0)
+    - react-native-safe-area-context/fabric (= 5.8.0)
     - React-NativeModulesApple
     - React-RCTFabric
     - React-renderercss
@@ -1629,7 +1629,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - react-native-safe-area-context/common (5.6.2):
+  - react-native-safe-area-context/common (5.8.0):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -1651,7 +1651,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - react-native-safe-area-context/fabric (5.6.2):
+  - react-native-safe-area-context/fabric (5.8.0):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2138,7 +2138,7 @@ PODS:
     - ReactNativeDependencies
     - Yoga
   - ReactNativeDependencies (0.86.0)
-  - RNGestureHandler (3.0.2):
+  - RNGestureHandler (3.1.0):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2160,7 +2160,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - RNPermissions (5.4.4):
+  - RNPermissions (5.6.1):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2182,34 +2182,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - RNReanimated (4.5.1):
-    - hermes-engine
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-Core-prebuilt
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-hermes
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-renderercss
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - ReactNativeDependencies
-    - RNReanimated/apple (= 4.5.1)
-    - RNReanimated/common (= 4.5.1)
-    - RNReanimated/view (= 4.5.1)
-    - RNWorklets
-    - Yoga
-  - RNReanimated/apple (4.5.1):
+  - RNReanimated (4.5.3):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2231,9 +2204,12 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
+    - RNReanimated/apple (= 4.5.3)
+    - RNReanimated/common (= 4.5.3)
+    - RNReanimated/view (= 4.5.3)
     - RNWorklets
     - Yoga
-  - RNReanimated/common (4.5.1):
+  - RNReanimated/apple (4.5.3):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2257,7 +2233,7 @@ PODS:
     - ReactNativeDependencies
     - RNWorklets
     - Yoga
-  - RNReanimated/view (4.5.1):
+  - RNReanimated/common (4.5.3):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2281,7 +2257,31 @@ PODS:
     - ReactNativeDependencies
     - RNWorklets
     - Yoga
-  - RNScreens (4.26.0):
+  - RNReanimated/view (4.5.3):
+    - hermes-engine
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-Core-prebuilt
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - ReactNativeDependencies
+    - RNWorklets
+    - Yoga
+  - RNScreens (4.26.2):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2303,9 +2303,9 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
-    - RNScreens/common (= 4.26.0)
+    - RNScreens/common (= 4.26.2)
     - Yoga
-  - RNScreens/common (4.26.0):
+  - RNScreens/common (4.26.2):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2444,7 +2444,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - VisionCamera (5.1.0):
+  - VisionCamera (5.2.1):
     - hermes-engine
     - NitroImage
     - NitroModules
@@ -2499,7 +2499,7 @@ PODS:
     - ReactNativeDependencies
     - VisionCamera
     - Yoga
-  - VisionCameraWorklets (5.1.0):
+  - VisionCameraWorklets (5.2.1):
     - hermes-engine
     - NitroModules
     - RCTRequired
@@ -2889,7 +2889,7 @@ SPEC CHECKSUMS:
   React-mutationobservernativemodule: 2e568e13c98bd185fe83266795233fa7ad2cbc19
   react-native-blur: baf5874b4abf3bb8b2012172a3d0905653a1a2b5
   react-native-image-picker: 2146157d5d37a34c2063d1d2ed01081b56d0b87b
-  react-native-safe-area-context: 3cd1f988c96f187e15b49b86b0a2068a6cb19393
+  react-native-safe-area-context: c1eb308f4b36372a4de4b3bdaa8ed695ec3dd461
   react-native-slider: 73473ab537b86b7ca1b21a28d16019d3cb63e927
   React-NativeModulesApple: a4713821c9caae40ae33eef933a6e692a6f4a81d
   React-networking: b344a1a41a4729ef859123b7a234f3092761cb25
@@ -2927,15 +2927,15 @@ SPEC CHECKSUMS:
   ReactCommon: 4d01bfb533b93a2103329dfefc74db6a9e272888
   ReactNativeBottomSheet: 3551d418c1d10cd49e0907d68300374544fb8d00
   ReactNativeDependencies: fa0a54b3f5319ae0e3b9aff32bfee7a424b88e66
-  RNGestureHandler: ef19613372e4c87374fe9494862e366d82d1852c
-  RNPermissions: 38d9cf58be74d148123c93d0e0713092e8e59260
-  RNReanimated: 516d842d105966ae05a6a1ad7ad2a0dc1e968d6b
-  RNScreens: 37cece0483decca1c3300bb1c2225c798039b8fc
+  RNGestureHandler: 6206fc566272f60a2d57a0b3258c495a73b7dc90
+  RNPermissions: 509028712d9e899fcce678c315989a6d439b003c
+  RNReanimated: 5cc36a25f9e60c523734a60783f84d363e73b4dc
+  RNScreens: dcd5c85a822d9cbb21fc321bbbbcf918f3d48c23
   RNSVG: ffe18ba0e8fbad864bf22d6f0060a4ee88ec9bf3
   RNWorklets: 82a5f27dcf3bb69267ec6ce662a756a4d3f61522
-  VisionCamera: 73a21a8ed0feecd7c579d79ae25eaf8c3e63c767
-  VisionCameraMLKit: c85a989fbaae33532636fdf9cab21b287ddf8a3f
-  VisionCameraWorklets: 0f70d789dfce3d2efc67db7e106e2f4a32bbe72e
+  VisionCamera: 4e3e123f4d14c7d3934748c84fe6ddfa5046c5ee
+  VisionCameraMLKit: 08f7f64b2794cde438ca7ab82a4d904d52d44dd3
+  VisionCameraWorklets: 0d8b34820c6aa351fbba9fab3d8ee8e8d98e1990
   Yoga: 94172d87dd5d83fc929bf1ee53121b5d4490b5f2
 
 PODFILE CHECKSUM: bfa9c28a161369f7b66f55890deec95fe59f1504

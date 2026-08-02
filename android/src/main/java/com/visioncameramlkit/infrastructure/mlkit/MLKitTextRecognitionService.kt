@@ -16,4 +16,8 @@ class MLKitTextRecognitionService(
     val mlkitText: Text? = Tasks.await(task)
     return MLKitTextAdapter.toDomain(mlkitText)
   }
+
+  override fun close() {
+    textRecognizer.close()
+  }
 }

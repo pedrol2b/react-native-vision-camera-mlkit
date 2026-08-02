@@ -2,18 +2,28 @@ name: Build Example (iOS)
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, develop]
     paths:
+      - '.github/workflows/build-ios.yml'
+      - 'cpp/**'
       - 'ios/**'
       - 'example/ios/**'
+      - 'nitrogen/**'
+      - 'nitro.json'
+      - 'src/specs/**'
       - '*.podspec'
       - 'package.json'
       - 'yarn.lock'
   push:
-    branches: [main]
+    branches: [main, develop]
     paths:
+      - '.github/workflows/build-ios.yml'
+      - 'cpp/**'
       - 'ios/**'
       - 'example/ios/**'
+      - 'nitrogen/**'
+      - 'nitro.json'
+      - 'src/specs/**'
       - '*.podspec'
       - 'package.json'
       - 'yarn.lock'

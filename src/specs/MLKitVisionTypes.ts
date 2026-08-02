@@ -1,6 +1,6 @@
 import type { BarcodeFormat } from '../features/barcode-scanning/types';
 import type { TextRecognitionLanguage } from '../features/text-recognition/types';
-import type { RegionOfInterest } from '../core/types';
+import type { Orientation, RegionOfInterest } from '../core/types';
 
 /**
  * ML Kit features that can be compiled into this package.
@@ -43,6 +43,11 @@ export interface MLKitRecognizerOptions {
    * full source frame coordinates.
    */
   roi?: RegionOfInterest;
+
+  /**
+   * Override the source image orientation when recognizing a static image.
+   */
+  orientation?: Orientation;
 }
 
 /**

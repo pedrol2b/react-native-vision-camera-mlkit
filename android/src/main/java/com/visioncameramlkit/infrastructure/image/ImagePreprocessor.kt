@@ -17,6 +17,7 @@ import com.visioncameramlkit.domain.models.ImagePreprocessingOptions
 import com.visioncameramlkit.domain.models.Orientation
 import com.visioncameramlkit.domain.models.ProcessedImage
 import com.visioncameramlkit.domain.models.RegionOfInterest
+import com.visioncameramlkit.domain.models.StaticImageLimits
 import com.visioncameramlkit.domain.models.resolveToPixelRect
 import com.visioncameramlkit.domain.services.IImagePreprocessor
 import java.io.File
@@ -91,6 +92,19 @@ class ImagePreprocessor : IImagePreprocessor {
     imageFile: File,
     options: ImagePreprocessingOptions,
   ): ProcessedImage {
+    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+    BitmapFactory.decodeFile(imageFile.absolutePath, bounds)
+    require(bounds.outWidth > 0 && bounds.outHeight > 0) {
+      "Failed to read static image dimensions"
+    }
+    require(
+      bounds.outWidth <= StaticImageLimits.MAX_DIMENSION &&
+        bounds.outHeight <= StaticImageLimits.MAX_DIMENSION &&
+        bounds.outWidth.toLong() * bounds.outHeight.toLong() <= StaticImageLimits.MAX_PIXEL_COUNT,
+    ) {
+      "Static image exceeds the 4 MP or 4,096 px dimension limit."
+    }
+
     val bitmap =
       BitmapFactory.decodeFile(imageFile.absolutePath)
         ?: throw UnsupportedOperationException("Failed to decode image file")

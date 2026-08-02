@@ -16,13 +16,14 @@
 [![MIT License][license-shield]][license-url]
 [![NPM Version][npm-version-shield]][npm-version-url]
 
-A [React Native Vision Camera](https://github.com/mrousavy/react-native-vision-camera) plugin that exposes high-performance [Google ML Kit](https://developers.google.com/ml-kit) [frame output](https://visioncamera.margelo.com/docs/frame-output) features. Ships today: text recognition (OCR) and barcode scanning. Face detection, pose detection, and other ML Kit vision features are planned — see the [roadmap](#google-ml-kit-vision-features-roadmap) below.
+A Nitro-based [React Native Vision Camera](https://github.com/mrousavy/react-native-vision-camera) v5 plugin that exposes high-performance [Google ML Kit](https://developers.google.com/ml-kit) [frame output](https://visioncamera.margelo.com/docs/frame-output) features. v2 implements text recognition (OCR) and barcode scanning for live frames and static images. Other ML Kit vision features are post-v2 roadmap items.
 
 > The example app is intentionally heavy and demo-focused. For integration details, follow the documentation below.
 
 ## Requirements
 
-- iOS 12+ and Android SDK 21+
+- React Native 0.86+
+- iOS 15.1+ and Android SDK 24+
 - [react-native-vision-camera](https://www.npmjs.com/package/react-native-vision-camera) `>=5` (Nitro-based v5, not v4)
 - [react-native-nitro-modules](https://www.npmjs.com/package/react-native-nitro-modules)
 
@@ -54,8 +55,9 @@ module.exports = {
 ```
 
 The **static-image APIs** (`processImageTextRecognition`,
-`processImageBarcodeScanning`) don't use frame processors and don't need
-Vision Camera, Worklets, or a camera at all.
+`processImageBarcodeScanning`) don't use frame outputs, Worklets, or a camera.
+They do use the package's configured Nitro recognizers, so VisionCamera v5 and
+Nitro Modules remain installation requirements for the native package.
 
 > For Expo, follow the Vision Camera guide for camera permissions/setup:
 > [visioncamera.margelo.com/docs](https://visioncamera.margelo.com/docs).
@@ -74,7 +76,17 @@ cd ios && pod install
 
 ## ML Kit Models Installation (Selective)
 
-By default, all ML Kit features are enabled. You can selectively include only the models you need to reduce binary size.
+v2 implements two feature families: text recognition and barcode scanning.
+Both are enabled by default, including all five OCR language models. Disable
+OCR languages you do not need to reduce binary size. Configuration keys for
+post-v2 roadmap features remain reserved and disabled; enabling one does not
+provide a public JS/Nitro API in v2.
+
+On Android, the Latin OCR and barcode base SDKs remain compile-time
+dependencies even when their feature flags are disabled because v2's native
+implementation references their API types. Those flags control runtime
+availability; the four optional OCR language modules are still omitted when
+disabled.
 
 ### Android (Gradle)
 
@@ -88,17 +100,7 @@ ext["react-native-vision-camera-mlkit"] = [
     textRecognitionDevanagari: false,
     textRecognitionJapanese: false,
     textRecognitionKorean: false,
-    faceDetection: false,
-    faceMeshDetection: false,
-    poseDetection: false,
-    poseDetectionAccurate: false,
-    selfieSegmentation: false,
-    subjectSegmentation: false,
-    documentScanner: false,
     barcodeScanning: true,
-    imageLabeling: false,
-    objectDetection: false,
-    digitalInkRecognition: false,
   ]
 ]
 ```
@@ -114,18 +116,9 @@ $VisionCameraMLKit = {
   'textRecognitionDevanagari' => false,
   'textRecognitionJapanese' => false,
   'textRecognitionKorean' => false,
-  'faceDetection' => false,
-  'poseDetection' => false,
-  'poseDetectionAccurate' => false,
-  'selfieSegmentation' => false,
   'barcodeScanning' => true,
-  'imageLabeling' => false,
-  'objectDetection' => false,
-  'digitalInkRecognition' => false,
 }
 ```
-
-Android-only keys: `faceMeshDetection`, `subjectSegmentation`, `documentScanner`.
 
 ### Expo (config plugin)
 
@@ -143,8 +136,7 @@ you don't have to hand-edit native config. Add it to your `app.json`/
         "react-native-vision-camera-mlkit",
         {
           "textRecognition": true,
-          "barcodeScanning": true,
-          "faceDetection": false
+          "barcodeScanning": true
         }
       ]
     ]
@@ -157,12 +149,17 @@ sections above). Passing an unrecognized key throws at prebuild time instead
 of silently being ignored. Requires `@expo/config-plugins` (already a
 dependency of `expo` itself, so Expo projects have it for free).
 
+Static-image processing accepts local files up to 25 MB encoded size, 4
+megapixels, and 4,096 pixels on either dimension. Larger inputs are rejected
+before full decode to protect application disk, memory, and CPU resources.
+
 ## Usage
 
 ### API Docs
 
 - [Text Recognition API](docs/text-recognition.md)
 - [Barcode Scanning API](docs/barcode-scanning.md)
+- [Migrating from v1 to v2](docs/migration-v1-to-v2.md)
 
 ### Text Recognition (Frame Output)
 
@@ -211,7 +208,7 @@ const frameOutput = useFrameOutput({
 - `scaleFactor?: number` (0.9-1.0)
 - `invertColors?: boolean`
 - `roi?: RegionOfInterest` (crop processing to a rectangle of the frame; see [Region of Interest](#region-of-interest))
-- `frameProcessInterval?: number` (deprecated, throttle frames manually inside `onFrame` instead)
+- `frameProcessInterval?: number` (deprecated compatibility field; v2 does not use it to throttle processing)
 
 `TextRecognitionArguments`:
 
@@ -219,7 +216,10 @@ const frameOutput = useFrameOutput({
 
 ### Image Processing (Static Images)
 
-Use `processImageTextRecognition` to analyze a file path or URI without the camera (for example, images picked from the gallery).
+Use `processImageTextRecognition` to analyze a local image without the camera
+(for example, an image picked from the gallery). Each call creates a Nitro text
+recognizer configured with the supplied options, then processes the image
+asynchronously.
 
 ```ts
 import { processImageTextRecognition } from 'react-native-vision-camera-mlkit';
@@ -236,11 +236,15 @@ console.log(result.blocks);
 `TextRecognitionImageOptions`:
 
 - `language?: 'LATIN' | 'CHINESE' | 'DEVANAGARI' | 'JAPANESE' | 'KOREAN'`
-- `orientation?: 'portrait' | 'portrait-upside-down' | 'landscape-left' | 'landscape-right'`
+- `orientation?: 'portrait' | 'portrait-upside-down' | 'landscape-left' | 'landscape-right'` (overrides EXIF orientation; omit it to use image metadata)
 - `invertColors?: boolean`
+- `scaleFactor?: number` (0.9-1.0)
 - `roi?: RegionOfInterest` (crop processing to a rectangle of the image; see [Region of Interest](#region-of-interest))
 
-> The native bridge normalizes URIs (`file://` is removed on iOS and added on Android if missing). Supported formats: JPEG, PNG, WebP.
+> Static images must be local and readable. iOS accepts an absolute path or
+> `file://` URI. Android accepts an absolute path, `file://` URI, or
+> `content://` URI (copied to a temporary cache file for processing). Remote
+> URLs and platform-library schemes such as `ph://` are not supported.
 
 ### Barcode Scanning (Frame Output)
 
@@ -301,7 +305,7 @@ const frameOutput = useFrameOutput({
 - `scaleFactor?: number` (0.9-1.0)
 - `invertColors?: boolean`
 - `roi?: RegionOfInterest` (crop processing to a rectangle of the frame; see [Region of Interest](#region-of-interest))
-- `frameProcessInterval?: number` (deprecated, throttle frames manually inside `onFrame` instead)
+- `frameProcessInterval?: number` (deprecated compatibility field; v2 does not use it to throttle processing)
 
 Supported `formats` values:
 
@@ -329,7 +333,9 @@ Supported `formats` values:
 
 ### Barcode Scanning (Static Images)
 
-Use `processImageBarcodeScanning` to analyze a file path or URI without the camera.
+Use `processImageBarcodeScanning` to analyze a local image without the camera.
+Each call creates a Nitro barcode scanner configured with the supplied options,
+then processes the image asynchronously.
 
 ```ts
 import { processImageBarcodeScanning } from 'react-native-vision-camera-mlkit';
@@ -351,7 +357,7 @@ for (const barcode of result.barcodes) {
 
 - `formats?: ('UNKNOWN' | 'ALL_FORMATS' | 'CODE_128' | 'CODE_39' | 'CODE_93' | 'CODABAR' | 'DATA_MATRIX' | 'EAN_13' | 'EAN_8' | 'ITF' | 'QR_CODE' | 'UPC_A' | 'UPC_E' | 'PDF417' | 'AZTEC')[]`
 - `enableAllPotentialBarcodes?: boolean` (Android only)
-- `orientation?: 'portrait' | 'portrait-upside-down' | 'landscape-left' | 'landscape-right'`
+- `orientation?: 'portrait' | 'portrait-upside-down' | 'landscape-left' | 'landscape-right'` (overrides EXIF orientation; omit it to use image metadata)
 - `invertColors?: boolean`
 - `scaleFactor?: number` (0.9-1.0)
 - `roi?: RegionOfInterest` (crop processing to a rectangle of the image; see [Region of Interest](#region-of-interest))
@@ -381,12 +387,19 @@ import {
 
 ### Error Handling
 
-Frame processors throw a setup error when the feature is not enabled in Gradle/Podfile. For static image processing, the following error strings are exported:
+Recognizer creation throws a setup error when OCR or barcode scanning is not
+enabled in Gradle/Podfile. Static Nitro calls reject invalid schemes, missing
+or unreadable files, and images the platform decoder cannot read. The package
+also exports these compatibility error-message constants:
 
 - `IMAGE_NOT_FOUND_ERROR`
 - `INVALID_URI_ERROR`
 - `IMAGE_PROCESSING_FAILED_ERROR`
 - `UNSUPPORTED_IMAGE_FORMAT_ERROR`
+
+These constants are retained for source compatibility and user-facing fallback
+messages. Nitro rejection messages include platform-specific file details and
+are not guaranteed to equal these strings; do not branch on `error.message`.
 
 Use the feature helpers to provide user-friendly configuration hints:
 
@@ -425,8 +438,8 @@ const { textRecognition } = useTextRecognition({
 ## Performance
 
 - Follow the Vision Camera [performance guide](https://visioncamera.margelo.com/docs/performance)
-- Always call `frame.dispose()` exactly once per frame inside `onFrame` - the Camera pipeline reuses a small buffer pool and stalls (dropping frames) if buffers aren't released.
-- Throttle processing by skipping frames yourself inside `onFrame` (see the `frameProcessInterval` deprecation note above) instead of relying on a native-side interval.
+- Always call `frame.dispose()` exactly once for every frame delivered to `onFrame`, including skipped frames. A `try`/`finally` around the whole callback is the safest pattern; unreleased v5 frames can stall the camera buffer pool.
+- `frameProcessInterval` is retained only for source compatibility and has no throttling effect in the Nitro recognizers. Throttle in `onFrame` by deciding whether to call the recognizer while still disposing every frame.
 - `useAsyncRunner()` can offload genuinely independent heavy work to a separate thread, but avoid wrapping a single native plugin call in it - passing a plugin's worklet-callable method through nested worklet closures into a different Worklet Runtime is fragile and can throw at runtime.
 
 ## iOS Orientation Notes (Text Recognition)
@@ -448,19 +461,22 @@ If your iOS build fails in Pods with errors referencing `fmt/include/fmt/base.h`
 
 ## Google ML Kit Vision Features Roadmap
 
-| #   | Feature                           | Status                                     | Platform                                          |
-| --- | --------------------------------- | ------------------------------------------ | ------------------------------------------------- |
-| 0   | **Text recognition v2**           | [![complete][complete]][complete]          | [![android][android]][android] [![ios][ios]][ios] |
-| 1   | **Barcode scanning**              | [![complete][complete]][complete]          | [![android][android]][android] [![ios][ios]][ios] |
-| 2   | **Face detection**                | [![in-progress][in-progress]][in-progress] | [![android][android]][android] [![ios][ios]][ios] |
-| 3   | **Face mesh detection**           | [![in-progress][in-progress]][in-progress] | [![android][android]][android]                    |
-| 4   | **Pose detection**                | [![in-progress][in-progress]][in-progress] | [![android][android]][android] [![ios][ios]][ios] |
-| 5   | **Selfie segmentation**           | [![in-progress][in-progress]][in-progress] | [![android][android]][android] [![ios][ios]][ios] |
-| 6   | **Subject segmentation**          | [![in-progress][in-progress]][in-progress] | [![android][android]][android]                    |
-| 7   | **Document scanner**              | [![in-progress][in-progress]][in-progress] | [![android][android]][android]                    |
-| 8   | **Image labeling**                | [![in-progress][in-progress]][in-progress] | [![android][android]][android] [![ios][ios]][ios] |
-| 9   | **Object detection and tracking** | [![in-progress][in-progress]][in-progress] | [![android][android]][android] [![ios][ios]][ios] |
-| 10  | **Digital ink recognition**       | [![in-progress][in-progress]][in-progress] | [![android][android]][android] [![ios][ios]][ios] |
+| Feature                           | Release status    | Intended platform |
+| --------------------------------- | ----------------- | ----------------- |
+| **Text recognition v2**           | Available in v2   | Android and iOS   |
+| **Barcode scanning**              | Available in v2   | Android and iOS   |
+| **Face detection**                | Post-v2 roadmap   | Android and iOS   |
+| **Face mesh detection**           | Post-v2 roadmap   | Android           |
+| **Pose detection**                | Post-v2 roadmap   | Android and iOS   |
+| **Selfie segmentation**           | Post-v2 roadmap   | Android and iOS   |
+| **Subject segmentation**          | Post-v2 roadmap   | Android           |
+| **Document scanner**              | Post-v2 roadmap   | Android           |
+| **Image labeling**                | Post-v2 roadmap   | Android and iOS   |
+| **Object detection and tracking** | Post-v2 roadmap   | Android and iOS   |
+| **Digital ink recognition**       | Post-v2 roadmap   | Android and iOS   |
+
+Roadmap entries are not implemented public APIs and are not commitments to a
+particular release.
 
 ## Sponsor on GitHub
 
@@ -470,10 +486,6 @@ react-native-vision-camera-mlkit is provided as is and maintained in my free tim
 
 If you’re integrating this library into a production app, consider funding the project.
 
-[complete]: https://img.shields.io/badge/COMPLETE-5E5CE6
-[in-progress]: https://img.shields.io/badge/IN%20PROGRESS-FFD60A
-[android]: https://img.shields.io/badge/ANDROID-3DDC84
-[ios]: https://img.shields.io/badge/IOS-0A84FF
 [contributors-shield]: https://img.shields.io/github/contributors/pedrol2b/react-native-vision-camera-mlkit.svg?style=for-the-badge
 [contributors-url]: https://github.com/pedrol2b/react-native-vision-camera-mlkit/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/pedrol2b/react-native-vision-camera-mlkit.svg?style=for-the-badge

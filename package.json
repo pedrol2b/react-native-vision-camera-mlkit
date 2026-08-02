@@ -27,10 +27,13 @@
     "react-native.config.js",
     "!ios/build",
     "!android/build",
+    "!android/app/build",
     "!android/gradle",
     "!android/gradlew",
     "!android/gradlew.bat",
     "!android/local.properties",
+    "!**/*.test.*",
+    "!**/*.spec.*",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__",
@@ -128,6 +131,10 @@
   "workspaces": [
     "example"
   ],
+  "resolutions": {
+    "@babel/plugin-transform-modules-systemjs": "7.29.8",
+    "undici": "6.28.0"
+  },
   "packageManager": "yarn@4.11.0",
   "react-native-builder-bob": {
     "source": "src",
@@ -146,14 +153,6 @@
         }
       ]
     ]
-  },
-  "codegenConfig": {
-    "name": "VisionCameraMLKitSpec",
-    "type": "modules",
-    "jsSrcsDir": "src",
-    "android": {
-      "javaPackageName": "com.visioncameramlkit"
-    }
   },
   "prettier": {
     "quoteProps": "consistent",
@@ -191,7 +190,24 @@
     "modulePathIgnorePatterns": [
       "<rootDir>/example/node_modules",
       "<rootDir>/lib/"
-    ]
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "plugin/**/*.js",
+      "!src/**/*.test.{ts,tsx}",
+      "!src/**/__tests__/**",
+      "!src/**/types.ts",
+      "!src/specs/**",
+      "!plugin/**/__tests__/**"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    }
   },
   "create-react-native-library": {
     "languages": "kotlin-objc",

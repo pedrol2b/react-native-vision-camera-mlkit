@@ -1,9 +1,11 @@
 import { useMemo } from 'react';
 import type { Frame } from 'react-native-vision-camera';
-import { NativeBridge } from '../../core/NativeBridge';
 import { MLKIT_FEATURE_KEYS } from '../../core/constants';
+import { normalizeImageUri } from '../../core/normalizeImageUri';
+import { PluginFactory } from '../../core/PluginFactory';
 import { useMLKitPlugin } from '../../hooks/useMLKitPlugin';
 import type { BarcodeScanner } from '../../specs/BarcodeScanner.nitro';
+import { mapStaticBarcodeResult } from './mapStaticBarcodeResult';
 import type {
   BarcodeScanningArguments,
   BarcodeScanningImageOptions,
@@ -18,11 +20,18 @@ export const processImageBarcodeScanning = async (
   uri: string,
   options: BarcodeScanningImageOptions = {}
 ): Promise<BarcodeScanningResult> => {
-  return await NativeBridge.processImage(
+  const scanner = PluginFactory.initPlugin(
     MLKIT_FEATURE_KEYS.BARCODE_SCANNING,
-    uri,
     options
-  );
+  ) as BarcodeScanner;
+
+  try {
+    return mapStaticBarcodeResult(
+      await scanner.recognizeImage(normalizeImageUri(uri))
+    );
+  } finally {
+    scanner.dispose();
+  }
 };
 
 /**

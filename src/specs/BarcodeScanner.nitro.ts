@@ -17,4 +17,9 @@ export interface BarcodeScanner
     frame: Frame,
     args?: BarcodeScanningArguments
   ): BarcodeScannerResult;
+
+  /**
+   * Runs ML Kit barcode scanning on a static image URI.
+   */
+  recognizeImage(uri: string): Promise<BarcodeScannerResult>;
 }

@@ -1,4 +1,5 @@
 import Foundation
+import ImageIO
 
 #if canImport(MLKitVision) && canImport(VisionCamera)
   import MLKitVision
@@ -31,8 +32,7 @@ import Foundation
     private func createScaledVisionImage(
       from ciImage: CIImage,
       scaleFactor: CGFloat,
-      frameOrientation: UIImage.Orientation,
-      outputOrientation: OutputOrientation?,
+      visionOrientation: UIImage.Orientation,
       roi: DomainRegionOfInterest?
     ) -> VisionImage? {
       var workingImage = ciImage
@@ -75,10 +75,7 @@ import Foundation
       )
 
       let visionImage = VisionImage(image: uiImage)
-      visionImage.orientation = getVisionOrientation(
-        frameOrientation: frameOrientation,
-        outputOrientation: outputOrientation
-      )
+      visionImage.orientation = visionOrientation
       return visionImage
     }
 
@@ -102,6 +99,10 @@ import Foundation
 
       let effectiveScale = clampScale(options.scaleFactor)
       let frameOrientation = frame.orientation.asUIImageOrientation
+      let visionOrientation = resolveVisionOrientation(
+        frameOrientation: frameOrientation,
+        outputOrientation: options.outputOrientation
+      )
 
       if let roi = options.roi {
         guard (try? roi.validate()) != nil else {
@@ -115,8 +116,7 @@ import Foundation
         guard
           let invertedImage = createInvertedVisionImageFromFrame(
             sampleBuffer: sampleBuffer,
-            frameOrientation: frameOrientation,
-            outputOrientation: options.outputOrientation,
+            visionOrientation: visionOrientation,
             scaleFactor: effectiveScale,
             roi: options.roi
           )
@@ -128,8 +128,7 @@ import Foundation
         guard
           let convertedImage = createVisionImageFromFrame(
             sampleBuffer: sampleBuffer,
-            frameOrientation: frameOrientation,
-            outputOrientation: options.outputOrientation,
+            visionOrientation: visionOrientation,
             scaleFactor: effectiveScale,
             roi: options.roi
           )
@@ -171,7 +170,7 @@ import Foundation
       let metadata = ImageMetadata(
         width: width,
         height: height,
-        orientation: frameOrientation,
+        orientation: visionOrientation,
         isInverted: options.invertColors,
         offsetX: offsetX,
         offsetY: offsetY,
@@ -183,8 +182,7 @@ import Foundation
 
     private func createVisionImageFromFrame(
       sampleBuffer: CMSampleBuffer,
-      frameOrientation: UIImage.Orientation,
-      outputOrientation: OutputOrientation?,
+      visionOrientation: UIImage.Orientation,
       scaleFactor: CGFloat,
       roi: DomainRegionOfInterest?
     ) -> VisionImage? {
@@ -213,8 +211,7 @@ import Foundation
           guard
             let convertedImage = convertToSupportedFormat(
               pixelBuffer: pixelBuffer,
-              frameOrientation: frameOrientation,
-              outputOrientation: outputOrientation,
+              visionOrientation: visionOrientation,
               scaleFactor: scaleFactor,
               roi: roi
             )
@@ -228,17 +225,13 @@ import Foundation
 
       // Fallback: Use CMSampleBuffer directly (for BGRA, scaleFactor == 1.0, and no ROI)
       let image = VisionImage(buffer: sampleBuffer)
-      image.orientation = getVisionOrientation(
-        frameOrientation: frameOrientation,
-        outputOrientation: outputOrientation
-      )
+      image.orientation = visionOrientation
       return image
     }
 
     private func createInvertedVisionImageFromFrame(
       sampleBuffer: CMSampleBuffer,
-      frameOrientation: UIImage.Orientation,
-      outputOrientation: OutputOrientation?,
+      visionOrientation: UIImage.Orientation,
       scaleFactor: CGFloat,
       roi: DomainRegionOfInterest?
     ) -> VisionImage? {
@@ -256,13 +249,12 @@ import Foundation
       return createScaledVisionImage(
         from: invertedCIImage,
         scaleFactor: scaleFactor,
-        frameOrientation: frameOrientation,
-        outputOrientation: outputOrientation,
+        visionOrientation: visionOrientation,
         roi: roi
       )
     }
 
-    private func getVisionOrientation(
+    private func resolveVisionOrientation(
       frameOrientation: UIImage.Orientation,
       outputOrientation: OutputOrientation?
     )
@@ -290,8 +282,7 @@ import Foundation
 
     private func convertToSupportedFormat(
       pixelBuffer: CVPixelBuffer,
-      frameOrientation: UIImage.Orientation,
-      outputOrientation: OutputOrientation?,
+      visionOrientation: UIImage.Orientation,
       scaleFactor: CGFloat,
       roi: DomainRegionOfInterest?
     ) -> VisionImage? {
@@ -302,8 +293,7 @@ import Foundation
       return createScaledVisionImage(
         from: ciImage,
         scaleFactor: scaleFactor,
-        frameOrientation: frameOrientation,
-        outputOrientation: outputOrientation,
+        visionOrientation: visionOrientation,
         roi: roi
       )
     }
@@ -311,24 +301,27 @@ import Foundation
     func preprocessImage(imageFile: URL, options: ImagePreprocessingOptions)
       -> ProcessedImage?
     {
-      guard let imageData = try? Data(contentsOf: imageFile),
-        let uiImage = UIImage(data: imageData)
-      else {
+      guard validateStaticImageDimensions(imageFile) else {
+        return nil
+      }
+      guard let decodedImage = UIImage(contentsOfFile: imageFile.path) else {
         return nil
       }
 
-      // Use user-provided orientation override when available.
-      // Otherwise use the resulting UIImage orientation after processing.
-      let requestedOrientation = options.orientation?.asUIImageOrientation
+      // An explicit orientation describes the source pixels and overrides embedded EXIF.
+      // Normalize either orientation into pixels before resolving ROI coordinates.
+      let effectiveOrientation =
+        options.orientation?.asUIImageOrientation ?? decodedImage.imageOrientation
+      guard let normalizedImage = decodedImage.normalized(to: effectiveOrientation) else {
+        return nil
+      }
       let effectiveScale = clampScale(options.scaleFactor)
 
-      var processedImage = uiImage
+      var processedImage = normalizedImage
       var offsetX: CGFloat = 0
       var offsetY: CGFloat = 0
 
-      // Apply optional ROI crop, right after decode/orientation-resolution and before
-      // scale/invert (UIImage.imageOrientation metadata already encodes orientation for the
-      // static path, so there's no separate rotate step here).
+      // Apply optional ROI crop in normalized, visually oriented pixel coordinates.
       if let roi = options.roi {
         guard (try? roi.validate()) != nil else {
           return nil
@@ -354,7 +347,7 @@ import Foundation
         processedImage = UIImage(
           cgImage: croppedCGImage,
           scale: processedImage.scale,
-          orientation: processedImage.imageOrientation
+          orientation: .up
         )
       }
 
@@ -370,8 +363,7 @@ import Foundation
 
       // Create VisionImage
       let visionImage = VisionImage(image: processedImage)
-      let visionOrientation = requestedOrientation ?? processedImage.imageOrientation
-      visionImage.orientation = visionOrientation
+      visionImage.orientation = .up
 
       let pixelWidth =
         processedImage.cgImage?.width
@@ -383,7 +375,7 @@ import Foundation
       let metadata = ImageMetadata(
         width: pixelWidth,
         height: pixelHeight,
-        orientation: visionOrientation,
+        orientation: .up,
         isInverted: options.invertColors,
         offsetX: offsetX,
         offsetY: offsetY,
@@ -391,6 +383,24 @@ import Foundation
       )
 
       return ProcessedImage(image: visionImage, metadata: metadata)
+    }
+
+    private func validateStaticImageDimensions(_ imageFile: URL) -> Bool {
+      guard
+        let source = CGImageSourceCreateWithURL(imageFile as CFURL, nil),
+        let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil)
+          as? [CFString: Any],
+        let width = properties[kCGImagePropertyPixelWidth] as? Int,
+        let height = properties[kCGImagePropertyPixelHeight] as? Int,
+        width > 0,
+        height > 0,
+        width <= StaticImageLimits.maxDimension,
+        height <= StaticImageLimits.maxDimension,
+        width <= StaticImageLimits.maxPixelCount / height
+      else {
+        return false
+      }
+      return true
     }
 
     private func scaleUIImage(_ image: UIImage, scaleFactor: CGFloat) -> UIImage {

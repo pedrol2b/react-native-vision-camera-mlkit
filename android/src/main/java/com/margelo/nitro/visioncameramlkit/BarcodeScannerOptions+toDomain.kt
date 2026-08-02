@@ -16,4 +16,5 @@ internal fun BarcodeScannerOptions.toImagePreprocessingOptions(): ImagePreproces
     invertColors = invertColors ?: false,
     scaleFactor = scaleFactor?.toFloat() ?: 1.0f,
     roi = roi.toDomainRegionOfInterest(),
+    orientation = orientation.toDomainOrientation(),
   )

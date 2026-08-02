@@ -111,6 +111,13 @@ export type MLKitBaseArguments = {
 
 export type ImageProcessingBaseOptions = {
   /**
+   * Optional image downscaling for performance optimization.
+   * Clamped to the range [0.9, 1.0] to preserve ML accuracy.
+   * Example: 0.9 reduces width/height by ~10% (~19% fewer pixels).
+   * @default 1.0
+   */
+  scaleFactor?: number;
+  /**
    * Override the image orientation for processing.
    * When omitted, the orientation is automatically detected from the image's
    * EXIF metadata. Provide an explicit value only if the metadata is missing

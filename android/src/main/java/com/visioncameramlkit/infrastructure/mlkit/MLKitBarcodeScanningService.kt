@@ -16,4 +16,8 @@ class MLKitBarcodeScanningService(
     val barcodes: List<Barcode> = Tasks.await(task)
     return MLKitBarcodeAdapter.toDomain(barcodes)
   }
+
+  override fun close() {
+    barcodeScanner.close()
+  }
 }

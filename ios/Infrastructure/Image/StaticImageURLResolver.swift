@@ -29,12 +29,18 @@ enum StaticImageURLResolver {
       throw RuntimeError.error(withMessage: "Static image file is not readable: \(path)")
     }
 
-    let resourceValues = try fileURL.resourceValues(forKeys: [.fileSizeKey])
-    guard let fileSize = resourceValues.fileSize,
-      fileSize <= StaticImageLimits.maxEncodedBytes
+    let resourceValues = try fileURL.resourceValues(
+      forKeys: [.fileSizeKey, .isRegularFileKey, .isSymbolicLinkKey]
+    )
+    guard
+      StaticImageLimits.acceptsFile(
+        isRegularFile: resourceValues.isRegularFile,
+        isSymbolicLink: resourceValues.isSymbolicLink,
+        encodedBytes: resourceValues.fileSize
+      )
     else {
       throw RuntimeError.error(
-        withMessage: "Static image exceeds the 25 MB encoded-size limit."
+        withMessage: "Static image must be a regular, non-symlink file up to 25 MB."
       )
     }
 

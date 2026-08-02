@@ -47,7 +47,8 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "specs": "nitrogen",
     "release": "release-it --only-version",
-    "test": "jest"
+    "test": "jest",
+    "test:ios-static": "CLANG_MODULE_CACHE_PATH=/private/tmp/vcmlkit-clang-cache SWIFT_MODULECACHE_PATH=/private/tmp/vcmlkit-swift-cache xcrun swiftc ios/Domain/Models/StaticImageLimits.swift ios/Domain/Models/StaticImageDecodePlan.swift native-tests/ios/StaticImageDecodePlan.test.swift -o /private/tmp/vcmlkit-static-image-tests && /private/tmp/vcmlkit-static-image-tests"
   },
   "keywords": [
     "android",

@@ -149,9 +149,12 @@ sections above). Passing an unrecognized key throws at prebuild time instead
 of silently being ignored. Requires `@expo/config-plugins` (already a
 dependency of `expo` itself, so Expo projects have it for free).
 
-Static-image processing accepts local files up to 25 MB encoded size, 4
-megapixels, and 4,096 pixels on either dimension. Larger inputs are rejected
-before full decode to protect application disk, memory, and CPU resources.
+Static-image processing accepts local files up to 25 MB encoded size. iOS
+accepts sources up to 25 megapixels and 10,000 pixels on either dimension, then
+downsamples them to at most 4 megapixels and 4,096 pixels per dimension during
+ImageIO decode. Android currently accepts decoded dimensions up to 4 megapixels
+and 4,096 pixels per dimension. Larger inputs are rejected before full decode
+to protect application disk, memory, and CPU resources.
 
 ## Usage
 
@@ -241,8 +244,9 @@ console.log(result.blocks);
 - `scaleFactor?: number` (0.9-1.0)
 - `roi?: RegionOfInterest` (crop processing to a rectangle of the image; see [Region of Interest](#region-of-interest))
 
-> Static images must be local and readable. iOS accepts an absolute path or
-> `file://` URI. Android accepts an absolute path, `file://` URI, or
+> Static images must be local and readable. On iOS, the target must be a
+> regular, non-symlink file supplied as an absolute path or `file://` URI.
+> Android accepts an absolute path, `file://` URI, or
 > `content://` URI (copied to a temporary cache file for processing). Remote
 > URLs and platform-library schemes such as `ph://` are not supported.
 

@@ -7,6 +7,11 @@ import ImageIO
 
   class ImagePreprocessor: IImagePreprocessor {
 
+    private struct DecodedStaticImage {
+      let image: UIImage
+      let sourceScaleFactor: CGFloat
+    }
+
     // Reuse CIContext across frames to avoid repeated allocation overhead
     // CIContext creation is expensive (~10-20ms), reusing reduces per-frame cost significantly
     private static let sharedContext: CIContext = {
@@ -301,18 +306,20 @@ import ImageIO
     func preprocessImage(imageFile: URL, options: ImagePreprocessingOptions)
       -> ProcessedImage?
     {
-      guard validateStaticImageDimensions(imageFile) else {
-        return nil
-      }
-      guard let decodedImage = UIImage(contentsOfFile: imageFile.path) else {
+      guard
+        let decoded = decodeStaticImage(
+          imageFile,
+          explicitOrientation: options.orientation?.asUIImageOrientation
+        )
+      else {
         return nil
       }
 
       // An explicit orientation describes the source pixels and overrides embedded EXIF.
       // Normalize either orientation into pixels before resolving ROI coordinates.
       let effectiveOrientation =
-        options.orientation?.asUIImageOrientation ?? decodedImage.imageOrientation
-      guard let normalizedImage = decodedImage.normalized(to: effectiveOrientation) else {
+        options.orientation?.asUIImageOrientation ?? decoded.image.imageOrientation
+      guard let normalizedImage = decoded.image.normalized(to: effectiveOrientation) else {
         return nil
       }
       let effectiveScale = clampScale(options.scaleFactor)
@@ -342,8 +349,8 @@ import ImageIO
           return nil
         }
 
-        offsetX = pixelRect.origin.x
-        offsetY = pixelRect.origin.y
+        offsetX = pixelRect.origin.x / decoded.sourceScaleFactor
+        offsetY = pixelRect.origin.y / decoded.sourceScaleFactor
         processedImage = UIImage(
           cgImage: croppedCGImage,
           scale: processedImage.scale,
@@ -379,28 +386,71 @@ import ImageIO
         isInverted: options.invertColors,
         offsetX: offsetX,
         offsetY: offsetY,
-        scaleFactor: effectiveScale
+        scaleFactor: decoded.sourceScaleFactor * effectiveScale
       )
 
       return ProcessedImage(image: visionImage, metadata: metadata)
     }
 
-    private func validateStaticImageDimensions(_ imageFile: URL) -> Bool {
+    private func decodeStaticImage(
+      _ imageFile: URL,
+      explicitOrientation: UIImage.Orientation?
+    ) -> DecodedStaticImage? {
       guard
         let source = CGImageSourceCreateWithURL(imageFile as CFURL, nil),
         let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil)
           as? [CFString: Any],
         let width = properties[kCGImagePropertyPixelWidth] as? Int,
         let height = properties[kCGImagePropertyPixelHeight] as? Int,
-        width > 0,
-        height > 0,
-        width <= StaticImageLimits.maxDimension,
-        height <= StaticImageLimits.maxDimension,
-        width <= StaticImageLimits.maxPixelCount / height
+        let decodePlan = StaticImageDecodePlan.make(
+          sourceWidth: width,
+          sourceHeight: height
+        )
       else {
-        return false
+        return nil
       }
-      return true
+
+      let thumbnailOptions: [CFString: Any] = [
+        kCGImageSourceCreateThumbnailFromImageAlways: true,
+        kCGImageSourceCreateThumbnailWithTransform: explicitOrientation == nil,
+        kCGImageSourceThumbnailMaxPixelSize: decodePlan.thumbnailMaxPixelSize,
+        kCGImageSourceShouldCacheImmediately: true,
+      ]
+
+      guard
+        let thumbnail = CGImageSourceCreateThumbnailAtIndex(
+          source,
+          0,
+          thumbnailOptions as CFDictionary
+        )
+      else {
+        return nil
+      }
+
+      guard
+        StaticImageLimits.acceptsDecoded(
+          width: thumbnail.width,
+          height: thumbnail.height
+        )
+      else {
+        return nil
+      }
+
+      let actualScale = CGFloat(
+        decodePlan.sourceScaleFactor(
+          decodedWidth: thumbnail.width,
+          decodedHeight: thumbnail.height
+        )
+      )
+
+      return DecodedStaticImage(
+        image: UIImage(
+          cgImage: thumbnail,
+          scale: 1,
+          orientation: explicitOrientation ?? .up
+        ),
+        sourceScaleFactor: actualScale
+      )
     }
 
     private func scaleUIImage(_ image: UIImage, scaleFactor: CGFloat) -> UIImage {

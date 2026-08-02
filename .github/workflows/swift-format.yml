@@ -6,12 +6,14 @@ on:
     paths:
       - '.github/workflows/swift-format.yml'
       - 'ios/**/*.swift'
+      - 'native-tests/ios/**/*.swift'
       - '.swift-format'
   push:
     branches: [main, develop]
     paths:
       - '.github/workflows/swift-format.yml'
       - 'ios/**/*.swift'
+      - 'native-tests/ios/**/*.swift'
       - '.swift-format'
   merge_group:
     types: [checks_requested]
@@ -56,3 +58,6 @@ jobs:
           mint run swift-format swift-format lint \
             --configuration ../.swift-format \
             --recursive .
+          mint run swift-format swift-format lint \
+            --configuration ../.swift-format \
+            ../native-tests/ios/StaticImageDecodePlan.test.swift

@@ -21,6 +21,17 @@ apply plugin: "kotlin-android"
 
 apply plugin: "com.facebook.react"
 
+// This library's android/ directory sits at the repo root and is linked into
+// the example app by local path rather than node_modules, unlike every other
+// native dependency here. Without an explicit jsRootDir, RNGP resolves the JS
+// root against this package's own package.json, which also declares
+// "workspaces": ["example"] - causing it to treat the whole workspace as the
+// app root and aggregate codegen output for every native module in it (e.g.
+// bottom-sheet's), duplicating classes that module already builds for itself.
+react {
+  jsRootDir = file("../")
+}
+
 def reactNativeArchitectures() {
   def value = rootProject.getProperties().get("reactNativeArchitectures")
   return value ? value.split(",") : ["armeabi-v7a", "x86", "x86_64", "arm64-v8a"]

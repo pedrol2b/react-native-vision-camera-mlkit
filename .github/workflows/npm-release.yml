@@ -21,9 +21,6 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/setup
 
-      - name: Build package
-        run: yarn prepare
-
       - name: Validate release tag
         run: |
           PACKAGE_VERSION="$(node -p "require('./package.json').version")"
@@ -33,6 +30,9 @@ jobs:
             echo "Release ref must be the package version tag: $EXPECTED_TAG" >&2
             exit 1
           fi
+
+      - name: Build package
+        run: yarn prepare
 
       - name: Pack package
         id: pack

@@ -6,6 +6,12 @@ extension UIImage {
       return nil
     }
 
+    // `.up` means the pixel data already matches the desired visual orientation,
+    // so there's nothing to bake in — skip the redundant render pass.
+    if orientation == .up {
+      return UIImage(cgImage: cgImage, scale: 1, orientation: .up)
+    }
+
     let swapsDimensions: Bool
     switch orientation {
     case .left, .leftMirrored, .right, .rightMirrored:

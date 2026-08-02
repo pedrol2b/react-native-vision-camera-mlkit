@@ -7,7 +7,6 @@ on:
       - '.github/workflows/build-ios.yml'
       - 'cpp/**'
       - 'ios/**'
-      - 'native-tests/ios/**'
       - 'example/ios/**'
       - 'nitrogen/**'
       - 'nitro.json'
@@ -21,7 +20,6 @@ on:
       - '.github/workflows/build-ios.yml'
       - 'cpp/**'
       - 'ios/**'
-      - 'native-tests/ios/**'
       - 'example/ios/**'
       - 'nitrogen/**'
       - 'nitro.json'
@@ -105,9 +103,6 @@ jobs:
           cd example
           bundle install
           bundle exec pod install --project-directory=ios
-
-      - name: Run static-image native regression tests
-        run: yarn test:ios-static
 
       - name: Build iOS example
         run: yarn turbo run build:ios

@@ -114,33 +114,34 @@ class ImagePreprocessor : IImagePreprocessor {
     val effectiveOrientation = options.orientation ?: readExifOrientation(imageFile)
 
     val rotatedBitmap = rotateBitmap(bitmap, effectiveOrientation)
+    // Bitmap.createBitmap returns the source instance itself when no transform is
+    // actually applied (e.g. no rotation needed), so only recycle on a genuine copy.
+    if (rotatedBitmap !== bitmap) bitmap.recycle()
+
     val effectiveScale = clampScale(options.scaleFactor)
 
     val (croppedBitmap, cropRect) = cropToRegionOfInterest(rotatedBitmap, options.roi)
+    if (croppedBitmap !== rotatedBitmap) rotatedBitmap.recycle()
+
+    val scaledBitmap =
+      if (effectiveScale < 1.0f) {
+        croppedBitmap.scale(
+          (croppedBitmap.width * effectiveScale).toInt(),
+          (croppedBitmap.height * effectiveScale).toInt(),
+          false,
+        )
+      } else {
+        croppedBitmap
+      }
+    if (scaledBitmap !== croppedBitmap) croppedBitmap.recycle()
 
     val processedBitmap =
       if (options.invertColors) {
-        val scaledBitmap =
-          if (effectiveScale < 1.0f) {
-            croppedBitmap.scale(
-              (croppedBitmap.width * effectiveScale).toInt(),
-              (croppedBitmap.height * effectiveScale).toInt(),
-              false,
-            )
-          } else {
-            croppedBitmap
-          }
-        invertBitmap(scaledBitmap)
+        val invertedBitmap = invertBitmap(scaledBitmap)
+        scaledBitmap.recycle()
+        invertedBitmap
       } else {
-        if (effectiveScale < 1.0f) {
-          croppedBitmap.scale(
-            (croppedBitmap.width * effectiveScale).toInt(),
-            (croppedBitmap.height * effectiveScale).toInt(),
-            false,
-          )
-        } else {
-          croppedBitmap
-        }
+        scaledBitmap
       }
 
     val inputImage = InputImage.fromBitmap(processedBitmap, 0)

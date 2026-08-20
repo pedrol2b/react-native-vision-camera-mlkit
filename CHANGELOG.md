@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.0.1-rc.0] - 2026-08-20
+## [2.0.1] - 2026-08-20
 
 ### Fixed
 
@@ -78,8 +78,8 @@ Complete project rewrite.
 
 Initial release.
 
-[Unreleased]: https://github.com/pedrol2b/react-native-vision-camera-mlkit/compare/v2.0.1-rc.0...HEAD
-[2.0.1-rc.0]: https://github.com/pedrol2b/react-native-vision-camera-mlkit/compare/v2.0.0...v2.0.1-rc.0
+[Unreleased]: https://github.com/pedrol2b/react-native-vision-camera-mlkit/compare/v2.0.1...HEAD
+[2.0.1]: https://github.com/pedrol2b/react-native-vision-camera-mlkit/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/pedrol2b/react-native-vision-camera-mlkit/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/pedrol2b/react-native-vision-camera-mlkit/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/pedrol2b/react-native-vision-camera-mlkit/releases/tag/v0.1.0

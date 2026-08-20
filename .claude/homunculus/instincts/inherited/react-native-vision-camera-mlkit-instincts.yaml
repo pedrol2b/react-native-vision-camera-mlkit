@@ -1,0 +1,127 @@
+# Instincts generated from https://github.com/pedrol2b/react-native-vision-camera-mlkit
+# Generated: 2026-08-20T03:02:44.319Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: react-native-vision-camera-mlkit-commit-conventional
+trigger: "when writing a commit message"
+confidence: 0.85
+domain: git
+source: repo-analysis
+source_repo: https://github.com/pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Commit Conventional
+
+## Action
+
+Use conventional commit format with prefixes: fix, chore, docs
+
+## Evidence
+
+- 3 commits analyzed
+- Detected conventional commit pattern
+- Examples: fix(ios): keep text recognition switch exhaustive under selective install, chore(ios): update Podfile.lock
+
+---
+id: react-native-vision-camera-mlkit-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Commit Length
+
+## Action
+
+Write moderate-length commit messages (~55 characters)
+
+## Evidence
+
+- Average commit message length: 55 chars
+- Based on 3 commits
+
+---
+id: react-native-vision-camera-mlkit-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Naming Files
+
+## Action
+
+Use PascalCase naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: PascalCase
+
+---
+id: react-native-vision-camera-mlkit-import-relative
+trigger: "when importing modules"
+confidence: 0.75
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Import Relative
+
+## Action
+
+Use relative imports for project files
+
+## Evidence
+
+- Import analysis shows relative import pattern
+- Example: import { x } from '../lib/x'
+
+---
+id: react-native-vision-camera-mlkit-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: react-native-vision-camera-mlkit-test-separate
+trigger: "when writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/pedrol2b/react-native-vision-camera-mlkit
+---
+
+# React Native Vision Camera Mlkit Test Separate
+
+## Action
+
+Place tests in the tests/ or __tests__/ directory, mirroring src structure
+
+## Evidence
+
+- Separate test directory pattern detected
+- Tests live in dedicated test folders
+

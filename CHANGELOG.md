@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- iOS: text recognition failed to build whenever any language model was
+  disabled through the selective ML Kit install. Each `case` of the
+  `switch` over `DomainTextRecognitionLanguage` was wrapped in its own
+  `#if MLKIT_TEXT_RECOGNITION*` flag, so any partial selection compiled a
+  case out while the enum still declared all five, leaving the switch
+  non-exhaustive (`switch must be exhaustive`). Only all-enabled or
+  all-disabled builds compiled, which defeated the point of selective
+  install. The guards now live inside each case body, keeping the switch
+  exhaustive under every flag combination. Requesting a language whose
+  model was excluded throws a descriptive error naming the configuration
+  key to enable, matching the exception Android already raises, rather
+  than crashing. (#22)
+
 ## [2.0.0] - 2026-08-02
 
 Major, breaking release. Migrates off the legacy TurboModule bridge onto

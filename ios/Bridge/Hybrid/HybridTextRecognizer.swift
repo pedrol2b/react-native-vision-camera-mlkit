@@ -15,16 +15,16 @@ final class HybridTextRecognizer: HybridTextRecognizerSpec {
     private let staticRecognitionService: MLKitTextRecognitionService
   #endif
 
-  init(options: TextRecognizerOptions) {
+  init(options: TextRecognizerOptions) throws {
     self.options = options
     #if MLKIT_TEXT_RECOGNITION_ANY
       let resolvedTextOptions = options.toDomainTextRecognitionOptions()
       self.textOptions = resolvedTextOptions
       self.imageOptions = options.toImagePreprocessingOptions()
-      self.recognitionService = TextRecognitionServiceFactory.create(
+      self.recognitionService = try TextRecognitionServiceFactory.create(
         language: resolvedTextOptions.language
       )
-      self.staticRecognitionService = TextRecognitionServiceFactory.create(
+      self.staticRecognitionService = try TextRecognitionServiceFactory.create(
         language: resolvedTextOptions.language
       )
     #endif

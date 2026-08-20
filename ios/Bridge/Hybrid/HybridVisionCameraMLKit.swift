@@ -62,7 +62,7 @@ final class HybridVisionCameraMLKit: HybridVisionCameraMLKitSpec {
       throw RuntimeError.error(withMessage: "TextRecognition is not enabled in the native ML Kit configuration.")
     }
 
-    return HybridTextRecognizer(options: options)
+    return try HybridTextRecognizer(options: options)
   }
 
   func createBarcodeScanner(options: BarcodeScannerOptions) throws -> any HybridBarcodeScannerSpec {

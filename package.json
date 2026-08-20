@@ -1,6 +1,6 @@
 {
   "name": "react-native-vision-camera-mlkit",
-  "version": "2.0.0",
+  "version": "2.0.1-rc.0",
   "description": "A React Native Vision Camera (v5, Nitro-based) plugin for Google ML Kit vision features. Ships text recognition (OCR) and barcode scanning today, each independently selectable to keep binary size down, for real-time frame processing and static images, with more ML Kit vision features (face detection, pose detection, and others) on the roadmap.",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",

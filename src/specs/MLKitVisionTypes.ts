@@ -1,4 +1,5 @@
 import type { BarcodeFormat } from '../features/barcode-scanning/types';
+import type { ObjectDetectorMode } from '../features/object-detection/types';
 import type { TextRecognitionLanguage } from '../features/text-recognition/types';
 import type { Orientation, RegionOfInterest } from '../core/types';
 
@@ -58,6 +59,26 @@ export interface TextRecognizerOptions extends MLKitRecognizerOptions {
    * Language model used by ML Kit text recognition.
    */
   language?: TextRecognitionLanguage;
+}
+
+/**
+ * Options for creating a configured object detector.
+ */
+export interface ObjectDetectorOptions extends MLKitRecognizerOptions {
+  /**
+   * Tracking strategy used by ML Kit object detection.
+   */
+  detectorMode?: ObjectDetectorMode;
+
+  /**
+   * Detect every prominent object instead of only the most prominent one.
+   */
+  shouldEnableMultipleObjects?: boolean;
+
+  /**
+   * Classify detected objects into ML Kit's coarse category set.
+   */
+  shouldEnableClassification?: boolean;
 }
 
 /**

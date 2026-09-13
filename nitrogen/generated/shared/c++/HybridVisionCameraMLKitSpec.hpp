@@ -23,6 +23,10 @@ namespace margelo::nitro::visioncameramlkit { struct TextRecognizerOptions; }
 namespace margelo::nitro::visioncameramlkit { class HybridBarcodeScannerSpec; }
 // Forward declaration of `BarcodeScannerOptions` to properly resolve imports.
 namespace margelo::nitro::visioncameramlkit { struct BarcodeScannerOptions; }
+// Forward declaration of `HybridObjectDetectorSpec` to properly resolve imports.
+namespace margelo::nitro::visioncameramlkit { class HybridObjectDetectorSpec; }
+// Forward declaration of `ObjectDetectorOptions` to properly resolve imports.
+namespace margelo::nitro::visioncameramlkit { struct ObjectDetectorOptions; }
 
 #include "MLKitFeature.hpp"
 #include <memory>
@@ -30,6 +34,8 @@ namespace margelo::nitro::visioncameramlkit { struct BarcodeScannerOptions; }
 #include "TextRecognizerOptions.hpp"
 #include "HybridBarcodeScannerSpec.hpp"
 #include "BarcodeScannerOptions.hpp"
+#include "HybridObjectDetectorSpec.hpp"
+#include "ObjectDetectorOptions.hpp"
 
 namespace margelo::nitro::visioncameramlkit {
 
@@ -65,6 +71,7 @@ namespace margelo::nitro::visioncameramlkit {
       virtual bool isFeatureAvailable(MLKitFeature feature) = 0;
       virtual std::shared_ptr<HybridTextRecognizerSpec> createTextRecognizer(const TextRecognizerOptions& options) = 0;
       virtual std::shared_ptr<HybridBarcodeScannerSpec> createBarcodeScanner(const BarcodeScannerOptions& options) = 0;
+      virtual std::shared_ptr<HybridObjectDetectorSpec> createObjectDetector(const ObjectDetectorOptions& options) = 0;
 
     protected:
       // Hybrid Setup

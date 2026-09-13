@@ -32,6 +32,12 @@ namespace margelo::nitro::visioncameramlkit { class HybridBarcodeScannerSpec; }
 namespace margelo::nitro::visioncameramlkit { struct BarcodeScannerOptions; }
 // Forward declaration of `BarcodeFormat` to properly resolve imports.
 namespace margelo::nitro::visioncameramlkit { enum class BarcodeFormat; }
+// Forward declaration of `HybridObjectDetectorSpec` to properly resolve imports.
+namespace margelo::nitro::visioncameramlkit { class HybridObjectDetectorSpec; }
+// Forward declaration of `ObjectDetectorOptions` to properly resolve imports.
+namespace margelo::nitro::visioncameramlkit { struct ObjectDetectorOptions; }
+// Forward declaration of `ObjectDetectorMode` to properly resolve imports.
+namespace margelo::nitro::visioncameramlkit { enum class ObjectDetectorMode; }
 
 #include "MLKitFeature.hpp"
 #include <memory>
@@ -46,6 +52,9 @@ namespace margelo::nitro::visioncameramlkit { enum class BarcodeFormat; }
 #include "BarcodeScannerOptions.hpp"
 #include "BarcodeFormat.hpp"
 #include <vector>
+#include "HybridObjectDetectorSpec.hpp"
+#include "ObjectDetectorOptions.hpp"
+#include "ObjectDetectorMode.hpp"
 
 #include "VisionCameraMLKit-Swift-Cxx-Umbrella.hpp"
 
@@ -115,6 +124,14 @@ namespace margelo::nitro::visioncameramlkit {
     }
     inline std::shared_ptr<HybridBarcodeScannerSpec> createBarcodeScanner(const BarcodeScannerOptions& options) override {
       auto __result = _swiftPart.createBarcodeScanner(std::forward<decltype(options)>(options));
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<HybridObjectDetectorSpec> createObjectDetector(const ObjectDetectorOptions& options) override {
+      auto __result = _swiftPart.createObjectDetector(std::forward<decltype(options)>(options));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

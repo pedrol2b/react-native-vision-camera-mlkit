@@ -39,6 +39,10 @@ abstract class HybridVisionCameraMLKitSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun createBarcodeScanner(options: BarcodeScannerOptions): HybridBarcodeScannerSpec
+  
+  @DoNotStrip
+  @Keep
+  abstract fun createObjectDetector(options: ObjectDetectorOptions): HybridObjectDetectorSpec
 
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {

@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 import { FEATURE_ERROR_MAP } from '../shared/constants';
 import type { BarcodeScanningOptions } from '../features/barcode-scanning/types';
+import type { ObjectDetectionOptions } from '../features/object-detection/types';
 import type { TextRecognitionOptions } from '../features/text-recognition/types';
 import { MLKIT_FEATURE_KEYS } from './constants';
 import { validateRegionOfInterest } from './validateRegionOfInterest';
@@ -29,6 +30,7 @@ const TEXT_LANGUAGES = new Set([
   'JAPANESE',
   'KOREAN',
 ]);
+const DETECTOR_MODES = new Set(['stream', 'singleImage']);
 const BARCODE_FORMATS = new Set([
   'UNKNOWN',
   'ALL_FORMATS',
@@ -99,6 +101,27 @@ const validateFeatureOptions = (
   ) {
     invalidOption('language');
   }
+  if (feature === MLKIT_FEATURE_KEYS.OBJECT_DETECTION) {
+    if (
+      hasDefinedOption(options, 'detectorMode') &&
+      !DETECTOR_MODES.has(options.detectorMode as string)
+    ) {
+      invalidOption('detectorMode');
+    }
+    if (
+      hasDefinedOption(options, 'shouldEnableMultipleObjects') &&
+      typeof options.shouldEnableMultipleObjects !== 'boolean'
+    ) {
+      invalidOption('shouldEnableMultipleObjects');
+    }
+    if (
+      hasDefinedOption(options, 'shouldEnableClassification') &&
+      typeof options.shouldEnableClassification !== 'boolean'
+    ) {
+      invalidOption('shouldEnableClassification');
+    }
+  }
+
   if (feature !== MLKIT_FEATURE_KEYS.BARCODE_SCANNING) return;
 
   if (
@@ -210,6 +233,10 @@ buildscript {
       case MLKIT_FEATURE_KEYS.BARCODE_SCANNING:
         return VisionCameraMLKit.createBarcodeScanner(
           validatedOptions as BarcodeScanningOptions
+        );
+      case MLKIT_FEATURE_KEYS.OBJECT_DETECTION:
+        return VisionCameraMLKit.createObjectDetector(
+          validatedOptions as ObjectDetectionOptions
         );
       default:
         throw new Error(PluginFactory.getFeatureErrorMessage(feature));

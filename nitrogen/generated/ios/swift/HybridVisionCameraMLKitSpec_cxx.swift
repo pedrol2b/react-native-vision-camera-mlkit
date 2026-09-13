@@ -165,4 +165,19 @@ open class HybridVisionCameraMLKitSpec_cxx {
       return bridge.create_Result_std__shared_ptr_HybridBarcodeScannerSpec__(__exceptionPtr)
     }
   }
+  
+  @inline(__always)
+  public final func createObjectDetector(options: ObjectDetectorOptions) -> bridge.Result_std__shared_ptr_HybridObjectDetectorSpec__ {
+    do {
+      let __result = try self.__implementation.createObjectDetector(options: options)
+      let __resultCpp = { () -> bridge.std__shared_ptr_HybridObjectDetectorSpec_ in
+        let __cxxWrapped = __result.getCxxWrapper()
+        return __cxxWrapped.getCxxPart()
+      }()
+      return bridge.create_Result_std__shared_ptr_HybridObjectDetectorSpec__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_HybridObjectDetectorSpec__(__exceptionPtr)
+    }
+  }
 }

@@ -57,6 +57,7 @@ namespace margelo::nitro::visioncameramlkit {
     bool isFeatureAvailable(MLKitFeature feature) override;
     std::shared_ptr<HybridTextRecognizerSpec> createTextRecognizer(const TextRecognizerOptions& options) override;
     std::shared_ptr<HybridBarcodeScannerSpec> createBarcodeScanner(const BarcodeScannerOptions& options) override;
+    std::shared_ptr<HybridObjectDetectorSpec> createObjectDetector(const ObjectDetectorOptions& options) override;
 
   private:
     jni::global_ref<JHybridVisionCameraMLKitSpec::JavaPart> _javaPart;

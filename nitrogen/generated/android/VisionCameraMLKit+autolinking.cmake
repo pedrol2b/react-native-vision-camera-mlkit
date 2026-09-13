@@ -34,12 +34,14 @@ target_sources(
   ../nitrogen/generated/android/VisionCameraMLKitOnLoad.cpp
   # Shared Nitrogen C++ sources
   ../nitrogen/generated/shared/c++/HybridBarcodeScannerSpec.cpp
+  ../nitrogen/generated/shared/c++/HybridObjectDetectorSpec.cpp
   ../nitrogen/generated/shared/c++/HybridTextRecognizerSpec.cpp
   ../nitrogen/generated/shared/c++/HybridVisionCameraMLKitSpec.cpp
   # Android-specific Nitrogen C++ sources
   ../nitrogen/generated/android/c++/JHybridBarcodeScannerSpec.cpp
-  ../nitrogen/generated/android/c++/JHybridTextRecognizerSpec.cpp
+  ../nitrogen/generated/android/c++/JHybridObjectDetectorSpec.cpp
   ../nitrogen/generated/android/c++/JVariant_NullType_Double.cpp
+  ../nitrogen/generated/android/c++/JHybridTextRecognizerSpec.cpp
   ../nitrogen/generated/android/c++/JHybridVisionCameraMLKitSpec.cpp
 )
 

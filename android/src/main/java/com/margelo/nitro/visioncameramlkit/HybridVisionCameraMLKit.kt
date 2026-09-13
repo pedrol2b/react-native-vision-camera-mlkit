@@ -37,4 +37,12 @@ class HybridVisionCameraMLKit : HybridVisionCameraMLKitSpec() {
 
     return HybridBarcodeScanner(options)
   }
+
+  override fun createObjectDetector(options: ObjectDetectorOptions): HybridObjectDetectorSpec {
+    if (!isFeatureAvailable(MLKitFeature.OBJECTDETECTION)) {
+      throw Error("ObjectDetection is not enabled in the native ML Kit configuration.")
+    }
+
+    return HybridObjectDetector(options)
+  }
 }

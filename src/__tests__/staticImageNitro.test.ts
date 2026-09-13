@@ -4,11 +4,18 @@ import type {
 } from '../features/text-recognition';
 import type { BarcodeScanningImageOptions } from '../features/barcode-scanning';
 import type { BarcodeScannerResult } from '../specs/BarcodeScannerTypes';
+import type {
+  ObjectDetectionImageOptions,
+  ObjectDetectionResult,
+} from '../features/object-detection';
 
 type StaticImageApis = Pick<
   typeof import('../features/text-recognition') &
-    typeof import('../features/barcode-scanning'),
-  'processImageTextRecognition' | 'processImageBarcodeScanning'
+    typeof import('../features/barcode-scanning') &
+    typeof import('../features/object-detection'),
+  | 'processImageTextRecognition'
+  | 'processImageBarcodeScanning'
+  | 'processImageObjectDetection'
 >;
 
 type StaticTextRecognizer = {
@@ -21,6 +28,11 @@ type StaticBarcodeScanner = {
   dispose(): void;
 };
 
+type StaticObjectDetector = {
+  detectImage(uri: string): Promise<ObjectDetectionResult>;
+  dispose(): void;
+};
+
 type StaticNitroRoot = {
   isFeatureAvailable(feature: string): boolean;
   createTextRecognizer(
@@ -29,6 +41,9 @@ type StaticNitroRoot = {
   createBarcodeScanner(
     options: BarcodeScanningImageOptions
   ): StaticBarcodeScanner;
+  createObjectDetector(
+    options: ObjectDetectionImageOptions
+  ): StaticObjectDetector;
 };
 
 const loadStaticImageApis = () => {
@@ -42,8 +57,13 @@ const loadStaticImageApis = () => {
     Promise<BarcodeScannerResult>,
     [uri: string]
   >();
+  const detectObjectsImage = jest.fn<
+    Promise<ObjectDetectionResult>,
+    [uri: string]
+  >();
   const disposeTextRecognizer = jest.fn();
   const disposeBarcodeScanner = jest.fn();
+  const disposeObjectDetector = jest.fn();
   const textRecognizer: StaticTextRecognizer = {
     recognizeImage: recognizeTextImage,
     dispose: disposeTextRecognizer,
@@ -51,6 +71,10 @@ const loadStaticImageApis = () => {
   const barcodeScanner: StaticBarcodeScanner = {
     recognizeImage: recognizeBarcodeImage,
     dispose: disposeBarcodeScanner,
+  };
+  const objectDetector: StaticObjectDetector = {
+    detectImage: detectObjectsImage,
+    dispose: disposeObjectDetector,
   };
   const staticNitroRoot = {
     isFeatureAvailable: jest.fn(() => true),
@@ -62,8 +86,13 @@ const loadStaticImageApis = () => {
       StaticBarcodeScanner,
       [options: BarcodeScanningImageOptions]
     >(() => barcodeScanner),
+    createObjectDetector: jest.fn<
+      StaticObjectDetector,
+      [options: ObjectDetectionImageOptions]
+    >(() => objectDetector),
   } satisfies StaticNitroRoot;
-  const { createTextRecognizer, createBarcodeScanner } = staticNitroRoot;
+  const { createTextRecognizer, createBarcodeScanner, createObjectDetector } =
+    staticNitroRoot;
   const legacyNativeModuleAccess = jest.fn(() => {
     throw new Error(
       'Static image processing must not use a legacy native module'
@@ -99,16 +128,24 @@ const loadStaticImageApis = () => {
     StaticImageApis,
     'processImageBarcodeScanning'
   >;
+  const objectDetection = require('../features/object-detection') as Pick<
+    StaticImageApis,
+    'processImageObjectDetection'
+  >;
 
   return {
     ...textRecognition,
     ...barcodeScanning,
+    ...objectDetection,
     createTextRecognizer,
     createBarcodeScanner,
+    createObjectDetector,
     recognizeTextImage,
     recognizeBarcodeImage,
+    detectObjectsImage,
     disposeTextRecognizer,
     disposeBarcodeScanner,
+    disposeObjectDetector,
     legacyNativeModuleAccess,
   };
 };
@@ -237,6 +274,112 @@ describe('static image recognition through Nitro', () => {
 
     expect(legacyNativeModuleAccess).not.toHaveBeenCalled();
     expect(disposeTextRecognizer).toHaveBeenCalledTimes(1);
+  });
+
+  it('creates a configured object detector and detects the image URI', async () => {
+    const {
+      processImageObjectDetection,
+      createObjectDetector,
+      detectObjectsImage,
+      disposeObjectDetector,
+      legacyNativeModuleAccess,
+    } = loadStaticImageApis();
+    const result: ObjectDetectionResult = {
+      objects: [
+        {
+          bounds: {
+            x: 20,
+            y: 10,
+            centerX: 50,
+            centerY: 50,
+            width: 60,
+            height: 80,
+            top: 10,
+            left: 20,
+            bottom: 90,
+            right: 80,
+          },
+          trackingId: null,
+          labels: [],
+        },
+      ],
+    };
+    const options: ObjectDetectionImageOptions = {
+      shouldEnableMultipleObjects: true,
+      shouldEnableClassification: true,
+      orientation: 'landscape-right',
+      scaleFactor: 0.9,
+    };
+    detectObjectsImage.mockResolvedValue(result);
+
+    const response = await processImageObjectDetection(
+      'file:///tmp/shelf.jpg',
+      options
+    );
+
+    expect(createObjectDetector).toHaveBeenCalledWith({
+      detectorMode: 'singleImage',
+      ...options,
+    });
+    expect(detectObjectsImage).toHaveBeenCalledWith('file:///tmp/shelf.jpg');
+    expect(legacyNativeModuleAccess).not.toHaveBeenCalled();
+    expect(disposeObjectDetector).toHaveBeenCalledTimes(1);
+    expect(response).toBe(result);
+  });
+
+  it('defaults the object detector to single-image mode when options are omitted', async () => {
+    const {
+      processImageObjectDetection,
+      createObjectDetector,
+      detectObjectsImage,
+      disposeObjectDetector,
+    } = loadStaticImageApis();
+    detectObjectsImage.mockResolvedValue({ objects: [] });
+
+    await processImageObjectDetection('file:///tmp/empty-shelf.png');
+
+    expect(createObjectDetector).toHaveBeenCalledWith({
+      detectorMode: 'singleImage',
+    });
+    expect(detectObjectsImage).toHaveBeenCalledWith(
+      'file:///tmp/empty-shelf.png'
+    );
+    expect(disposeObjectDetector).toHaveBeenCalledTimes(1);
+  });
+
+  it('lets the caller override the single-image default with stream mode', async () => {
+    const {
+      processImageObjectDetection,
+      createObjectDetector,
+      detectObjectsImage,
+    } = loadStaticImageApis();
+    detectObjectsImage.mockResolvedValue({ objects: [] });
+
+    await processImageObjectDetection('file:///tmp/shelf.png', {
+      detectorMode: 'stream',
+    });
+
+    expect(createObjectDetector).toHaveBeenCalledWith({
+      detectorMode: 'stream',
+    });
+  });
+
+  it('propagates asynchronous object detector errors without falling back to the legacy bridge', async () => {
+    const {
+      processImageObjectDetection,
+      detectObjectsImage,
+      disposeObjectDetector,
+      legacyNativeModuleAccess,
+    } = loadStaticImageApis();
+    const failure = new Error('The image could not be decoded');
+    detectObjectsImage.mockRejectedValue(failure);
+
+    await expect(
+      processImageObjectDetection('file:///tmp/unreadable-shelf.jpg')
+    ).rejects.toBe(failure);
+
+    expect(legacyNativeModuleAccess).not.toHaveBeenCalled();
+    expect(disposeObjectDetector).toHaveBeenCalledTimes(1);
   });
 
   it('propagates asynchronous barcode scanner errors without falling back to the legacy bridge', async () => {

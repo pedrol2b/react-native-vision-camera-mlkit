@@ -2,6 +2,7 @@ import type { Frame } from 'react-native-vision-camera';
 import { MLKIT_FEATURE_KEYS } from '../core/constants';
 import type { TextRecognitionResult } from '../features/text-recognition/types';
 import type { BarcodeScanningResult } from '../features/barcode-scanning/types';
+import type { ObjectDetectionResult } from '../features/object-detection/types';
 
 const loadFrameProcessingHooks = () => {
   jest.resetModules();
@@ -11,13 +12,19 @@ const loadFrameProcessingHooks = () => {
     blocks: [],
   };
   const barcodeResult: BarcodeScanningResult = { barcodes: [] };
+  const objectResult: ObjectDetectionResult = { objects: [] };
   const recognizeText = jest.fn(() => textResult);
   const recognizeBarcodes = jest.fn(() => barcodeResult);
-  const useMLKitPlugin = jest.fn((feature: string) =>
-    feature === MLKIT_FEATURE_KEYS.TEXT_RECOGNITION
-      ? { recognize: recognizeText }
-      : { recognize: recognizeBarcodes }
-  );
+  const detectObjects = jest.fn(() => objectResult);
+  const useMLKitPlugin = jest.fn((feature: string) => {
+    if (feature === MLKIT_FEATURE_KEYS.TEXT_RECOGNITION) {
+      return { recognize: recognizeText };
+    }
+    if (feature === MLKIT_FEATURE_KEYS.OBJECT_DETECTION) {
+      return { detect: detectObjects };
+    }
+    return { recognize: recognizeBarcodes };
+  });
   const useMemo = jest.fn((factory: () => unknown) => factory());
 
   jest.doMock('react', () => ({ useMemo }));
@@ -31,10 +38,14 @@ const loadFrameProcessingHooks = () => {
       .useTextRecognition as typeof import('../features/text-recognition').useTextRecognition,
     useBarcodeScanning: require('../features/barcode-scanning')
       .useBarcodeScanning as typeof import('../features/barcode-scanning').useBarcodeScanning,
+    useObjectDetection: require('../features/object-detection')
+      .useObjectDetection as typeof import('../features/object-detection').useObjectDetection,
     recognizeText,
     recognizeBarcodes,
+    detectObjects,
     textResult,
     barcodeResult,
+    objectResult,
     useMLKitPlugin,
     useMemo,
   };
@@ -90,5 +101,40 @@ describe('frame processing hooks', () => {
     );
     expect(recognizeBarcodes).toHaveBeenCalledWith(frame, {});
     expect(result).toBe(barcodeResult);
+  });
+
+  it('creates an object detector and forwards frame-processing arguments', () => {
+    const {
+      useObjectDetection,
+      detectObjects,
+      objectResult,
+      useMLKitPlugin,
+      useMemo,
+    } = loadFrameProcessingHooks();
+    const options = { detectorMode: 'stream' as const };
+    const frame = { width: 1920, height: 1080 } as Frame;
+    const args = { outputOrientation: 'portrait' as const };
+
+    const plugin = useObjectDetection(options);
+    const result = plugin.objectDetection(frame, args);
+
+    expect(useMLKitPlugin).toHaveBeenCalledWith(
+      MLKIT_FEATURE_KEYS.OBJECT_DETECTION,
+      options
+    );
+    expect(useMemo).toHaveBeenCalledWith(expect.any(Function), [
+      { detect: detectObjects },
+    ]);
+    expect(detectObjects).toHaveBeenCalledWith(frame, args);
+    expect(result).toBe(objectResult);
+  });
+
+  it('supplies empty arguments to the object detector when none are given', () => {
+    const { useObjectDetection, detectObjects } = loadFrameProcessingHooks();
+    const frame = { width: 640, height: 480 } as Frame;
+
+    useObjectDetection().objectDetection(frame);
+
+    expect(detectObjects).toHaveBeenCalledWith(frame, {});
   });
 });

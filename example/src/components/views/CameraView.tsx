@@ -24,6 +24,7 @@ import {
 } from 'react-native-vision-camera';
 import {
   useBarcodeScanning,
+  useObjectDetection,
   useTextRecognition,
   type Orientation,
 } from 'react-native-vision-camera-mlkit';
@@ -126,6 +127,15 @@ const CameraView = forwardRef<CameraRef, CameraViewProps>(
       formats: pluginOptions[PLUGIN_ID.BARCODE_SCANNING].formats,
       enableAllPotentialBarcodes:
         pluginOptions[PLUGIN_ID.BARCODE_SCANNING].enableAllPotentialBarcodes,
+      ...sharedOptions,
+    });
+
+    const objectDetectionPlugin = useObjectDetection({
+      detectorMode: pluginOptions[PLUGIN_ID.OBJECT_DETECTION].detectorMode,
+      shouldEnableMultipleObjects:
+        pluginOptions[PLUGIN_ID.OBJECT_DETECTION].shouldEnableMultipleObjects,
+      shouldEnableClassification:
+        pluginOptions[PLUGIN_ID.OBJECT_DETECTION].shouldEnableClassification,
       ...sharedOptions,
     });
 
@@ -265,6 +275,11 @@ const CameraView = forwardRef<CameraRef, CameraViewProps>(
             );
           } else if (pluginId === PLUGIN_ID.BARCODE_SCANNING) {
             resultObject = barcodeScanningPlugin.barcodeScanning(
+              frame,
+              withArguments
+            );
+          } else if (pluginId === PLUGIN_ID.OBJECT_DETECTION) {
+            resultObject = objectDetectionPlugin.objectDetection(
               frame,
               withArguments
             );

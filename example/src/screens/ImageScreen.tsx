@@ -11,6 +11,7 @@ import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   processImageBarcodeScanning,
+  processImageObjectDetection,
   processImageTextRecognition,
 } from 'react-native-vision-camera-mlkit';
 import {
@@ -35,6 +36,7 @@ import { useImageProcessingOptionsStore, useTerminalStore } from '../stores';
 const IMAGE_PROCESSOR_MAP = {
   [PLUGIN_ID.TEXT_RECOGNITION]: processImageTextRecognition,
   [PLUGIN_ID.BARCODE_SCANNING]: processImageBarcodeScanning,
+  [PLUGIN_ID.OBJECT_DETECTION]: processImageObjectDetection,
 } as const;
 
 const ImageScreen = () => {

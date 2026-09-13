@@ -1,6 +1,7 @@
 import type {
   BarcodeScanningOptions,
   MLKitBaseOptions as SharedPluginOptions,
+  ObjectDetectionOptions,
   TextRecognitionOptions,
 } from 'react-native-vision-camera-mlkit';
 import { create } from 'zustand';
@@ -11,6 +12,12 @@ type SpecificPluginOptions = {
   [PLUGIN_ID.BARCODE_SCANNING]: Pick<
     BarcodeScanningOptions,
     'formats' | 'enableAllPotentialBarcodes'
+  >;
+  [PLUGIN_ID.OBJECT_DETECTION]: Pick<
+    ObjectDetectionOptions,
+    | 'detectorMode'
+    | 'shouldEnableMultipleObjects'
+    | 'shouldEnableClassification'
   >;
 };
 
@@ -44,6 +51,11 @@ export const usePluginOptionsStore = create<PluginOptionsState>((set) => ({
     [PLUGIN_ID.BARCODE_SCANNING]: {
       formats: [],
       enableAllPotentialBarcodes: false,
+    },
+    [PLUGIN_ID.OBJECT_DETECTION]: {
+      detectorMode: 'stream',
+      shouldEnableMultipleObjects: true,
+      shouldEnableClassification: false,
     },
   },
   setSharedOption: (key, value) =>

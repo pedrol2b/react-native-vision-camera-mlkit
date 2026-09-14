@@ -23,9 +23,11 @@ include_directories(
 target_sources(
   ${PACKAGE_NAME} PRIVATE
   ../nitrogen/generated/shared/c++/HybridBarcodeScannerSpec.cpp
+  ../nitrogen/generated/shared/c++/HybridObjectDetectorSpec.cpp
   ../nitrogen/generated/shared/c++/HybridTextRecognizerSpec.cpp
   ../nitrogen/generated/shared/c++/HybridVisionCameraMLKitSpec.cpp
   ../nitrogen/generated/android/c++/JHybridBarcodeScannerSpec.cpp
+  ../nitrogen/generated/android/c++/JHybridObjectDetectorSpec.cpp
   ../nitrogen/generated/android/c++/JHybridTextRecognizerSpec.cpp
   ../nitrogen/generated/android/c++/JHybridVisionCameraMLKitSpec.cpp
   ../nitrogen/generated/android/c++/JVariant_NullType_Double.cpp

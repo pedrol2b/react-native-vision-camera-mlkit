@@ -12,7 +12,7 @@ $VisionCameraMLKit = {
   'selfieSegmentation' => false,
   'barcodeScanning' => true,
   'imageLabeling' => false,
-  'objectDetection' => false,
+  'objectDetection' => true,
   'digitalInkRecognition' => false,
 }
 

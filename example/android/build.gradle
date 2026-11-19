@@ -26,7 +26,7 @@ buildscript {
         documentScanner          : false,
         barcodeScanning          : v2FeaturesEnabled,
         imageLabeling            : false,
-        objectDetection          : false,
+        objectDetection          : v2FeaturesEnabled,
         digitalInkRecognition    : false,
       ]
     ])

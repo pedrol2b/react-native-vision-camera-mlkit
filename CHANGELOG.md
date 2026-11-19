@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Object detection and tracking for live frames and static images on Android
+  and iOS, with optional classification, ROI support, and selective native
+  installation. Thanks to [@eumaninho54](https://github.com/eumaninho54) for
+  contributing this feature in [PR #27](https://github.com/pedrol2b/react-native-vision-camera-mlkit/pull/27).
+
 ## [2.0.1] - 2026-08-20
 
 ### Fixed

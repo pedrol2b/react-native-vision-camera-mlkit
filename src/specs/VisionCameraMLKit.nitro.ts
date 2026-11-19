@@ -3,8 +3,10 @@ import type { BarcodeScanner } from './BarcodeScanner.nitro';
 import type {
   BarcodeScannerOptions,
   MLKitFeature,
+  ObjectDetectorOptions,
   TextRecognizerOptions,
 } from './MLKitVisionTypes';
+import type { ObjectDetector } from './ObjectDetector.nitro';
 import type { TextRecognizer } from './TextRecognizer.nitro';
 
 /**
@@ -26,4 +28,9 @@ export interface VisionCameraMLKit
    * Creates a configured barcode scanner.
    */
   createBarcodeScanner(options: BarcodeScannerOptions): BarcodeScanner;
+
+  /**
+   * Creates a configured object detector.
+   */
+  createObjectDetector(options: ObjectDetectorOptions): ObjectDetector;
 }

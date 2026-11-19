@@ -169,6 +169,7 @@ android {
         "../nitrogen/generated/android/kotlin/com/margelo/nitro/visioncameramlkit",
         anyTextRecognition ? "src/textRecognitionEnabled/java" : "src/textRecognitionDisabled/java",
         mlkitConfig.barcodeScanning ? "src/barcodeScanningEnabled/java" : "src/barcodeScanningDisabled/java",
+        mlkitConfig.objectDetection ? "src/objectDetectionEnabled/java" : "src/objectDetectionDisabled/java",
       ]
     }
   }

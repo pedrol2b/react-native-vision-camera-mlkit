@@ -16,6 +16,7 @@ const loadPluginFactory = () => {
       isFeatureAvailable,
       createTextRecognizer: jest.fn(),
       createBarcodeScanner: jest.fn(),
+      createObjectDetector: jest.fn(),
     },
   }));
 
@@ -70,6 +71,31 @@ describe('PluginFactory.initPlugin', () => {
         language: 'KLINGON',
       })
     ).toThrow('Invalid MLKit plugin option "language".');
+  });
+
+  it.each([
+    { detectorMode: 'continuous' },
+    { detectorMode: 'STREAM' },
+    { shouldEnableMultipleObjects: 'true' },
+    { shouldEnableClassification: 1 },
+  ])('rejects invalid object-detection options: %p', (options) => {
+    const { PluginFactory } = loadPluginFactory();
+
+    expect(() =>
+      PluginFactory.initPlugin(MLKIT_FEATURE_KEYS.OBJECT_DETECTION, options)
+    ).toThrow('Invalid MLKit plugin option');
+  });
+
+  it('accepts every documented object-detection option', () => {
+    const { PluginFactory } = loadPluginFactory();
+
+    expect(() =>
+      PluginFactory.initPlugin(MLKIT_FEATURE_KEYS.OBJECT_DETECTION, {
+        detectorMode: 'singleImage',
+        shouldEnableMultipleObjects: true,
+        shouldEnableClassification: false,
+      })
+    ).not.toThrow();
   });
 
   it.each([

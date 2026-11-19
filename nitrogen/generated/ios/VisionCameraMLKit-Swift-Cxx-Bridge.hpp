@@ -20,16 +20,26 @@ namespace margelo::nitro::visioncameramlkit { enum class BarcodeValueTypeName; }
 namespace margelo::nitro::visioncameramlkit { struct BoundingBox; }
 // Forward declaration of `Corner` to properly resolve imports.
 namespace margelo::nitro::visioncameramlkit { struct Corner; }
+// Forward declaration of `DetectedObject` to properly resolve imports.
+namespace margelo::nitro::visioncameramlkit { struct DetectedObject; }
 // Forward declaration of `HybridBarcodeScannerSpec` to properly resolve imports.
 namespace margelo::nitro::visioncameramlkit { class HybridBarcodeScannerSpec; }
 // Forward declaration of `HybridFrameSpec` to properly resolve imports.
 namespace margelo::nitro::camera { class HybridFrameSpec; }
+// Forward declaration of `HybridObjectDetectorSpec` to properly resolve imports.
+namespace margelo::nitro::visioncameramlkit { class HybridObjectDetectorSpec; }
 // Forward declaration of `HybridTextRecognizerSpec` to properly resolve imports.
 namespace margelo::nitro::visioncameramlkit { class HybridTextRecognizerSpec; }
 // Forward declaration of `HybridVisionCameraMLKitSpec` to properly resolve imports.
 namespace margelo::nitro::visioncameramlkit { class HybridVisionCameraMLKitSpec; }
 // Forward declaration of `MLKitBaseArguments` to properly resolve imports.
 namespace margelo::nitro::visioncameramlkit { struct MLKitBaseArguments; }
+// Forward declaration of `ObjectDetectionResult` to properly resolve imports.
+namespace margelo::nitro::visioncameramlkit { struct ObjectDetectionResult; }
+// Forward declaration of `ObjectDetectorMode` to properly resolve imports.
+namespace margelo::nitro::visioncameramlkit { enum class ObjectDetectorMode; }
+// Forward declaration of `ObjectLabel` to properly resolve imports.
+namespace margelo::nitro::visioncameramlkit { struct ObjectLabel; }
 // Forward declaration of `Orientation` to properly resolve imports.
 namespace margelo::nitro::visioncameramlkit { enum class Orientation; }
 // Forward declaration of `RegionOfInterestUnit` to properly resolve imports.
@@ -54,6 +64,8 @@ namespace margelo::nitro::visioncameramlkit { struct TextSymbol; }
 namespace VisionCameraMLKit { class HybridBarcodeScannerSpec_cxx; }
 // Forward declaration of `HybridFrameSpec_cxx` to properly resolve imports.
 namespace VisionCamera { class HybridFrameSpec_cxx; }
+// Forward declaration of `HybridObjectDetectorSpec_cxx` to properly resolve imports.
+namespace VisionCameraMLKit { class HybridObjectDetectorSpec_cxx; }
 // Forward declaration of `HybridTextRecognizerSpec_cxx` to properly resolve imports.
 namespace VisionCameraMLKit { class HybridTextRecognizerSpec_cxx; }
 // Forward declaration of `HybridVisionCameraMLKitSpec_cxx` to properly resolve imports.
@@ -66,10 +78,15 @@ namespace VisionCameraMLKit { class HybridVisionCameraMLKitSpec_cxx; }
 #include "BarcodeValueTypeName.hpp"
 #include "BoundingBox.hpp"
 #include "Corner.hpp"
+#include "DetectedObject.hpp"
 #include "HybridBarcodeScannerSpec.hpp"
+#include "HybridObjectDetectorSpec.hpp"
 #include "HybridTextRecognizerSpec.hpp"
 #include "HybridVisionCameraMLKitSpec.hpp"
 #include "MLKitBaseArguments.hpp"
+#include "ObjectDetectionResult.hpp"
+#include "ObjectDetectorMode.hpp"
+#include "ObjectLabel.hpp"
 #include "Orientation.hpp"
 #include "RegionOfInterest.hpp"
 #include "RegionOfInterestUnit.hpp"
@@ -335,17 +352,6 @@ namespace margelo::nitro::visioncameramlkit::bridge::swift {
     return Result<std::shared_ptr<Promise<BarcodeScannerResult>>>::withError(error);
   }
   
-  // pragma MARK: std::vector<std::string>
-  /**
-   * Specialized version of `std::vector<std::string>`.
-   */
-  using std__vector_std__string_ = std::vector<std::string>;
-  inline std::vector<std::string> create_std__vector_std__string_(size_t size) noexcept {
-    std::vector<std::string> vector;
-    vector.reserve(size);
-    return vector;
-  }
-  
   // pragma MARK: std::variant<nitro::NullType, double>
   /**
    * Wrapper struct for `std::variant<nitro::NullType, double>`.
@@ -388,6 +394,103 @@ namespace margelo::nitro::visioncameramlkit::bridge::swift {
   }
   inline std::variant<nitro::NullType, double> get_std__optional_std__variant_nitro__NullType__double__(const std::optional<std::variant<nitro::NullType, double>>& optional) noexcept {
     return optional.value();
+  }
+  
+  // pragma MARK: std::vector<ObjectLabel>
+  /**
+   * Specialized version of `std::vector<ObjectLabel>`.
+   */
+  using std__vector_ObjectLabel_ = std::vector<ObjectLabel>;
+  inline std::vector<ObjectLabel> create_std__vector_ObjectLabel_(size_t size) noexcept {
+    std::vector<ObjectLabel> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  // pragma MARK: std::vector<DetectedObject>
+  /**
+   * Specialized version of `std::vector<DetectedObject>`.
+   */
+  using std__vector_DetectedObject_ = std::vector<DetectedObject>;
+  inline std::vector<DetectedObject> create_std__vector_DetectedObject_(size_t size) noexcept {
+    std::vector<DetectedObject> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<ObjectDetectionResult>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<ObjectDetectionResult>>`.
+   */
+  using std__shared_ptr_Promise_ObjectDetectionResult__ = std::shared_ptr<Promise<ObjectDetectionResult>>;
+  inline std::shared_ptr<Promise<ObjectDetectionResult>> create_std__shared_ptr_Promise_ObjectDetectionResult__() noexcept {
+    return Promise<ObjectDetectionResult>::create();
+  }
+  inline PromiseHolder<ObjectDetectionResult> wrap_std__shared_ptr_Promise_ObjectDetectionResult__(std::shared_ptr<Promise<ObjectDetectionResult>> promise) noexcept {
+    return PromiseHolder<ObjectDetectionResult>(std::move(promise));
+  }
+  
+  // pragma MARK: std::function<void(const ObjectDetectionResult& /* result */)>
+  /**
+   * Specialized version of `std::function<void(const ObjectDetectionResult&)>`.
+   */
+  using Func_void_ObjectDetectionResult = std::function<void(const ObjectDetectionResult& /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(const ObjectDetectionResult& / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_ObjectDetectionResult_Wrapper final {
+  public:
+    explicit Func_void_ObjectDetectionResult_Wrapper(std::function<void(const ObjectDetectionResult& /* result */)>&& func): _function(std::make_unique<std::function<void(const ObjectDetectionResult& /* result */)>>(std::move(func))) {}
+    inline void call(ObjectDetectionResult result) const noexcept {
+      _function->operator()(result);
+    }
+  private:
+    std::unique_ptr<std::function<void(const ObjectDetectionResult& /* result */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_ObjectDetectionResult create_Func_void_ObjectDetectionResult(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_ObjectDetectionResult_Wrapper wrap_Func_void_ObjectDetectionResult(Func_void_ObjectDetectionResult value) noexcept {
+    return Func_void_ObjectDetectionResult_Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::shared_ptr<HybridObjectDetectorSpec>
+  /**
+   * Specialized version of `std::shared_ptr<HybridObjectDetectorSpec>`.
+   */
+  using std__shared_ptr_HybridObjectDetectorSpec_ = std::shared_ptr<HybridObjectDetectorSpec>;
+  std::shared_ptr<HybridObjectDetectorSpec> create_std__shared_ptr_HybridObjectDetectorSpec_(void* NON_NULL swiftUnsafePointer) noexcept;
+  void* NON_NULL get_std__shared_ptr_HybridObjectDetectorSpec_(std__shared_ptr_HybridObjectDetectorSpec_ cppType);
+  
+  // pragma MARK: std::weak_ptr<HybridObjectDetectorSpec>
+  using std__weak_ptr_HybridObjectDetectorSpec_ = std::weak_ptr<HybridObjectDetectorSpec>;
+  inline std__weak_ptr_HybridObjectDetectorSpec_ weakify_std__shared_ptr_HybridObjectDetectorSpec_(const std::shared_ptr<HybridObjectDetectorSpec>& strong) noexcept { return strong; }
+  
+  // pragma MARK: Result<ObjectDetectionResult>
+  using Result_ObjectDetectionResult_ = Result<ObjectDetectionResult>;
+  inline Result_ObjectDetectionResult_ create_Result_ObjectDetectionResult_(const ObjectDetectionResult& value) noexcept {
+    return Result<ObjectDetectionResult>::withValue(value);
+  }
+  inline Result_ObjectDetectionResult_ create_Result_ObjectDetectionResult_(const std::exception_ptr& error) noexcept {
+    return Result<ObjectDetectionResult>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<Promise<ObjectDetectionResult>>>
+  using Result_std__shared_ptr_Promise_ObjectDetectionResult___ = Result<std::shared_ptr<Promise<ObjectDetectionResult>>>;
+  inline Result_std__shared_ptr_Promise_ObjectDetectionResult___ create_Result_std__shared_ptr_Promise_ObjectDetectionResult___(const std::shared_ptr<Promise<ObjectDetectionResult>>& value) noexcept {
+    return Result<std::shared_ptr<Promise<ObjectDetectionResult>>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_Promise_ObjectDetectionResult___ create_Result_std__shared_ptr_Promise_ObjectDetectionResult___(const std::exception_ptr& error) noexcept {
+    return Result<std::shared_ptr<Promise<ObjectDetectionResult>>>::withError(error);
+  }
+  
+  // pragma MARK: std::vector<std::string>
+  /**
+   * Specialized version of `std::vector<std::string>`.
+   */
+  using std__vector_std__string_ = std::vector<std::string>;
+  inline std::vector<std::string> create_std__vector_std__string_(size_t size) noexcept {
+    std::vector<std::string> vector;
+    vector.reserve(size);
+    return vector;
   }
   
   // pragma MARK: std::vector<TextSymbol>
@@ -599,6 +702,21 @@ namespace margelo::nitro::visioncameramlkit::bridge::swift {
     return optional.value();
   }
   
+  // pragma MARK: std::optional<ObjectDetectorMode>
+  /**
+   * Specialized version of `std::optional<ObjectDetectorMode>`.
+   */
+  using std__optional_ObjectDetectorMode_ = std::optional<ObjectDetectorMode>;
+  inline std::optional<ObjectDetectorMode> create_std__optional_ObjectDetectorMode_(const ObjectDetectorMode& value) noexcept {
+    return std::optional<ObjectDetectorMode>(value);
+  }
+  inline bool has_value_std__optional_ObjectDetectorMode_(const std::optional<ObjectDetectorMode>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline ObjectDetectorMode get_std__optional_ObjectDetectorMode_(const std::optional<ObjectDetectorMode>& optional) noexcept {
+    return optional.value();
+  }
+  
   // pragma MARK: std::shared_ptr<HybridVisionCameraMLKitSpec>
   /**
    * Specialized version of `std::shared_ptr<HybridVisionCameraMLKitSpec>`.
@@ -636,6 +754,15 @@ namespace margelo::nitro::visioncameramlkit::bridge::swift {
   }
   inline Result_std__shared_ptr_HybridBarcodeScannerSpec__ create_Result_std__shared_ptr_HybridBarcodeScannerSpec__(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<HybridBarcodeScannerSpec>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<HybridObjectDetectorSpec>>
+  using Result_std__shared_ptr_HybridObjectDetectorSpec__ = Result<std::shared_ptr<HybridObjectDetectorSpec>>;
+  inline Result_std__shared_ptr_HybridObjectDetectorSpec__ create_Result_std__shared_ptr_HybridObjectDetectorSpec__(const std::shared_ptr<HybridObjectDetectorSpec>& value) noexcept {
+    return Result<std::shared_ptr<HybridObjectDetectorSpec>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_HybridObjectDetectorSpec__ create_Result_std__shared_ptr_HybridObjectDetectorSpec__(const std::exception_ptr& error) noexcept {
+    return Result<std::shared_ptr<HybridObjectDetectorSpec>>::withError(error);
   }
 
 } // namespace margelo::nitro::visioncameramlkit::bridge::swift

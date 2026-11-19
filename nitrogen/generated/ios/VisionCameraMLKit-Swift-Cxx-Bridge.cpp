@@ -9,6 +9,7 @@
 
 // Include C++ implementation defined types
 #include "HybridBarcodeScannerSpecSwift.hpp"
+#include "HybridObjectDetectorSpecSwift.hpp"
 #include "HybridTextRecognizerSpecSwift.hpp"
 #include "HybridVisionCameraMLKitSpecSwift.hpp"
 #include "VisionCameraMLKit-Swift-Cxx-Umbrella.hpp"
@@ -56,6 +57,30 @@ namespace margelo::nitro::visioncameramlkit::bridge::swift {
     }
     #endif
     VisionCameraMLKit::HybridBarcodeScannerSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
+    return swiftPart.toUnsafe();
+  }
+  
+  // pragma MARK: std::function<void(const ObjectDetectionResult& /* result */)>
+  Func_void_ObjectDetectionResult create_Func_void_ObjectDetectionResult(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = VisionCameraMLKit::Func_void_ObjectDetectionResult::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const ObjectDetectionResult& result) mutable -> void {
+      swiftClosure.call(result);
+    };
+  }
+  
+  // pragma MARK: std::shared_ptr<HybridObjectDetectorSpec>
+  std::shared_ptr<HybridObjectDetectorSpec> create_std__shared_ptr_HybridObjectDetectorSpec_(void* NON_NULL swiftUnsafePointer) noexcept {
+    VisionCameraMLKit::HybridObjectDetectorSpec_cxx swiftPart = VisionCameraMLKit::HybridObjectDetectorSpec_cxx::fromUnsafe(swiftUnsafePointer);
+    return std::make_shared<margelo::nitro::visioncameramlkit::HybridObjectDetectorSpecSwift>(swiftPart);
+  }
+  void* NON_NULL get_std__shared_ptr_HybridObjectDetectorSpec_(std__shared_ptr_HybridObjectDetectorSpec_ cppType) {
+    std::shared_ptr<margelo::nitro::visioncameramlkit::HybridObjectDetectorSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::visioncameramlkit::HybridObjectDetectorSpecSwift>(cppType);
+    #ifdef NITRO_DEBUG
+    if (swiftWrapper == nullptr) [[unlikely]] {
+      throw std::runtime_error("Class \"HybridObjectDetectorSpec\" is not implemented in Swift!");
+    }
+    #endif
+    VisionCameraMLKit::HybridObjectDetectorSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
     return swiftPart.toUnsafe();
   }
   

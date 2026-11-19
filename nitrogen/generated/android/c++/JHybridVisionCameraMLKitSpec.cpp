@@ -11,6 +11,8 @@
 namespace margelo::nitro::visioncameramlkit { class HybridTextRecognizerSpec; }
 // Forward declaration of `HybridBarcodeScannerSpec` to properly resolve imports.
 namespace margelo::nitro::visioncameramlkit { class HybridBarcodeScannerSpec; }
+// Forward declaration of `HybridObjectDetectorSpec` to properly resolve imports.
+namespace margelo::nitro::visioncameramlkit { class HybridObjectDetectorSpec; }
 // Forward declaration of `MLKitFeature` to properly resolve imports.
 namespace margelo::nitro::visioncameramlkit { enum class MLKitFeature; }
 // Forward declaration of `TextRecognizerOptions` to properly resolve imports.
@@ -27,12 +29,18 @@ namespace margelo::nitro::visioncameramlkit { enum class Orientation; }
 namespace margelo::nitro::visioncameramlkit { struct BarcodeScannerOptions; }
 // Forward declaration of `BarcodeFormat` to properly resolve imports.
 namespace margelo::nitro::visioncameramlkit { enum class BarcodeFormat; }
+// Forward declaration of `ObjectDetectorOptions` to properly resolve imports.
+namespace margelo::nitro::visioncameramlkit { struct ObjectDetectorOptions; }
+// Forward declaration of `ObjectDetectorMode` to properly resolve imports.
+namespace margelo::nitro::visioncameramlkit { enum class ObjectDetectorMode; }
 
 #include <memory>
 #include "HybridTextRecognizerSpec.hpp"
 #include "JHybridTextRecognizerSpec.hpp"
 #include "HybridBarcodeScannerSpec.hpp"
 #include "JHybridBarcodeScannerSpec.hpp"
+#include "HybridObjectDetectorSpec.hpp"
+#include "JHybridObjectDetectorSpec.hpp"
 #include "MLKitFeature.hpp"
 #include "JMLKitFeature.hpp"
 #include "TextRecognizerOptions.hpp"
@@ -51,6 +59,10 @@ namespace margelo::nitro::visioncameramlkit { enum class BarcodeFormat; }
 #include "BarcodeFormat.hpp"
 #include <vector>
 #include "JBarcodeFormat.hpp"
+#include "ObjectDetectorOptions.hpp"
+#include "JObjectDetectorOptions.hpp"
+#include "ObjectDetectorMode.hpp"
+#include "JObjectDetectorMode.hpp"
 
 namespace margelo::nitro::visioncameramlkit {
 
@@ -99,6 +111,11 @@ namespace margelo::nitro::visioncameramlkit {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JHybridBarcodeScannerSpec::JavaPart>(jni::alias_ref<JBarcodeScannerOptions> /* options */)>("createBarcodeScanner");
     auto __result = method(_javaPart, JBarcodeScannerOptions::fromCpp(options));
     return __result->getJHybridBarcodeScannerSpec();
+  }
+  std::shared_ptr<HybridObjectDetectorSpec> JHybridVisionCameraMLKitSpec::createObjectDetector(const ObjectDetectorOptions& options) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JHybridObjectDetectorSpec::JavaPart>(jni::alias_ref<JObjectDetectorOptions> /* options */)>("createObjectDetector");
+    auto __result = method(_javaPart, JObjectDetectorOptions::fromCpp(options));
+    return __result->getJHybridObjectDetectorSpec();
   }
 
 } // namespace margelo::nitro::visioncameramlkit

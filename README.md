@@ -16,7 +16,7 @@
 [![MIT License][license-shield]][license-url]
 [![NPM Version][npm-version-shield]][npm-version-url]
 
-A Nitro-based [React Native Vision Camera](https://github.com/mrousavy/react-native-vision-camera) v5 plugin that exposes high-performance [Google ML Kit](https://developers.google.com/ml-kit) [frame output](https://visioncamera.margelo.com/docs/frame-output) features. v2 implements text recognition (OCR) and barcode scanning for live frames and static images. Other ML Kit vision features are post-v2 roadmap items.
+A Nitro-based [React Native Vision Camera](https://github.com/mrousavy/react-native-vision-camera) v5 plugin that exposes high-performance [Google ML Kit](https://developers.google.com/ml-kit) [frame output](https://visioncamera.margelo.com/docs/frame-output) features. v2 implements text recognition (OCR), barcode scanning and object detection for live frames and static images. Other ML Kit vision features are post-v2 roadmap items.
 
 > The example app is intentionally heavy and demo-focused. For integration details, follow the documentation below.
 
@@ -76,17 +76,17 @@ cd ios && pod install
 
 ## ML Kit Models Installation (Selective)
 
-v2 implements two feature families: text recognition and barcode scanning.
-Both are enabled by default, including all five OCR language models. Disable
-OCR languages you do not need to reduce binary size. Configuration keys for
-post-v2 roadmap features remain reserved and disabled; enabling one does not
-provide a public JS/Nitro API in v2.
+v2 implements three feature families: text recognition, barcode scanning and
+object detection. Text recognition and barcode scanning are enabled by default,
+including all five OCR language models; object detection is opt-in. Disable OCR
+languages you do not need to reduce binary size. Configuration keys for post-v2
+roadmap features remain reserved and disabled; enabling one does not provide a
+public JS/Nitro API in v2.
 
-Both `textRecognition` and `barcodeScanning` are fully optional at compile
-time on both platforms: disabling one removes its native SDK from the build
-entirely instead of only gating it at runtime, so consumers who only need
-barcode scanning (or only text recognition) do not pay for the other's
-dependencies or binary size.
+`textRecognition`, `barcodeScanning` and `objectDetection` are all fully
+optional at compile time on both platforms: disabling one removes its native SDK
+from the build entirely instead of only gating it at runtime, so consumers who
+only need one of them do not pay for the others' dependencies or binary size.
 
 ### Android (Gradle)
 
@@ -101,6 +101,7 @@ ext["react-native-vision-camera-mlkit"] = [
     textRecognitionJapanese: false,
     textRecognitionKorean: false,
     barcodeScanning: true,
+    objectDetection: false,
   ]
 ]
 ```
@@ -117,6 +118,7 @@ $VisionCameraMLKit = {
   'textRecognitionJapanese' => false,
   'textRecognitionKorean' => false,
   'barcodeScanning' => true,
+  'objectDetection' => false,
 }
 ```
 
@@ -136,7 +138,8 @@ you don't have to hand-edit native config. Add it to your `app.json`/
         "react-native-vision-camera-mlkit",
         {
           "textRecognition": true,
-          "barcodeScanning": true
+          "barcodeScanning": true,
+          "objectDetection": false
         }
       ]
     ]
@@ -164,6 +167,7 @@ to protect application disk, memory, and CPU resources.
 
 - [Text Recognition API](docs/text-recognition.md)
 - [Barcode Scanning API](docs/barcode-scanning.md)
+- [Object Detection API](docs/object-detection.md)
 - [Selective ML Kit Installation](docs/selective-mlkit-install.md)
 - [Expo Config Plugin](docs/expo-plugin.md)
 - [Migrating from v1 to v2](docs/migration-v1-to-v2.md)
@@ -375,6 +379,83 @@ for (const barcode of result.barcodes) {
 - `barcodes[]` with `format`, `formatName`, `valueType`, `valueTypeName`, `rawValue`, `displayValue`, `rawBytes`, `bounds`, `corners`, `isPotential`
 - `value?: { type: TYPE_*, data: ... }` for parsed payloads (WiFi, URL, SMS, Contact, Calendar Event, Driver License, etc.)
 
+### Object Detection (Frame Output)
+
+ML Kit object detection is class-agnostic: it finds prominent objects without
+needing a trained class for them, and in `stream` mode it assigns a
+`trackingId` that stays stable while the object remains in view.
+
+`objectDetection` is disabled by default; enable it in the native ML Kit
+configuration above before using it.
+
+```ts
+import { useFrameOutput } from 'react-native-vision-camera';
+import { useObjectDetection } from 'react-native-vision-camera-mlkit';
+
+const { objectDetection } = useObjectDetection({
+  detectorMode: 'stream',
+  shouldEnableMultipleObjects: true,
+  shouldEnableClassification: false,
+});
+
+const frameOutput = useFrameOutput({
+  onFrame(frame) {
+    'worklet';
+
+    try {
+      const result = objectDetection(frame, {
+        outputOrientation: 'portrait',
+      });
+
+      for (const object of result.objects) {
+        console.log(object.trackingId, object.bounds);
+      }
+    } finally {
+      frame.dispose();
+    }
+  },
+});
+```
+
+`ObjectDetectionOptions`:
+
+- `detectorMode?: 'stream' | 'singleImage'` (default `'stream'`)
+- `shouldEnableMultipleObjects?: boolean` (default `false`; when `false` only the most prominent object is returned)
+- `shouldEnableClassification?: boolean` (default `false`)
+- `invertColors?: boolean`
+- `scaleFactor?: number` (0.9-1.0)
+- `roi?: RegionOfInterest` (crop processing to a rectangle of the frame; see [Region of Interest](#region-of-interest))
+
+### Object Detection (Static Images)
+
+Use `processImageObjectDetection` to analyze a local image without the camera.
+Each call creates a Nitro object detector configured with the supplied options,
+then processes the image asynchronously. It defaults to `singleImage` mode.
+
+```ts
+import { processImageObjectDetection } from 'react-native-vision-camera-mlkit';
+
+const result = await processImageObjectDetection(imageUri, {
+  shouldEnableMultipleObjects: true,
+  shouldEnableClassification: true,
+  orientation: 'portrait',
+  scaleFactor: 1,
+});
+
+for (const object of result.objects) {
+  console.log(object.bounds, object.labels);
+}
+```
+
+`ObjectDetectionResult` includes:
+
+- `objects[]` with `bounds`, `trackingId` and `labels`
+- `trackingId` is `null` in `singleImage` mode, and in `stream` mode until tracking settles
+- `labels[]` is empty unless `shouldEnableClassification` is enabled, and carries `text`, `index`, `confidence`
+
+See [docs/object-detection.md](docs/object-detection.md) for detector modes,
+tracking-id caveats and performance guidance.
+
 ### Feature Utilities
 
 The package also exposes helpers from the plugin factory:
@@ -473,6 +554,7 @@ If your iOS build fails in Pods with errors referencing `fmt/include/fmt/base.h`
 | --------------------------------- | ----------------- | ----------------- |
 | **Text recognition v2**           | Available in v2   | Android and iOS   |
 | **Barcode scanning**              | Available in v2   | Android and iOS   |
+| **Object detection and tracking** | Available in v2   | Android and iOS   |
 | **Face detection**                | Post-v2 roadmap   | Android and iOS   |
 | **Face mesh detection**           | Post-v2 roadmap   | Android           |
 | **Pose detection**                | Post-v2 roadmap   | Android and iOS   |
@@ -480,7 +562,6 @@ If your iOS build fails in Pods with errors referencing `fmt/include/fmt/base.h`
 | **Subject segmentation**          | Post-v2 roadmap   | Android           |
 | **Document scanner**              | Post-v2 roadmap   | Android           |
 | **Image labeling**                | Post-v2 roadmap   | Android and iOS   |
-| **Object detection and tracking** | Post-v2 roadmap   | Android and iOS   |
 | **Digital ink recognition**       | Post-v2 roadmap   | Android and iOS   |
 
 Roadmap entries are not implemented public APIs and are not commitments to a

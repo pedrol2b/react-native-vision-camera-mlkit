@@ -37,10 +37,13 @@ export type {
 export type {
   BarcodeScannerOptions,
   MLKitRecognizerOptions,
+  ObjectDetectorOptions,
   TextRecognizerOptions,
 } from './specs/MLKitVisionTypes';
+export type { ObjectDetector } from './specs/ObjectDetector.nitro';
 export type { TextRecognizer } from './specs/TextRecognizer.nitro';
 export type { VisionCameraMLKit as VisionCameraMLKitSpec } from './specs/VisionCameraMLKit.nitro';
 
 export * from './features/barcode-scanning';
+export * from './features/object-detection';
 export * from './features/text-recognition';

@@ -72,4 +72,12 @@ final class HybridVisionCameraMLKit: HybridVisionCameraMLKitSpec {
 
     return HybridBarcodeScanner(options: options)
   }
+
+  func createObjectDetector(options: ObjectDetectorOptions) throws -> any HybridObjectDetectorSpec {
+    guard try isFeatureAvailable(feature: .objectdetection) else {
+      throw RuntimeError.error(withMessage: "ObjectDetection is not enabled in the native ML Kit configuration.")
+    }
+
+    return HybridObjectDetector(options: options)
+  }
 }

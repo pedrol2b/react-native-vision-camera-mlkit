@@ -17,6 +17,7 @@ namespace margelo::nitro::visioncameramlkit {
       prototype.registerHybridMethod("isFeatureAvailable", &HybridVisionCameraMLKitSpec::isFeatureAvailable);
       prototype.registerHybridMethod("createTextRecognizer", &HybridVisionCameraMLKitSpec::createTextRecognizer);
       prototype.registerHybridMethod("createBarcodeScanner", &HybridVisionCameraMLKitSpec::createBarcodeScanner);
+      prototype.registerHybridMethod("createObjectDetector", &HybridVisionCameraMLKitSpec::createObjectDetector);
     });
   }
 

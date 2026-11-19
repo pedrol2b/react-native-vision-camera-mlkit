@@ -16,6 +16,7 @@
 #include <NitroModules/HybridObjectRegistry.hpp>
 
 #include "JHybridBarcodeScannerSpec.hpp"
+#include "JHybridObjectDetectorSpec.hpp"
 #include "JHybridTextRecognizerSpec.hpp"
 #include "JHybridVisionCameraMLKitSpec.hpp"
 #include <NitroModules/DefaultConstructableObject.hpp>
@@ -43,6 +44,7 @@ void registerAllNatives() {
 
   // Register native JNI methods
   margelo::nitro::visioncameramlkit::JHybridBarcodeScannerSpec::CxxPart::registerNatives();
+  margelo::nitro::visioncameramlkit::JHybridObjectDetectorSpec::CxxPart::registerNatives();
   margelo::nitro::visioncameramlkit::JHybridTextRecognizerSpec::CxxPart::registerNatives();
   margelo::nitro::visioncameramlkit::JHybridVisionCameraMLKitSpec::CxxPart::registerNatives();
 

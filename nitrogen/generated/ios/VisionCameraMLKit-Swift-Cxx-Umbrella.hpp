@@ -22,10 +22,14 @@ namespace margelo::nitro::visioncameramlkit { enum class BarcodeValueTypeName; }
 namespace margelo::nitro::visioncameramlkit { struct BoundingBox; }
 // Forward declaration of `Corner` to properly resolve imports.
 namespace margelo::nitro::visioncameramlkit { struct Corner; }
+// Forward declaration of `DetectedObject` to properly resolve imports.
+namespace margelo::nitro::visioncameramlkit { struct DetectedObject; }
 // Forward declaration of `HybridBarcodeScannerSpec` to properly resolve imports.
 namespace margelo::nitro::visioncameramlkit { class HybridBarcodeScannerSpec; }
 // Forward declaration of `HybridFrameSpec` to properly resolve imports.
 namespace margelo::nitro::camera { class HybridFrameSpec; }
+// Forward declaration of `HybridObjectDetectorSpec` to properly resolve imports.
+namespace margelo::nitro::visioncameramlkit { class HybridObjectDetectorSpec; }
 // Forward declaration of `HybridTextRecognizerSpec` to properly resolve imports.
 namespace margelo::nitro::visioncameramlkit { class HybridTextRecognizerSpec; }
 // Forward declaration of `HybridVisionCameraMLKitSpec` to properly resolve imports.
@@ -34,6 +38,14 @@ namespace margelo::nitro::visioncameramlkit { class HybridVisionCameraMLKitSpec;
 namespace margelo::nitro::visioncameramlkit { struct MLKitBaseArguments; }
 // Forward declaration of `MLKitFeature` to properly resolve imports.
 namespace margelo::nitro::visioncameramlkit { enum class MLKitFeature; }
+// Forward declaration of `ObjectDetectionResult` to properly resolve imports.
+namespace margelo::nitro::visioncameramlkit { struct ObjectDetectionResult; }
+// Forward declaration of `ObjectDetectorMode` to properly resolve imports.
+namespace margelo::nitro::visioncameramlkit { enum class ObjectDetectorMode; }
+// Forward declaration of `ObjectDetectorOptions` to properly resolve imports.
+namespace margelo::nitro::visioncameramlkit { struct ObjectDetectorOptions; }
+// Forward declaration of `ObjectLabel` to properly resolve imports.
+namespace margelo::nitro::visioncameramlkit { struct ObjectLabel; }
 // Forward declaration of `Orientation` to properly resolve imports.
 namespace margelo::nitro::visioncameramlkit { enum class Orientation; }
 // Forward declaration of `RegionOfInterestUnit` to properly resolve imports.
@@ -63,11 +75,17 @@ namespace margelo::nitro::visioncameramlkit { struct TextSymbol; }
 #include "BarcodeValueTypeName.hpp"
 #include "BoundingBox.hpp"
 #include "Corner.hpp"
+#include "DetectedObject.hpp"
 #include "HybridBarcodeScannerSpec.hpp"
+#include "HybridObjectDetectorSpec.hpp"
 #include "HybridTextRecognizerSpec.hpp"
 #include "HybridVisionCameraMLKitSpec.hpp"
 #include "MLKitBaseArguments.hpp"
 #include "MLKitFeature.hpp"
+#include "ObjectDetectionResult.hpp"
+#include "ObjectDetectorMode.hpp"
+#include "ObjectDetectorOptions.hpp"
+#include "ObjectLabel.hpp"
 #include "Orientation.hpp"
 #include "RegionOfInterest.hpp"
 #include "RegionOfInterestUnit.hpp"
@@ -104,6 +122,8 @@ namespace margelo::nitro::visioncameramlkit { struct TextSymbol; }
 namespace VisionCameraMLKit { class HybridBarcodeScannerSpec_cxx; }
 // Forward declaration of `HybridFrameSpec_cxx` to properly resolve imports.
 namespace VisionCamera { class HybridFrameSpec_cxx; }
+// Forward declaration of `HybridObjectDetectorSpec_cxx` to properly resolve imports.
+namespace VisionCameraMLKit { class HybridObjectDetectorSpec_cxx; }
 // Forward declaration of `HybridTextRecognizerSpec_cxx` to properly resolve imports.
 namespace VisionCameraMLKit { class HybridTextRecognizerSpec_cxx; }
 // Forward declaration of `HybridVisionCameraMLKitSpec_cxx` to properly resolve imports.

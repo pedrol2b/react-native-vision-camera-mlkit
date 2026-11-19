@@ -16,6 +16,7 @@ public protocol HybridVisionCameraMLKitSpec_protocol: HybridObject {
   func isFeatureAvailable(feature: MLKitFeature) throws -> Bool
   func createTextRecognizer(options: TextRecognizerOptions) throws -> (any HybridTextRecognizerSpec)
   func createBarcodeScanner(options: BarcodeScannerOptions) throws -> (any HybridBarcodeScannerSpec)
+  func createObjectDetector(options: ObjectDetectorOptions) throws -> (any HybridObjectDetectorSpec)
 }
 
 public extension HybridVisionCameraMLKitSpec_protocol {

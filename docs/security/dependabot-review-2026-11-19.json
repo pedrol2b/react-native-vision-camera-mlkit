@@ -1,0 +1,4156 @@
+{
+  "review_date": "2026-11-19",
+  "baseline_commit": "4230259ca0e976f08306e502c3d2b21d2e7f253a",
+  "initial_state_counts": {
+    "open": 60,
+    "auto_dismissed": 17,
+    "dismissed": 10,
+    "fixed": 114
+  },
+  "disposition_counts": {
+    "already-not-affected-at-baseline": 108,
+    "remediated-in-this-branch": 92,
+    "unresolved-compatible-patch-unavailable": 1
+  },
+  "records": [
+    {
+      "number": 1,
+      "package": "semver",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-c2qf-rxjj-qqgw",
+      "severity": "high",
+      "vulnerable_range": ">= 7.0.0, < 7.5.2",
+      "baseline_versions": [
+        "6.3.1",
+        "7.7.3",
+        "7.8.5"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.3.1",
+        "7.7.3",
+        "7.8.5"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 2,
+      "package": "vm2",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-g644-9gfx-q4q4",
+      "severity": "critical",
+      "vulnerable_range": "<= 3.9.19",
+      "baseline_versions": [],
+      "baseline_affected_versions": [],
+      "candidate_versions": [],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 3,
+      "package": "vm2",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-cchq-frgv-rjh5",
+      "severity": "critical",
+      "vulnerable_range": "<= 3.9.19",
+      "baseline_versions": [],
+      "baseline_affected_versions": [],
+      "candidate_versions": [],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 4,
+      "package": "ip",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-2p57-rm9w-gvfp",
+      "severity": "high",
+      "vulnerable_range": "<= 2.0.1",
+      "baseline_versions": [],
+      "baseline_affected_versions": [],
+      "candidate_versions": [],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 5,
+      "package": "ws",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-3h5v-q93c-6h6q",
+      "severity": "high",
+      "vulnerable_range": ">= 6.0.0, < 6.2.3",
+      "baseline_versions": [
+        "6.2.6",
+        "7.5.13"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.2.6",
+        "7.5.13"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 6,
+      "package": "ws",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-3h5v-q93c-6h6q",
+      "severity": "high",
+      "vulnerable_range": ">= 7.0.0, < 7.5.10",
+      "baseline_versions": [
+        "6.2.6",
+        "7.5.13"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.2.6",
+        "7.5.13"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 8,
+      "package": "micromatch",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-952p-6rrq-rcjv",
+      "severity": "medium",
+      "vulnerable_range": "< 4.0.8",
+      "baseline_versions": [
+        "4.0.8"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "4.0.8"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 9,
+      "package": "serve-static",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-cm22-4g7w-348p",
+      "severity": "low",
+      "vulnerable_range": "< 1.16.0",
+      "baseline_versions": [
+        "1.16.3"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "1.16.3"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 10,
+      "package": "send",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-m6fv-jmcg-4jfg",
+      "severity": "low",
+      "vulnerable_range": "< 0.19.0",
+      "baseline_versions": [
+        "0.19.2"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "0.19.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 11,
+      "package": "braces",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-grv7-fg5c-xmjg",
+      "severity": "high",
+      "vulnerable_range": "< 3.0.3",
+      "baseline_versions": [
+        "3.0.3"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "3.0.3"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 16,
+      "package": "@octokit/request-error",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-xx4v-prfh-6cgc",
+      "severity": "medium",
+      "vulnerable_range": ">= 1.0.0, < 5.1.1",
+      "baseline_versions": [
+        "7.1.0"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "7.1.0"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 17,
+      "package": "@octokit/plugin-paginate-rest",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-h5c3-5r3r-rr8q",
+      "severity": "medium",
+      "vulnerable_range": ">= 1.0.0, < 9.2.2",
+      "baseline_versions": [
+        "14.0.0"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "14.0.0"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 18,
+      "package": "@octokit/request",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-rmvr-2pp2-xj38",
+      "severity": "medium",
+      "vulnerable_range": ">= 1.0.0, < 8.4.1",
+      "baseline_versions": [
+        "10.0.7"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "10.0.7"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 19,
+      "package": "@babel/helpers",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-968p-4wvh-cqc8",
+      "severity": "medium",
+      "vulnerable_range": "< 7.26.10",
+      "baseline_versions": [
+        "7.28.4",
+        "7.29.7"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "7.29.14"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 20,
+      "package": "@babel/runtime",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-968p-4wvh-cqc8",
+      "severity": "medium",
+      "vulnerable_range": "< 7.26.10",
+      "baseline_versions": [
+        "7.28.4"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "7.28.4"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 21,
+      "package": "image-size",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-m5qc-5hw7-8vg7",
+      "severity": "high",
+      "vulnerable_range": ">= 1.1.0, < 1.2.1",
+      "baseline_versions": [
+        "1.2.1"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "2.1.0"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 22,
+      "package": "brace-expansion",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-v6h2-p8h4-qcjw",
+      "severity": "low",
+      "vulnerable_range": ">= 2.0.0, <= 2.0.1",
+      "baseline_versions": [
+        "1.1.18",
+        "2.1.4",
+        "5.0.9"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "1.1.22",
+        "5.0.13"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 23,
+      "package": "on-headers",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-76c9-3jph-rj3q",
+      "severity": "low",
+      "vulnerable_range": "< 1.1.0",
+      "baseline_versions": [
+        "1.1.0"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "1.1.0"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 24,
+      "package": "tmp",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-52f5-9888-hmc6",
+      "severity": "low",
+      "vulnerable_range": "<= 0.2.3",
+      "baseline_versions": [],
+      "baseline_affected_versions": [],
+      "candidate_versions": [],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 29,
+      "package": "js-yaml",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-mh29-5h37-fv8m",
+      "severity": "medium",
+      "vulnerable_range": "< 3.14.2",
+      "baseline_versions": [
+        "3.15.1",
+        "4.3.1"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "3.15.2",
+        "4.3.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 30,
+      "package": "js-yaml",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-mh29-5h37-fv8m",
+      "severity": "medium",
+      "vulnerable_range": ">= 4.0.0, < 4.1.1",
+      "baseline_versions": [
+        "3.15.1",
+        "4.3.1"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "3.15.2",
+        "4.3.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 32,
+      "package": "glob",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-5j98-mcp5-4vw2",
+      "severity": "high",
+      "vulnerable_range": ">= 10.2.0, < 10.5.0",
+      "baseline_versions": [
+        "7.2.3",
+        "10.5.0",
+        "13.0.6"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "7.2.3",
+        "14.0.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 34,
+      "package": "tar",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-8qq5-rm4j-mr97",
+      "severity": "high",
+      "vulnerable_range": "<= 7.5.2",
+      "baseline_versions": [
+        "7.5.22"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "7.5.22"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 36,
+      "package": "tar",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-r6q2-hw4h-h46w",
+      "severity": "high",
+      "vulnerable_range": "<= 7.5.3",
+      "baseline_versions": [
+        "7.5.22"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "7.5.22"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 37,
+      "package": "lodash",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-xxjr-mmjv-4gpg",
+      "severity": "medium",
+      "vulnerable_range": ">= 4.0.0, <= 4.17.22",
+      "baseline_versions": [
+        "4.18.1"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "4.18.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 38,
+      "package": "vm2",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-99p7-6v5w-7xg8",
+      "severity": "critical",
+      "vulnerable_range": "<= 3.10.1",
+      "baseline_versions": [],
+      "baseline_affected_versions": [],
+      "candidate_versions": [],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 39,
+      "package": "tar",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-34x7-hfp2-rc4v",
+      "severity": "high",
+      "vulnerable_range": "< 7.5.7",
+      "baseline_versions": [
+        "7.5.22"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "7.5.22"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 40,
+      "package": "undici",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-g9mf-h72j-4rw9",
+      "severity": "medium",
+      "vulnerable_range": "< 6.23.0",
+      "baseline_versions": [
+        "6.28.0"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.29.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 42,
+      "package": "@isaacs/brace-expansion",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-7h2j-956f-4vf2",
+      "severity": "high",
+      "vulnerable_range": "<= 5.0.0",
+      "baseline_versions": [],
+      "baseline_affected_versions": [],
+      "candidate_versions": [],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 43,
+      "package": "qs",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-w7fw-mjwx-w883",
+      "severity": "low",
+      "vulnerable_range": ">= 6.7.0, <= 6.14.1",
+      "baseline_versions": [
+        "6.15.3"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.16.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 46,
+      "package": "tar",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-83g3-92jg-28cx",
+      "severity": "high",
+      "vulnerable_range": "< 7.5.8",
+      "baseline_versions": [
+        "7.5.22"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "7.5.22"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 49,
+      "package": "ajv",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-2g4f-4pwh-qvx6",
+      "severity": "medium",
+      "vulnerable_range": ">= 7.0.0-alpha.0, < 8.18.0",
+      "baseline_versions": [
+        "6.15.0",
+        "8.20.0"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.15.0",
+        "8.20.0"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 50,
+      "package": "ajv",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-2g4f-4pwh-qvx6",
+      "severity": "medium",
+      "vulnerable_range": "< 6.14.0",
+      "baseline_versions": [
+        "6.15.0",
+        "8.20.0"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.15.0",
+        "8.20.0"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 51,
+      "package": "minimatch",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-3ppc-4f35-3m26",
+      "severity": "high",
+      "vulnerable_range": ">= 10.0.0, < 10.2.1",
+      "baseline_versions": [
+        "3.1.5",
+        "9.0.9",
+        "10.2.6"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "3.1.5",
+        "11.0.1",
+        "11.0.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 52,
+      "package": "minimatch",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-3ppc-4f35-3m26",
+      "severity": "high",
+      "vulnerable_range": ">= 9.0.0, < 9.0.6",
+      "baseline_versions": [
+        "3.1.5",
+        "9.0.9",
+        "10.2.6"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "3.1.5",
+        "11.0.1",
+        "11.0.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 53,
+      "package": "minimatch",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-3ppc-4f35-3m26",
+      "severity": "high",
+      "vulnerable_range": "< 3.1.3",
+      "baseline_versions": [
+        "3.1.5",
+        "9.0.9",
+        "10.2.6"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "3.1.5",
+        "11.0.1",
+        "11.0.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 54,
+      "package": "basic-ftp",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-5rq4-664w-9x2c",
+      "severity": "critical",
+      "vulnerable_range": "< 5.2.0",
+      "baseline_versions": [
+        "5.3.1"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.2.6"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 55,
+      "package": "minimatch",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-7r86-cg39-jmmj",
+      "severity": "high",
+      "vulnerable_range": ">= 10.0.0, < 10.2.3",
+      "baseline_versions": [
+        "3.1.5",
+        "9.0.9",
+        "10.2.6"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "3.1.5",
+        "11.0.1",
+        "11.0.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 56,
+      "package": "minimatch",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-23c5-xmqv-rm74",
+      "severity": "high",
+      "vulnerable_range": ">= 10.0.0, < 10.2.3",
+      "baseline_versions": [
+        "3.1.5",
+        "9.0.9",
+        "10.2.6"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "3.1.5",
+        "11.0.1",
+        "11.0.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 58,
+      "package": "minimatch",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-23c5-xmqv-rm74",
+      "severity": "high",
+      "vulnerable_range": ">= 9.0.0, < 9.0.7",
+      "baseline_versions": [
+        "3.1.5",
+        "9.0.9",
+        "10.2.6"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "3.1.5",
+        "11.0.1",
+        "11.0.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 59,
+      "package": "minimatch",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-7r86-cg39-jmmj",
+      "severity": "high",
+      "vulnerable_range": ">= 9.0.0, < 9.0.7",
+      "baseline_versions": [
+        "3.1.5",
+        "9.0.9",
+        "10.2.6"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "3.1.5",
+        "11.0.1",
+        "11.0.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 60,
+      "package": "minimatch",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-7r86-cg39-jmmj",
+      "severity": "high",
+      "vulnerable_range": "< 3.1.3",
+      "baseline_versions": [
+        "3.1.5",
+        "9.0.9",
+        "10.2.6"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "3.1.5",
+        "11.0.1",
+        "11.0.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 61,
+      "package": "minimatch",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-23c5-xmqv-rm74",
+      "severity": "high",
+      "vulnerable_range": "< 3.1.4",
+      "baseline_versions": [
+        "3.1.5",
+        "9.0.9",
+        "10.2.6"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "3.1.5",
+        "11.0.1",
+        "11.0.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 62,
+      "package": "fast-xml-parser",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-jmr7-xgp7-cmfj",
+      "severity": "high",
+      "vulnerable_range": ">= 4.1.3, < 4.5.4",
+      "baseline_versions": [
+        "4.5.7"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "5.12.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 63,
+      "package": "fast-xml-parser",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-m7jm-9gc2-mpf2",
+      "severity": "critical",
+      "vulnerable_range": ">= 4.1.3, < 4.5.4",
+      "baseline_versions": [
+        "4.5.7"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "5.12.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 65,
+      "package": "tar",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-qffp-2rhf-9h96",
+      "severity": "high",
+      "vulnerable_range": "<= 7.5.9",
+      "baseline_versions": [
+        "7.5.22"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "7.5.22"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 66,
+      "package": "fast-xml-parser",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-fj3w-jwp8-x2g3",
+      "severity": "low",
+      "vulnerable_range": ">= 4.0.0-beta.0, < 4.5.4",
+      "baseline_versions": [
+        "4.5.7"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "5.12.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 67,
+      "package": "tar",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-9ppj-qmqm-q256",
+      "severity": "high",
+      "vulnerable_range": "<= 7.5.10",
+      "baseline_versions": [
+        "7.5.22"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "7.5.22"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 68,
+      "package": "undici",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-f269-vfmq-vjvj",
+      "severity": "high",
+      "vulnerable_range": ">= 6.0.0, < 6.24.0",
+      "baseline_versions": [
+        "6.28.0"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.29.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 69,
+      "package": "undici",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-2mjp-6q6p-2qxm",
+      "severity": "medium",
+      "vulnerable_range": "< 6.24.0",
+      "baseline_versions": [
+        "6.28.0"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.29.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 70,
+      "package": "undici",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-4992-7rv2-5pvq",
+      "severity": "medium",
+      "vulnerable_range": "< 6.24.0",
+      "baseline_versions": [
+        "6.28.0"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.29.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 71,
+      "package": "undici",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-v9p9-hfj2-hcw8",
+      "severity": "high",
+      "vulnerable_range": "< 6.24.0",
+      "baseline_versions": [
+        "6.28.0"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.29.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 72,
+      "package": "undici",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-vrm6-8vpv-qv8q",
+      "severity": "high",
+      "vulnerable_range": "< 6.24.0",
+      "baseline_versions": [
+        "6.28.0"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.29.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 73,
+      "package": "flatted",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-25h7-pfq9-p65f",
+      "severity": "high",
+      "vulnerable_range": "< 3.4.0",
+      "baseline_versions": [
+        "3.4.4"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "3.4.4"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 76,
+      "package": "flatted",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-rf6f-7fwh-wjgh",
+      "severity": "high",
+      "vulnerable_range": "<= 3.4.1",
+      "baseline_versions": [
+        "3.4.4"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "3.4.4"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 77,
+      "package": "activesupport",
+      "ecosystem": "rubygems",
+      "manifest": "example/Gemfile",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-89vf-4333-qx8v",
+      "severity": "medium",
+      "vulnerable_range": "< 7.2.3.1",
+      "baseline_versions": [
+        "7.1.6"
+      ],
+      "baseline_affected_versions": [
+        "7.1.6"
+      ],
+      "candidate_versions": [
+        "7.2.4"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 78,
+      "package": "activesupport",
+      "ecosystem": "rubygems",
+      "manifest": "example/Gemfile",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-cg4j-q9v8-6v38",
+      "severity": "medium",
+      "vulnerable_range": "< 7.2.3.1",
+      "baseline_versions": [
+        "7.1.6"
+      ],
+      "baseline_affected_versions": [
+        "7.1.6"
+      ],
+      "candidate_versions": [
+        "7.2.4"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 79,
+      "package": "activesupport",
+      "ecosystem": "rubygems",
+      "manifest": "example/Gemfile",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-2j26-frm8-cmj9",
+      "severity": "medium",
+      "vulnerable_range": "< 7.2.3.1",
+      "baseline_versions": [
+        "7.1.6"
+      ],
+      "baseline_affected_versions": [
+        "7.1.6"
+      ],
+      "candidate_versions": [
+        "7.2.4"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 80,
+      "package": "fast-xml-parser",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-8gc5-j5rx-235r",
+      "severity": "high",
+      "vulnerable_range": ">= 4.0.0-beta.3, < 4.5.5",
+      "baseline_versions": [
+        "4.5.7"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "5.12.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 81,
+      "package": "picomatch",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-c2c7-rcm5-vvqj",
+      "severity": "high",
+      "vulnerable_range": ">= 4.0.0, < 4.0.4",
+      "baseline_versions": [
+        "2.3.2",
+        "4.0.5"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "2.3.2",
+        "4.0.5"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 82,
+      "package": "picomatch",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-3v7f-55p6-f55p",
+      "severity": "medium",
+      "vulnerable_range": ">= 4.0.0, < 4.0.4",
+      "baseline_versions": [
+        "2.3.2",
+        "4.0.5"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "2.3.2",
+        "4.0.5"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 83,
+      "package": "handlebars",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-xhpv-hc6g-r9c6",
+      "severity": "high",
+      "vulnerable_range": ">= 4.0.0, <= 4.7.8",
+      "baseline_versions": [
+        "4.7.9"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "4.7.10"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 84,
+      "package": "handlebars",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-2w6w-674q-4c4q",
+      "severity": "critical",
+      "vulnerable_range": ">= 4.0.0, <= 4.7.8",
+      "baseline_versions": [
+        "4.7.9"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "4.7.10"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 85,
+      "package": "handlebars",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-9cx6-37pm-9jff",
+      "severity": "high",
+      "vulnerable_range": ">= 4.0.0, <= 4.7.8",
+      "baseline_versions": [
+        "4.7.9"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "4.7.10"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 86,
+      "package": "handlebars",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-3mfm-83xf-c92r",
+      "severity": "high",
+      "vulnerable_range": ">= 4.0.0, <= 4.7.8",
+      "baseline_versions": [
+        "4.7.9"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "4.7.10"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 87,
+      "package": "handlebars",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-xjpj-3mr7-gcpf",
+      "severity": "high",
+      "vulnerable_range": ">= 4.0.0, <= 4.7.8",
+      "baseline_versions": [
+        "4.7.9"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "4.7.10"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 88,
+      "package": "brace-expansion",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-f886-m6hf-6m8v",
+      "severity": "medium",
+      "vulnerable_range": ">= 2.0.0, < 2.0.3",
+      "baseline_versions": [
+        "1.1.18",
+        "2.1.4",
+        "5.0.9"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "1.1.22",
+        "5.0.13"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 89,
+      "package": "handlebars",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-442j-39wm-28r2",
+      "severity": "low",
+      "vulnerable_range": ">= 4.0.0, <= 4.7.8",
+      "baseline_versions": [
+        "4.7.9"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "4.7.10"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 90,
+      "package": "handlebars",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-7rx3-28cr-v5wh",
+      "severity": "medium",
+      "vulnerable_range": ">= 4.6.0, <= 4.7.8",
+      "baseline_versions": [
+        "4.7.9"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "4.7.10"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 91,
+      "package": "defu",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-737v-mqg7-c878",
+      "severity": "high",
+      "vulnerable_range": "<= 6.1.4",
+      "baseline_versions": [
+        "6.1.7"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.1.7"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 92,
+      "package": "picomatch",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-c2c7-rcm5-vvqj",
+      "severity": "high",
+      "vulnerable_range": "< 2.3.2",
+      "baseline_versions": [
+        "2.3.2",
+        "4.0.5"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "2.3.2",
+        "4.0.5"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 93,
+      "package": "picomatch",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-3v7f-55p6-f55p",
+      "severity": "medium",
+      "vulnerable_range": "< 2.3.2",
+      "baseline_versions": [
+        "2.3.2",
+        "4.0.5"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "2.3.2",
+        "4.0.5"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 95,
+      "package": "lodash",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-r5fr-rjxr-66jc",
+      "severity": "high",
+      "vulnerable_range": ">= 4.0.0, <= 4.17.23",
+      "baseline_versions": [
+        "4.18.1"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "4.18.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 96,
+      "package": "fast-xml-parser",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-jp2q-39xq-3w4g",
+      "severity": "medium",
+      "vulnerable_range": ">= 4.0.0-beta.3, < 4.5.5",
+      "baseline_versions": [
+        "4.5.7"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "5.12.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 97,
+      "package": "basic-ftp",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-6v7q-wjvx-w8wg",
+      "severity": "high",
+      "vulnerable_range": "<= 5.2.1",
+      "baseline_versions": [
+        "5.3.1"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.2.6"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 98,
+      "package": "basic-ftp",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-rp42-5vxx-qpwr",
+      "severity": "high",
+      "vulnerable_range": "<= 5.2.2",
+      "baseline_versions": [
+        "5.3.1"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.2.6"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 100,
+      "package": "ip-address",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-v2v4-37r5-5v8g",
+      "severity": "medium",
+      "vulnerable_range": "<= 10.1.0",
+      "baseline_versions": [
+        "10.4.0"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "10.7.6"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 101,
+      "package": "basic-ftp",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-rpmf-866q-6p89",
+      "severity": "high",
+      "vulnerable_range": "<= 5.3.0",
+      "baseline_versions": [
+        "5.3.1"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.2.6"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 104,
+      "package": "@babel/plugin-transform-modules-systemjs",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-fv7c-fp4j-7gwp",
+      "severity": "high",
+      "vulnerable_range": ">= 7.12.0, <= 7.29.3",
+      "baseline_versions": [
+        "7.29.8"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "7.29.8"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 105,
+      "package": "qs",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-q8mj-m7cp-5q26",
+      "severity": "medium",
+      "vulnerable_range": ">= 6.11.1, <= 6.15.1",
+      "baseline_versions": [
+        "6.15.3"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.16.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 106,
+      "package": "turbo",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-3qcw-2rhx-2726",
+      "severity": "low",
+      "vulnerable_range": ">= 1.1.0, < 2.9.14",
+      "baseline_versions": [
+        "2.10.8"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "2.10.8"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 107,
+      "package": "turbo",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-hcf7-66rw-9f5r",
+      "severity": "medium",
+      "vulnerable_range": "<= 2.9.13",
+      "baseline_versions": [
+        "2.10.8"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "2.10.8"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 108,
+      "package": "shell-quote",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-w7jw-789q-3m8p",
+      "severity": "critical",
+      "vulnerable_range": ">= 1.1.0, <= 1.8.3",
+      "baseline_versions": [
+        "1.10.0"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "1.12.0"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 110,
+      "package": "joi",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-q7cg-457f-vx79",
+      "severity": "medium",
+      "vulnerable_range": "< 17.13.4",
+      "baseline_versions": [
+        "17.13.4"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "17.13.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 111,
+      "package": "launch-editor",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-v6wh-96g9-6wx3",
+      "severity": "medium",
+      "vulnerable_range": "<= 2.14.0",
+      "baseline_versions": [
+        "2.14.1"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "2.14.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 112,
+      "package": "ws",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-96hv-2xvq-fx4p",
+      "severity": "high",
+      "vulnerable_range": ">= 6.0.0, < 6.2.4",
+      "baseline_versions": [
+        "6.2.6",
+        "7.5.13"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.2.6",
+        "7.5.13"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 113,
+      "package": "ws",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-96hv-2xvq-fx4p",
+      "severity": "high",
+      "vulnerable_range": ">= 7.0.0, < 7.5.11",
+      "baseline_versions": [
+        "6.2.6",
+        "7.5.13"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.2.6",
+        "7.5.13"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 114,
+      "package": "tar",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-vmf3-w455-68vh",
+      "severity": "medium",
+      "vulnerable_range": "<= 7.5.15",
+      "baseline_versions": [
+        "7.5.22"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "7.5.22"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 115,
+      "package": "undici",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-vxpw-j846-p89q",
+      "severity": "high",
+      "vulnerable_range": "< 6.27.0",
+      "baseline_versions": [
+        "6.28.0"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.29.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 116,
+      "package": "undici",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-p88m-4jfj-68fv",
+      "severity": "medium",
+      "vulnerable_range": "< 6.27.0",
+      "baseline_versions": [
+        "6.28.0"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.29.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 117,
+      "package": "undici",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-35p6-xmwp-9g52",
+      "severity": "low",
+      "vulnerable_range": "< 6.27.0",
+      "baseline_versions": [
+        "6.28.0"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.29.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 118,
+      "package": "concurrent-ruby",
+      "ecosystem": "rubygems",
+      "manifest": "example/Gemfile",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-6wx8-w4f5-wwcr",
+      "severity": "low",
+      "vulnerable_range": "< 1.3.7",
+      "baseline_versions": [
+        "1.3.3"
+      ],
+      "baseline_affected_versions": [
+        "1.3.3"
+      ],
+      "candidate_versions": [
+        "1.3.8"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 119,
+      "package": "concurrent-ruby",
+      "ecosystem": "rubygems",
+      "manifest": "example/Gemfile",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-h8w8-99g7-qmvj",
+      "severity": "high",
+      "vulnerable_range": "< 1.3.7",
+      "baseline_versions": [
+        "1.3.3"
+      ],
+      "baseline_affected_versions": [
+        "1.3.3"
+      ],
+      "candidate_versions": [
+        "1.3.8"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 120,
+      "package": "concurrent-ruby",
+      "ecosystem": "rubygems",
+      "manifest": "example/Gemfile",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-wv3x-4vxv-whpp",
+      "severity": "low",
+      "vulnerable_range": "< 1.3.7",
+      "baseline_versions": [
+        "1.3.3"
+      ],
+      "baseline_affected_versions": [
+        "1.3.3"
+      ],
+      "candidate_versions": [
+        "1.3.8"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 121,
+      "package": "undici",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-g8m3-5g58-fq7m",
+      "severity": "low",
+      "vulnerable_range": "< 6.27.0",
+      "baseline_versions": [
+        "6.28.0"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "6.29.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 123,
+      "package": "@babel/core",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "dismissed",
+      "ghsa": "GHSA-4x5r-pxfx-6jf8",
+      "severity": "low",
+      "vulnerable_range": "<= 7.29.0",
+      "baseline_versions": [
+        "7.28.5",
+        "7.29.7"
+      ],
+      "baseline_affected_versions": [
+        "7.28.5"
+      ],
+      "candidate_versions": [
+        "7.29.13"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 124,
+      "package": "js-yaml",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-h67p-54hq-rp68",
+      "severity": "medium",
+      "vulnerable_range": ">= 4.0.0, <= 4.1.1",
+      "baseline_versions": [
+        "3.15.1",
+        "4.3.1"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "3.15.2",
+        "4.3.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 125,
+      "package": "js-yaml",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-h67p-54hq-rp68",
+      "severity": "medium",
+      "vulnerable_range": "< 3.15.0",
+      "baseline_versions": [
+        "3.15.1",
+        "4.3.1"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "3.15.2",
+        "4.3.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 126,
+      "package": "fast-uri",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-4c8g-83qw-93j6",
+      "severity": "high",
+      "vulnerable_range": ">= 3.0.0, < 3.1.3",
+      "baseline_versions": [
+        "3.1.5"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "3.1.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 127,
+      "package": "fast-uri",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-v2hh-gcrm-f6hx",
+      "severity": "high",
+      "vulnerable_range": ">= 3.0.0, <= 3.1.3",
+      "baseline_versions": [
+        "3.1.5"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "3.1.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 128,
+      "package": "shell-quote",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-395f-4hp3-45gv",
+      "severity": "high",
+      "vulnerable_range": "<= 1.8.4",
+      "baseline_versions": [
+        "1.10.0"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "1.12.0"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 129,
+      "package": "tar",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-8x88-c5mf-7j5w",
+      "severity": "high",
+      "vulnerable_range": "<= 7.5.17",
+      "baseline_versions": [
+        "7.5.22"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "7.5.22"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 130,
+      "package": "tar",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-w8wr-v893-vjvp",
+      "severity": "medium",
+      "vulnerable_range": "<= 7.5.17",
+      "baseline_versions": [
+        "7.5.22"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "7.5.22"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 131,
+      "package": "tar",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-23hp-3jrh-7fpw",
+      "severity": "critical",
+      "vulnerable_range": "<= 7.5.18",
+      "baseline_versions": [
+        "7.5.22"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "7.5.22"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 132,
+      "package": "tar",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-gvwx-54wh-qm9j",
+      "severity": "medium",
+      "vulnerable_range": "<= 7.5.16",
+      "baseline_versions": [
+        "7.5.22"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "7.5.22"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 133,
+      "package": "yaml",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-48c2-rrv3-qjmp",
+      "severity": "medium",
+      "vulnerable_range": ">= 2.0.0, < 2.8.3",
+      "baseline_versions": [
+        "2.9.0"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "2.9.0"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 134,
+      "package": "handlebars",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-2qvq-rjwj-gvw9",
+      "severity": "medium",
+      "vulnerable_range": ">= 4.0.0, < 4.7.9",
+      "baseline_versions": [
+        "4.7.9"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "4.7.10"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 135,
+      "package": "brace-expansion",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-f886-m6hf-6m8v",
+      "severity": "medium",
+      "vulnerable_range": "< 1.1.13",
+      "baseline_versions": [
+        "1.1.18",
+        "2.1.4",
+        "5.0.9"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "1.1.22",
+        "5.0.13"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 136,
+      "package": "brace-expansion",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-3jxr-9vmj-r5cp",
+      "severity": "high",
+      "vulnerable_range": "< 1.1.16",
+      "baseline_versions": [
+        "1.1.18",
+        "2.1.4",
+        "5.0.9"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "1.1.22",
+        "5.0.13"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 137,
+      "package": "brace-expansion",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-3jxr-9vmj-r5cp",
+      "severity": "high",
+      "vulnerable_range": ">= 2.0.0, < 2.1.2",
+      "baseline_versions": [
+        "1.1.18",
+        "2.1.4",
+        "5.0.9"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "1.1.22",
+        "5.0.13"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 138,
+      "package": "js-yaml",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-52cp-r559-cp3m",
+      "severity": "high",
+      "vulnerable_range": ">= 3.0.0, < 3.15.0",
+      "baseline_versions": [
+        "3.15.1",
+        "4.3.1"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "3.15.2",
+        "4.3.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 139,
+      "package": "js-yaml",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-52cp-r559-cp3m",
+      "severity": "high",
+      "vulnerable_range": ">= 4.0.0, < 4.3.0",
+      "baseline_versions": [
+        "3.15.1",
+        "4.3.1"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "3.15.2",
+        "4.3.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 140,
+      "package": "body-parser",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-v422-hmwv-36x6",
+      "severity": "low",
+      "vulnerable_range": "< 1.20.6",
+      "baseline_versions": [
+        "1.20.6"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "1.20.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 141,
+      "package": "tar",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-r292-9mhp-454m",
+      "severity": "high",
+      "vulnerable_range": "<= 7.5.20",
+      "baseline_versions": [
+        "7.5.22"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "7.5.22"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 143,
+      "package": "brace-expansion",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "fixed",
+      "ghsa": "GHSA-mh99-v99m-4gvg",
+      "severity": "high",
+      "vulnerable_range": ">= 2.0.0, < 2.1.3",
+      "baseline_versions": [
+        "1.1.18",
+        "2.1.4",
+        "5.0.9"
+      ],
+      "baseline_affected_versions": [],
+      "candidate_versions": [
+        "1.1.22",
+        "5.0.13"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "already-not-affected-at-baseline"
+    },
+    {
+      "number": 144,
+      "package": "activesupport",
+      "ecosystem": "rubygems",
+      "manifest": "example/Gemfile.lock",
+      "initial_github_state": "dismissed",
+      "ghsa": "GHSA-cg4j-q9v8-6v38",
+      "severity": "medium",
+      "vulnerable_range": "< 7.2.3.1",
+      "baseline_versions": [
+        "7.1.6"
+      ],
+      "baseline_affected_versions": [
+        "7.1.6"
+      ],
+      "candidate_versions": [
+        "7.2.4"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 145,
+      "package": "activesupport",
+      "ecosystem": "rubygems",
+      "manifest": "example/Gemfile.lock",
+      "initial_github_state": "dismissed",
+      "ghsa": "GHSA-89vf-4333-qx8v",
+      "severity": "medium",
+      "vulnerable_range": "< 7.2.3.1",
+      "baseline_versions": [
+        "7.1.6"
+      ],
+      "baseline_affected_versions": [
+        "7.1.6"
+      ],
+      "candidate_versions": [
+        "7.2.4"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 146,
+      "package": "activesupport",
+      "ecosystem": "rubygems",
+      "manifest": "example/Gemfile.lock",
+      "initial_github_state": "dismissed",
+      "ghsa": "GHSA-2j26-frm8-cmj9",
+      "severity": "medium",
+      "vulnerable_range": "< 7.2.3.1",
+      "baseline_versions": [
+        "7.1.6"
+      ],
+      "baseline_affected_versions": [
+        "7.1.6"
+      ],
+      "candidate_versions": [
+        "7.2.4"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 147,
+      "package": "concurrent-ruby",
+      "ecosystem": "rubygems",
+      "manifest": "example/Gemfile.lock",
+      "initial_github_state": "dismissed",
+      "ghsa": "GHSA-h8w8-99g7-qmvj",
+      "severity": "high",
+      "vulnerable_range": "< 1.3.7",
+      "baseline_versions": [
+        "1.3.3"
+      ],
+      "baseline_affected_versions": [
+        "1.3.3"
+      ],
+      "candidate_versions": [
+        "1.3.8"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 148,
+      "package": "concurrent-ruby",
+      "ecosystem": "rubygems",
+      "manifest": "example/Gemfile.lock",
+      "initial_github_state": "dismissed",
+      "ghsa": "GHSA-wv3x-4vxv-whpp",
+      "severity": "low",
+      "vulnerable_range": "< 1.3.7",
+      "baseline_versions": [
+        "1.3.3"
+      ],
+      "baseline_affected_versions": [
+        "1.3.3"
+      ],
+      "candidate_versions": [
+        "1.3.8"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 149,
+      "package": "concurrent-ruby",
+      "ecosystem": "rubygems",
+      "manifest": "example/Gemfile.lock",
+      "initial_github_state": "dismissed",
+      "ghsa": "GHSA-6wx8-w4f5-wwcr",
+      "severity": "low",
+      "vulnerable_range": "< 1.3.7",
+      "baseline_versions": [
+        "1.3.3"
+      ],
+      "baseline_affected_versions": [
+        "1.3.3"
+      ],
+      "candidate_versions": [
+        "1.3.8"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 150,
+      "package": "uuid",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "dismissed",
+      "ghsa": "GHSA-w5hq-g745-h8pq",
+      "severity": "medium",
+      "vulnerable_range": "< 11.1.1",
+      "baseline_versions": [
+        "7.0.3"
+      ],
+      "baseline_affected_versions": [
+        "7.0.3"
+      ],
+      "candidate_versions": [
+        "11.1.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 151,
+      "package": "json",
+      "ecosystem": "rubygems",
+      "manifest": "example/Gemfile.lock",
+      "initial_github_state": "dismissed",
+      "ghsa": "GHSA-9hj4-r449-hfvc",
+      "severity": "low",
+      "vulnerable_range": ">= 2.20.0, <= 2.21.1",
+      "baseline_versions": [
+        "2.20.0"
+      ],
+      "baseline_affected_versions": [
+        "2.20.0"
+      ],
+      "candidate_versions": [
+        "2.21.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 155,
+      "package": "nanoid",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "dismissed",
+      "ghsa": "GHSA-2v37-7h3g-55p8",
+      "severity": "high",
+      "vulnerable_range": "< 3.3.18",
+      "baseline_versions": [
+        "3.3.16"
+      ],
+      "baseline_affected_versions": [
+        "3.3.16"
+      ],
+      "candidate_versions": [
+        "3.3.20"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 156,
+      "package": "decode-uri-component",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-vcc3-ghjq-m6fr",
+      "severity": "medium",
+      "vulnerable_range": "<= 0.4.2",
+      "baseline_versions": [
+        "0.2.2"
+      ],
+      "baseline_affected_versions": [
+        "0.2.2"
+      ],
+      "candidate_versions": [],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 157,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-6gmq-8vp8-gcm6",
+      "severity": "medium",
+      "vulnerable_range": ">= 0.9.0, <= 0.9.11",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.9.10"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 158,
+      "package": "fast-uri",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-5jgf-p345-68v8",
+      "severity": "high",
+      "vulnerable_range": ">= 3.1.3, < 3.1.6",
+      "baseline_versions": [
+        "3.1.5"
+      ],
+      "baseline_affected_versions": [
+        "3.1.5"
+      ],
+      "candidate_versions": [
+        "3.1.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 159,
+      "package": "fast-uri",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-fph4-wmhf-6fwf",
+      "severity": "high",
+      "vulnerable_range": ">= 3.1.2, < 3.1.6",
+      "baseline_versions": [
+        "3.1.5"
+      ],
+      "baseline_affected_versions": [
+        "3.1.5"
+      ],
+      "candidate_versions": [
+        "3.1.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 160,
+      "package": "qs",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "auto_dismissed",
+      "ghsa": "GHSA-x5fp-wj9c-mxmx",
+      "severity": "medium",
+      "vulnerable_range": ">= 6.14.2, <= 6.15.3",
+      "baseline_versions": [
+        "6.15.3"
+      ],
+      "baseline_affected_versions": [
+        "6.15.3"
+      ],
+      "candidate_versions": [
+        "6.16.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 161,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-6gmq-8vp8-gcm6",
+      "severity": "medium",
+      "vulnerable_range": ">= 0.7.0, <= 0.8.14",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.8.13"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 162,
+      "package": "@humanfs/node",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-p498-v437-472g",
+      "severity": "medium",
+      "vulnerable_range": "< 0.16.8",
+      "baseline_versions": [
+        "0.16.7"
+      ],
+      "baseline_affected_versions": [
+        "0.16.7"
+      ],
+      "candidate_versions": [
+        "0.16.8"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 163,
+      "package": "fast-uri",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-f65p-4m7j-42xc",
+      "severity": "high",
+      "vulnerable_range": ">= 3.0.0, < 3.1.6",
+      "baseline_versions": [
+        "3.1.5"
+      ],
+      "baseline_affected_versions": [
+        "3.1.5"
+      ],
+      "candidate_versions": [
+        "3.1.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 164,
+      "package": "fast-uri",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-jqff-g426-hqxp",
+      "severity": "high",
+      "vulnerable_range": ">= 3.0.0, < 3.1.6",
+      "baseline_versions": [
+        "3.1.5"
+      ],
+      "baseline_affected_versions": [
+        "3.1.5"
+      ],
+      "candidate_versions": [
+        "3.1.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 165,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-vr34-hp96-76pp",
+      "severity": "high",
+      "vulnerable_range": ">= 0.9.10, <= 0.9.11",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.9.10"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 166,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-3px3-54cx-rmw9",
+      "severity": "high",
+      "vulnerable_range": ">= 0.9.0, <= 0.9.11",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.9.10"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 167,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-6h8r-xr42-gp59",
+      "severity": "medium",
+      "vulnerable_range": ">= 0.9.0, <= 0.9.11",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.9.10"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 168,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-93r5-fhx6-vmg9",
+      "severity": "high",
+      "vulnerable_range": ">= 0.9.0, <= 0.9.11",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.9.10"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 169,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "auto_dismissed",
+      "ghsa": "GHSA-6mj3-qw4j-hgrw",
+      "severity": "high",
+      "vulnerable_range": ">= 0.9.0-beta.1, <= 0.9.11",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.9.10"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 170,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-c7q8-3ch8-vqpv",
+      "severity": "high",
+      "vulnerable_range": ">= 0.9.0, <= 0.9.11",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.9.10"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 171,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-8344-3jmq-59r6",
+      "severity": "high",
+      "vulnerable_range": ">= 0.9.0, <= 0.9.11",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.9.10"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 172,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-w2rr-34g9-rvrj",
+      "severity": "high",
+      "vulnerable_range": ">= 0.9.0, <= 0.9.10",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.9.10"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 173,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-27p8-2357-5qqv",
+      "severity": "high",
+      "vulnerable_range": ">= 0.9.0, <= 0.9.11",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.9.10"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 174,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-4w3w-2rp5-g8jm",
+      "severity": "high",
+      "vulnerable_range": ">= 0.9.0, <= 0.9.10",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.9.10"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 175,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "auto_dismissed",
+      "ghsa": "GHSA-965w-775f-mr7g",
+      "severity": "high",
+      "vulnerable_range": ">= 0.9.0, <= 0.9.11",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.9.10"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 176,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "auto_dismissed",
+      "ghsa": "GHSA-g53g-w8rj-fmg7",
+      "severity": "high",
+      "vulnerable_range": ">= 0.9.0-beta.9, <= 0.9.10",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.9.10"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 177,
+      "package": "qs",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "auto_dismissed",
+      "ghsa": "GHSA-4mjr-xmp4-gh2g",
+      "severity": "medium",
+      "vulnerable_range": ">= 2.2.5, < 6.16.0",
+      "baseline_versions": [
+        "6.15.3"
+      ],
+      "baseline_affected_versions": [
+        "6.15.3"
+      ],
+      "candidate_versions": [
+        "6.16.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 178,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-6h8r-xr42-gp59",
+      "severity": "medium",
+      "vulnerable_range": ">= 0.7.0, <= 0.8.14",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.8.13"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 179,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "auto_dismissed",
+      "ghsa": "GHSA-965w-775f-mr7g",
+      "severity": "high",
+      "vulnerable_range": ">= 0.7.0, <= 0.8.14",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.8.13"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 180,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-8344-3jmq-59r6",
+      "severity": "high",
+      "vulnerable_range": ">= 0.7.0, <= 0.8.14",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.8.13"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 181,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-4w3w-2rp5-g8jm",
+      "severity": "high",
+      "vulnerable_range": ">= 0.7.0, <= 0.8.13",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.8.13"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 182,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-27p8-2357-5qqv",
+      "severity": "high",
+      "vulnerable_range": ">= 0.7.0, <= 0.8.14",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.8.13"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 183,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "auto_dismissed",
+      "ghsa": "GHSA-x4fp-j954-r2f4",
+      "severity": "high",
+      "vulnerable_range": ">= 0.7.0, <= 0.8.14",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.8.13"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 184,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-w2rr-34g9-rvrj",
+      "severity": "high",
+      "vulnerable_range": ">= 0.7.0, <= 0.8.13",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.8.13"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 185,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-93r5-fhx6-vmg9",
+      "severity": "high",
+      "vulnerable_range": ">= 0.7.0, <= 0.8.14",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.8.13"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 186,
+      "package": "@xmldom/xmldom",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-c7q8-3ch8-vqpv",
+      "severity": "high",
+      "vulnerable_range": ">= 0.7.0, <= 0.8.14",
+      "baseline_versions": [
+        "0.8.13",
+        "0.9.10"
+      ],
+      "baseline_affected_versions": [
+        "0.8.13"
+      ],
+      "candidate_versions": [
+        "0.8.15",
+        "0.9.12"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 187,
+      "package": "joi",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-6w3j-5fw6-r9vr",
+      "severity": "low",
+      "vulnerable_range": ">= 17.2.0, < 17.13.6",
+      "baseline_versions": [
+        "17.13.4"
+      ],
+      "baseline_affected_versions": [
+        "17.13.4"
+      ],
+      "candidate_versions": [
+        "17.13.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 188,
+      "package": "joi",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-gg4h-3hg2-grpc",
+      "severity": "low",
+      "vulnerable_range": ">= 16.0.0, < 17.13.5",
+      "baseline_versions": [
+        "17.13.4"
+      ],
+      "baseline_affected_versions": [
+        "17.13.4"
+      ],
+      "candidate_versions": [
+        "17.13.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 189,
+      "package": "js-yaml",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-2883-xcg3-v3hh",
+      "severity": "high",
+      "vulnerable_range": ">= 4.0.0, < 4.3.2",
+      "baseline_versions": [
+        "3.15.1",
+        "4.3.1"
+      ],
+      "baseline_affected_versions": [
+        "4.3.1"
+      ],
+      "candidate_versions": [
+        "3.15.2",
+        "4.3.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 190,
+      "package": "js-yaml",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-2883-xcg3-v3hh",
+      "severity": "high",
+      "vulnerable_range": ">= 3.0.0, < 3.15.2",
+      "baseline_versions": [
+        "3.15.1",
+        "4.3.1"
+      ],
+      "baseline_affected_versions": [
+        "3.15.1"
+      ],
+      "candidate_versions": [
+        "3.15.2",
+        "4.3.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 191,
+      "package": "image-size",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "auto_dismissed",
+      "ghsa": "GHSA-5p2g-fcmc-qvqq",
+      "severity": "high",
+      "vulnerable_range": ">= 1.2.0, <= 2.0.2",
+      "baseline_versions": [
+        "1.2.1"
+      ],
+      "baseline_affected_versions": [
+        "1.2.1"
+      ],
+      "candidate_versions": [
+        "2.1.0"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 192,
+      "package": "image-size",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "auto_dismissed",
+      "ghsa": "GHSA-w3rx-r6r6-pgpr",
+      "severity": "high",
+      "vulnerable_range": ">= 0.6.3, <= 2.0.2",
+      "baseline_versions": [
+        "1.2.1"
+      ],
+      "baseline_affected_versions": [
+        "1.2.1"
+      ],
+      "candidate_versions": [
+        "2.1.0"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 193,
+      "package": "undici",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-3wwx-pv8p-q78v",
+      "severity": "medium",
+      "vulnerable_range": ">= 6.25.0, < 6.28.1",
+      "baseline_versions": [
+        "6.28.0"
+      ],
+      "baseline_affected_versions": [
+        "6.28.0"
+      ],
+      "candidate_versions": [
+        "6.29.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 194,
+      "package": "ip-address",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-2vr4-cq9g-pvrc",
+      "severity": "medium",
+      "vulnerable_range": ">= 10.2.0, <= 10.5.0",
+      "baseline_versions": [
+        "10.4.0"
+      ],
+      "baseline_affected_versions": [
+        "10.4.0"
+      ],
+      "candidate_versions": [
+        "10.7.6"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 195,
+      "package": "undici",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-rfgv-xxqx-mfg5",
+      "severity": "high",
+      "vulnerable_range": ">= 6.7.0, < 6.28.1",
+      "baseline_versions": [
+        "6.28.0"
+      ],
+      "baseline_affected_versions": [
+        "6.28.0"
+      ],
+      "candidate_versions": [
+        "6.29.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 196,
+      "package": "joi",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "auto_dismissed",
+      "ghsa": "GHSA-6h2x-m376-mqjq",
+      "severity": "high",
+      "vulnerable_range": ">= 17.2.0, < 17.13.7",
+      "baseline_versions": [
+        "17.13.4"
+      ],
+      "baseline_affected_versions": [
+        "17.13.4"
+      ],
+      "candidate_versions": [
+        "17.13.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 197,
+      "package": "brace-expansion",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "auto_dismissed",
+      "ghsa": "GHSA-6j4f-fj2g-mc7p",
+      "severity": "high",
+      "vulnerable_range": ">= 4.0.0, < 5.0.10",
+      "baseline_versions": [
+        "1.1.18",
+        "2.1.4",
+        "5.0.9"
+      ],
+      "baseline_affected_versions": [
+        "5.0.9"
+      ],
+      "candidate_versions": [
+        "1.1.22",
+        "5.0.13"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 198,
+      "package": "ip-address",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-j6r3-76f7-8jcv",
+      "severity": "medium",
+      "vulnerable_range": "<= 10.7.0",
+      "baseline_versions": [
+        "10.4.0"
+      ],
+      "baseline_affected_versions": [
+        "10.4.0"
+      ],
+      "candidate_versions": [
+        "10.7.6"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 199,
+      "package": "basic-ftp",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "auto_dismissed",
+      "ghsa": "GHSA-c475-qrg2-pj4r",
+      "severity": "high",
+      "vulnerable_range": "<= 6.2.0",
+      "baseline_versions": [
+        "5.3.1"
+      ],
+      "baseline_affected_versions": [
+        "5.3.1"
+      ],
+      "candidate_versions": [
+        "6.2.6"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 200,
+      "package": "brace-expansion",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "auto_dismissed",
+      "ghsa": "GHSA-qhr7-859c-m2p7",
+      "severity": "high",
+      "vulnerable_range": ">= 2.0.0, < 2.1.6",
+      "baseline_versions": [
+        "1.1.18",
+        "2.1.4",
+        "5.0.9"
+      ],
+      "baseline_affected_versions": [
+        "2.1.4"
+      ],
+      "candidate_versions": [
+        "1.1.22",
+        "5.0.13"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 201,
+      "package": "brace-expansion",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "auto_dismissed",
+      "ghsa": "GHSA-6j4f-fj2g-mc7p",
+      "severity": "high",
+      "vulnerable_range": ">= 2.0.0, < 2.1.5",
+      "baseline_versions": [
+        "1.1.18",
+        "2.1.4",
+        "5.0.9"
+      ],
+      "baseline_affected_versions": [
+        "2.1.4"
+      ],
+      "candidate_versions": [
+        "1.1.22",
+        "5.0.13"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 202,
+      "package": "brace-expansion",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-q2hr-2g5m-vwhr",
+      "severity": "medium",
+      "vulnerable_range": ">= 2.0.0, < 2.1.7",
+      "baseline_versions": [
+        "1.1.18",
+        "2.1.4",
+        "5.0.9"
+      ],
+      "baseline_affected_versions": [
+        "2.1.4"
+      ],
+      "candidate_versions": [
+        "1.1.22",
+        "5.0.13"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 203,
+      "package": "shell-quote",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-pqg4-j6r4-53mv",
+      "severity": "critical",
+      "vulnerable_range": ">= 1.8.4, < 1.11.0",
+      "baseline_versions": [
+        "1.10.0"
+      ],
+      "baseline_affected_versions": [
+        "1.10.0"
+      ],
+      "candidate_versions": [
+        "1.12.0"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 204,
+      "package": "handlebars",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-xw65-4hp5-5hc7",
+      "severity": "medium",
+      "vulnerable_range": ">= 4.0.0, <= 4.7.9",
+      "baseline_versions": [
+        "4.7.9"
+      ],
+      "baseline_affected_versions": [
+        "4.7.9"
+      ],
+      "candidate_versions": [
+        "4.7.10"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 205,
+      "package": "handlebars",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-8r5x-fm3f-whwj",
+      "severity": "critical",
+      "vulnerable_range": ">= 4.0.0, <= 4.7.9",
+      "baseline_versions": [
+        "4.7.9"
+      ],
+      "baseline_affected_versions": [
+        "4.7.9"
+      ],
+      "candidate_versions": [
+        "4.7.10"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 206,
+      "package": "brace-expansion",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-q2hr-2g5m-vwhr",
+      "severity": "medium",
+      "vulnerable_range": "< 1.1.21",
+      "baseline_versions": [
+        "1.1.18",
+        "2.1.4",
+        "5.0.9"
+      ],
+      "baseline_affected_versions": [
+        "1.1.18"
+      ],
+      "candidate_versions": [
+        "1.1.22",
+        "5.0.13"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 208,
+      "package": "handlebars",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-p8wg-vrv2-v86f",
+      "severity": "critical",
+      "vulnerable_range": ">= 3.0.0, <= 4.7.9",
+      "baseline_versions": [
+        "4.7.9"
+      ],
+      "baseline_affected_versions": [
+        "4.7.9"
+      ],
+      "candidate_versions": [
+        "4.7.10"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 209,
+      "package": "launch-editor",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-698v-4r3x-3vcv",
+      "severity": "medium",
+      "vulnerable_range": "<= 2.14.1",
+      "baseline_versions": [
+        "2.14.1"
+      ],
+      "baseline_affected_versions": [
+        "2.14.1"
+      ],
+      "candidate_versions": [
+        "2.14.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 210,
+      "package": "launch-editor",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-r825-w8mm-5pxw",
+      "severity": "medium",
+      "vulnerable_range": "<= 2.14.1",
+      "baseline_versions": [
+        "2.14.1"
+      ],
+      "baseline_affected_versions": [
+        "2.14.1"
+      ],
+      "candidate_versions": [
+        "2.14.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 211,
+      "package": "launch-editor",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-587h-7wmj-h5pm",
+      "severity": "high",
+      "vulnerable_range": "<= 2.14.1",
+      "baseline_versions": [
+        "2.14.1"
+      ],
+      "baseline_affected_versions": [
+        "2.14.1"
+      ],
+      "candidate_versions": [
+        "2.14.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 212,
+      "package": "fast-uri",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-wjr9-j795-jxcr",
+      "severity": "medium",
+      "vulnerable_range": ">= 3.1.3, < 3.1.9",
+      "baseline_versions": [
+        "3.1.5"
+      ],
+      "baseline_affected_versions": [
+        "3.1.5"
+      ],
+      "candidate_versions": [
+        "3.1.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 213,
+      "package": "undici",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-xjj6-f33q-929c",
+      "severity": "high",
+      "vulnerable_range": ">= 6.23.0, < 6.29.1",
+      "baseline_versions": [
+        "6.28.0"
+      ],
+      "baseline_affected_versions": [
+        "6.28.0"
+      ],
+      "candidate_versions": [
+        "6.29.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 214,
+      "package": "undici",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-4qv8-2p9j-2685",
+      "severity": "medium",
+      "vulnerable_range": ">= 6.5.0, < 6.29.1",
+      "baseline_versions": [
+        "6.28.0"
+      ],
+      "baseline_affected_versions": [
+        "6.28.0"
+      ],
+      "candidate_versions": [
+        "6.29.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 215,
+      "package": "ip-address",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "auto_dismissed",
+      "ghsa": "GHSA-rxp7-6hxx-x8q5",
+      "severity": "medium",
+      "vulnerable_range": "<= 10.7.3",
+      "baseline_versions": [
+        "10.4.0"
+      ],
+      "baseline_affected_versions": [
+        "10.4.0"
+      ],
+      "candidate_versions": [
+        "10.7.6"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 216,
+      "package": "fast-uri",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-333x-w4r6-6crp",
+      "severity": "low",
+      "vulnerable_range": ">= 3.0.0, < 3.1.9",
+      "baseline_versions": [
+        "3.1.5"
+      ],
+      "baseline_affected_versions": [
+        "3.1.5"
+      ],
+      "candidate_versions": [
+        "3.1.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 217,
+      "package": "fast-uri",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-w74x-v6f9-j3xg",
+      "severity": "medium",
+      "vulnerable_range": ">= 3.0.0, < 3.1.9",
+      "baseline_versions": [
+        "3.1.5"
+      ],
+      "baseline_affected_versions": [
+        "3.1.5"
+      ],
+      "candidate_versions": [
+        "3.1.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 218,
+      "package": "fast-uri",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-xhq7-xmqj-769h",
+      "severity": "low",
+      "vulnerable_range": ">= 3.0.0, < 3.1.9",
+      "baseline_versions": [
+        "3.1.5"
+      ],
+      "baseline_affected_versions": [
+        "3.1.5"
+      ],
+      "candidate_versions": [
+        "3.1.9"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 219,
+      "package": "zod",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "auto_dismissed",
+      "ghsa": "GHSA-mrhx-c7xc-m3w5",
+      "severity": "high",
+      "vulnerable_range": "< 4.6.6",
+      "baseline_versions": [
+        "4.4.3"
+      ],
+      "baseline_affected_versions": [
+        "4.4.3"
+      ],
+      "candidate_versions": [
+        "4.6.7"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 220,
+      "package": "undici",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-9fm3-97px-rjf6",
+      "severity": "medium",
+      "vulnerable_range": ">= 5.15.0, < 6.29.1",
+      "baseline_versions": [
+        "6.28.0"
+      ],
+      "baseline_affected_versions": [
+        "6.28.0"
+      ],
+      "candidate_versions": [
+        "6.29.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 221,
+      "package": "undici",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-qrxm-fqhp-jwvm",
+      "severity": "high",
+      "vulnerable_range": ">= 4.2.1, < 6.29.1",
+      "baseline_versions": [
+        "6.28.0"
+      ],
+      "baseline_affected_versions": [
+        "6.28.0"
+      ],
+      "candidate_versions": [
+        "6.29.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 222,
+      "package": "undici",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-2m5v-pch6-74hx",
+      "severity": "high",
+      "vulnerable_range": ">= 4.0.0, < 6.29.1",
+      "baseline_versions": [
+        "6.28.0"
+      ],
+      "baseline_affected_versions": [
+        "6.28.0"
+      ],
+      "candidate_versions": [
+        "6.29.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 224,
+      "package": "decode-uri-component",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-qr28-fpjm-wq7f",
+      "severity": "high",
+      "vulnerable_range": "<= 0.5.0",
+      "baseline_versions": [
+        "0.2.2"
+      ],
+      "baseline_affected_versions": [
+        "0.2.2"
+      ],
+      "candidate_versions": [],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 225,
+      "package": "activesupport",
+      "ecosystem": "rubygems",
+      "manifest": "example/Gemfile.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-8474-xrp6-wh69",
+      "severity": "high",
+      "vulnerable_range": "< 8.0.5.2",
+      "baseline_versions": [
+        "7.1.6"
+      ],
+      "baseline_affected_versions": [
+        "7.1.6"
+      ],
+      "candidate_versions": [
+        "7.2.4"
+      ],
+      "candidate_affected_versions": [
+        "7.2.4"
+      ],
+      "disposition": "unresolved-compatible-patch-unavailable"
+    },
+    {
+      "number": 226,
+      "package": "fast-xml-parser",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-474x-hrwr-fgx4",
+      "severity": "low",
+      "vulnerable_range": "<= 5.11.2",
+      "baseline_versions": [
+        "4.5.7"
+      ],
+      "baseline_affected_versions": [
+        "4.5.7"
+      ],
+      "candidate_versions": [
+        "5.12.1"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 227,
+      "package": "basic-ftp",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-5pm8-86m8-9m6r",
+      "severity": "medium",
+      "vulnerable_range": "<= 6.2.3",
+      "baseline_versions": [
+        "5.3.1"
+      ],
+      "baseline_affected_versions": [
+        "5.3.1"
+      ],
+      "candidate_versions": [
+        "6.2.6"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 228,
+      "package": "basic-ftp",
+      "ecosystem": "npm",
+      "manifest": "yarn.lock",
+      "initial_github_state": "auto_dismissed",
+      "ghsa": "GHSA-r4jh-29pc-gfqr",
+      "severity": "medium",
+      "vulnerable_range": "<= 6.2.2",
+      "baseline_versions": [
+        "5.3.1"
+      ],
+      "baseline_affected_versions": [
+        "5.3.1"
+      ],
+      "candidate_versions": [
+        "6.2.6"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 229,
+      "package": "addressable",
+      "ecosystem": "rubygems",
+      "manifest": "example/Gemfile.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-8gmh-2hhj-2hv9",
+      "severity": "medium",
+      "vulnerable_range": ">= 2.2.5, < 2.9.1",
+      "baseline_versions": [
+        "2.9.0"
+      ],
+      "baseline_affected_versions": [
+        "2.9.0"
+      ],
+      "candidate_versions": [
+        "2.9.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 230,
+      "package": "addressable",
+      "ecosystem": "rubygems",
+      "manifest": "example/Gemfile.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-j82w-28jv-3pmj",
+      "severity": "medium",
+      "vulnerable_range": ">= 2.3.0, < 2.9.1",
+      "baseline_versions": [
+        "2.9.0"
+      ],
+      "baseline_affected_versions": [
+        "2.9.0"
+      ],
+      "candidate_versions": [
+        "2.9.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 231,
+      "package": "addressable",
+      "ecosystem": "rubygems",
+      "manifest": "example/Gemfile.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-9f42-57jx-vpp3",
+      "severity": "medium",
+      "vulnerable_range": ">= 2.3.0, < 2.9.1",
+      "baseline_versions": [
+        "2.9.0"
+      ],
+      "baseline_affected_versions": [
+        "2.9.0"
+      ],
+      "candidate_versions": [
+        "2.9.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 232,
+      "package": "addressable",
+      "ecosystem": "rubygems",
+      "manifest": "example/Gemfile.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-qq38-m9mg-xjj5",
+      "severity": "medium",
+      "vulnerable_range": "< 2.9.1",
+      "baseline_versions": [
+        "2.9.0"
+      ],
+      "baseline_affected_versions": [
+        "2.9.0"
+      ],
+      "candidate_versions": [
+        "2.9.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 233,
+      "package": "addressable",
+      "ecosystem": "rubygems",
+      "manifest": "example/Gemfile.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-9crm-g4mf-wc5j",
+      "severity": "medium",
+      "vulnerable_range": ">= 2.0.0, < 2.9.1",
+      "baseline_versions": [
+        "2.9.0"
+      ],
+      "baseline_affected_versions": [
+        "2.9.0"
+      ],
+      "candidate_versions": [
+        "2.9.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    },
+    {
+      "number": 234,
+      "package": "addressable",
+      "ecosystem": "rubygems",
+      "manifest": "example/Gemfile.lock",
+      "initial_github_state": "open",
+      "ghsa": "GHSA-539f-xcgw-2gjg",
+      "severity": "low",
+      "vulnerable_range": ">= 2.0.0, < 2.9.1",
+      "baseline_versions": [
+        "2.9.0"
+      ],
+      "baseline_affected_versions": [
+        "2.9.0"
+      ],
+      "candidate_versions": [
+        "2.9.2"
+      ],
+      "candidate_affected_versions": [],
+      "disposition": "remediated-in-this-branch"
+    }
+  ]
+}

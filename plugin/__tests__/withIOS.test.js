@@ -1,3 +1,5 @@
+/** @jest-environment node */
+
 const { insertIOSConfig } = require('../withIOS');
 
 const BASE_PODFILE = `require File.join(File.dirname(\`node --print "require.resolve('expo/package.json')"\`), "scripts/autolinking")\n\nplatform :ios, '15.1'\n\ntarget 'ExampleApp' do\n  use_expo_modules!\nend\n`;

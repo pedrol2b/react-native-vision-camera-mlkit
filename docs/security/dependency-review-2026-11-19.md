@@ -63,7 +63,10 @@ resolutions are scoped to consumers that still require an affected major:
   metadata extraction are exercised. Remove this patch after an upstream Metro
   upgrade provides the same compatibility.
 
-Run `yarn test:dependency-compat` to repeat these consumer checks. The two Expo
+Run `yarn test:dependency-compat` to repeat these consumer checks. The Unit Tests
+workflow runs them automatically for every PR and every push to `main` or
+`develop`; it has no path filters, so script and Yarn patch edits are covered.
+The two Expo
 config-plugin test suites now declare the Node test environment: these plugins
 execute in Node, and uuid's conditional exports must resolve its Node entry
 rather than the React Native environment's fallback browser ESM entry. The

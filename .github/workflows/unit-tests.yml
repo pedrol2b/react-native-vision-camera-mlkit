@@ -25,3 +25,6 @@ jobs:
 
       - name: Run tests
         run: yarn test --maxWorkers=2 --coverage
+
+      - name: Verify patched dependency consumers
+        run: yarn test:dependency-compat

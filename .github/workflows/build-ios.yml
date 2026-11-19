@@ -5,6 +5,13 @@ on:
     branches: [main, develop]
     paths:
       - '.github/workflows/build-ios.yml'
+      - '.github/actions/setup/**'
+      - '.nvmrc'
+      - '.yarnrc.yml'
+      - '.yarn/releases/**'
+      - 'example/package.json'
+      - 'example/Gemfile'
+      - 'example/Gemfile.lock'
       - 'cpp/**'
       - 'ios/**'
       - 'example/ios/**'
@@ -18,6 +25,13 @@ on:
     branches: [main, develop]
     paths:
       - '.github/workflows/build-ios.yml'
+      - '.github/actions/setup/**'
+      - '.nvmrc'
+      - '.yarnrc.yml'
+      - '.yarn/releases/**'
+      - 'example/package.json'
+      - 'example/Gemfile'
+      - 'example/Gemfile.lock'
       - 'cpp/**'
       - 'ios/**'
       - 'example/ios/**'
@@ -98,10 +112,16 @@ jobs:
 
           echo "IOS_DESTINATION=OS=${IOS_RUNTIME},name=iPhone 15" >> "$GITHUB_ENV"
 
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@f9c4492e86def3e644ab32a0ef185eda5b0c20d0 # v1
+        with:
+          ruby-version: '3.3'
+          working-directory: example
+          bundler-cache: true
+
       - name: Install CocoaPods
         run: |
           cd example
-          bundle install
           bundle exec pod install --project-directory=ios
 
       - name: Build iOS example

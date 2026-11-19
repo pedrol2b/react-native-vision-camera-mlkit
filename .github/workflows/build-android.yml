@@ -5,6 +5,11 @@ on:
     branches: [main, develop]
     paths:
       - '.github/workflows/build-android.yml'
+      - '.github/actions/setup/**'
+      - '.nvmrc'
+      - '.yarnrc.yml'
+      - '.yarn/releases/**'
+      - 'example/package.json'
       - 'android/**'
       - 'cpp/**'
       - 'example/android/**'
@@ -19,6 +24,11 @@ on:
     branches: [main, develop]
     paths:
       - '.github/workflows/build-android.yml'
+      - '.github/actions/setup/**'
+      - '.nvmrc'
+      - '.yarnrc.yml'
+      - '.yarn/releases/**'
+      - 'example/package.json'
       - 'android/**'
       - 'cpp/**'
       - 'example/android/**'
@@ -68,16 +78,6 @@ jobs:
 
       - name: Accept Android SDK licenses
         run: yes | sdkmanager --licenses
-
-      - name: Cache Android SDK
-        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
-        with:
-          path: |
-            ${{ env.ANDROID_SDK_ROOT }}
-            ~/.android
-          key: ${{ runner.os }}-android-sdk-${{ hashFiles('example/android/gradle/wrapper/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-android-sdk-
 
       - name: Cache Gradle
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3

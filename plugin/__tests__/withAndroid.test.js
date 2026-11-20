@@ -1,3 +1,5 @@
+/** @jest-environment node */
+
 const { insertAndroidConfig } = require('../withAndroid');
 
 const BASE_GRADLE = `buildscript {\n  ext {\n    kotlinVersion = "1.9.0"\n  }\n}\n\napply plugin: "com.android.application"\n`;

@@ -47,7 +47,8 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "specs": "nitrogen",
     "release": "release-it --only-version",
-    "test": "jest"
+    "test": "jest",
+    "test:dependency-compat": "node scripts/security-dependency-smoke.cjs"
   },
   "keywords": [
     "android",
@@ -136,7 +137,18 @@
   ],
   "resolutions": {
     "@babel/plugin-transform-modules-systemjs": "7.29.8",
-    "undici": "6.28.0"
+    "undici": "6.29.1",
+    "get-uri/basic-ftp": "6.2.6",
+    "xcode/uuid": "11.1.1",
+    "@react-native-community/cli-config-android/fast-xml-parser": "5.12.1",
+    "@react-native-community/cli-platform-apple/fast-xml-parser": "5.12.1",
+    "metro@npm:0.84.4": "patch:metro@npm%3A0.84.4#~/.yarn/patches/metro-npm-0.84.4-68d21d57b4.patch",
+    "metro@npm:^0.84.3": "patch:metro@npm%3A0.84.4#~/.yarn/patches/metro-npm-0.84.4-68d21d57b4.patch",
+    "metro/image-size": "2.1.0",
+    "@expo/config-plugins/glob": "14.0.2",
+    "react-native-builder-bob/glob": "14.0.2",
+    "@ts-morph/common/minimatch": "11.0.1",
+    "@typescript-eslint/typescript-estree/minimatch": "11.0.1"
   },
   "packageManager": "yarn@4.11.0",
   "react-native-builder-bob": {
